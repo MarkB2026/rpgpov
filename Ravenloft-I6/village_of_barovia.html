@@ -5761,6 +5761,8 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
 <script id="arcQuickSharedScript">
 (()=>{
 "use strict";
+const RPGPOV_OFFLINE_ARCS=[{"id":"a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1","name":"Alaric","race":"Human","className":"Paladin","level":7,"hp":43,"weapons":"Long sword (1d8), dagger (1d4); plate mail and shield.","spells":"Paladin abilities: Detect Evil, Lay on Hands, Protection from Evil. No memorized priest spells at this level.","abilities":"Honourable, protective, steadfast. BATTLE: defend the vulnerable. BANTER: earnest and occasionally dry. BEHAVIOUR: will not casually endorse cruelty or dishonour."},{"id":"b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2","name":"Malachar","race":"Human","className":"Wizard","level":5,"hp":19,"weapons":"Quarterstaff (1d6), dagger (1d4); no armour.","spells":"Spellbook: Detect Magic, Magic Missile, Protection from Evil, Shield, Mirror Image, Web, Hold Undead, Dispel Magic. Prepared spells must be confirmed before casting; track slots and expenditure.","abilities":"Scholarly, sceptical, curious about the undead. BATTLE: preserve spells and control threats. BANTER: sharp observations. BEHAVIOUR: examines clues before taking risks."},{"id":"c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3","name":"Seraphina","race":"Human","className":"Cleric","level":6,"hp":34,"weapons":"Mace (1d6+1), sling; chain mail and shield.","spells":"Cleric abilities: Turn Undead. Prayer repertoire: Bless, Cure Light Wounds, Detect Evil, Protection from Evil, Hold Person, Spiritual Hammer, Dispel Magic, Remove Curse. Prepared spells and remaining slots must be tracked.","abilities":"Compassionate but unflinching. BATTLE: turn undead, protect and heal. BANTER: thoughtful moral counsel. BEHAVIOUR: refuses to abandon the injured."},{"id":"d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4","name":"Kael","race":"Half-Elf","className":"Ranger","level":6,"hp":41,"weapons":"Longbow (1d8), long sword (1d8), dagger (1d4); studded leather.","spells":"Ranger skills: tracking, wilderness lore, stealth in natural terrain. No memorized priest spells at this level.","abilities":"Observant, quiet, fiercely loyal. BATTLE: ranged cover and flanking. BANTER: short, wry remarks. BEHAVIOUR: scouts, watches tracks and avoids unnecessary noise."},{"id":"e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5","name":"Mira","race":"Halfling","className":"Thief","level":5,"hp":28,"weapons":"Short sword (1d6), dagger (1d4), sling; leather armour.","spells":"Thief skills: Open Locks, Find/Remove Traps, Move Silently, Hide in Shadows, Climb Walls, Hear Noise, Backstab. Percentages to be confirmed on character sheet.","abilities":"Mischievous, quick-witted, loyal beneath the jokes. BATTLE: avoid direct clashes, exploit openings. BANTER: irreverent humour. BEHAVIOUR: checks doors, traps and valuables, but values the party."}];
+const RPGPOV_ANIMATED_FILES={"Alaric":"alaric.jpg","Malachar":"malachar.jpg","Seraphina":"seraphina.jpg","Kael":"kael.jpg","Mira":"mira.jpg"};
 const portraits={Alaric:'knight',Malachar:'wizard',Seraphina:'cleric',Kael:'elf_ranger',Mira:'rogue',Brenna:'fighter',Elowen:'bard','Thrain Ironbeard':'dwarf','Lirael Moonwhisper':'elf_archer','Cassian Ashborne':'sorcerer','Sylvara Greenleaf':'druid','Brother Joram':'brother_joram','Elandor Swiftblade':'elandor_swiftblade','Arathor Moonshadow':'arathor_moonshadow','Elara Nightwind':'elara_nightwind','Virelya Red Veil':'virelya_red_veil','Thorn Underleaf':'thorn_underleaf','Maelis Vorn':'maelis_vorn','Alaric Duskfall':'alaric_duskfall','Fenwick Thistlegear':'fenwick_thistlegear'};
 const toggle=document.createElement('button');
 toggle.id='arcQuickToggle';toggle.type='button';toggle.textContent='⚔ PARTY';
@@ -5786,19 +5788,26 @@ function stat(sheet,label){
 function activeIds(){
  try{
   const session=sessionStorage.getItem('dndpov_ai_session');
-  if(!session)return null;
+  if(!session)return RPGPOV_OFFLINE_ARCS.slice(0,4).map(c=>c.id);
   const stored=localStorage.getItem('dndpov_svalich_active_arcs_v1_'+session);
   const ids=stored?JSON.parse(stored):null;
-  return Array.isArray(ids)?ids:null;
- }catch{return null;}
+  return Array.isArray(ids)?ids:RPGPOV_OFFLINE_ARCS.slice(0,4).map(c=>c.id);
+ }catch{return RPGPOV_OFFLINE_ARCS.slice(0,4).map(c=>c.id);}
 }
 async function loadCharacters(){
  const session=sessionStorage.getItem('dndpov_ai_session');
- if(!session)return [];
- const r=await fetch('/api/character/list',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session})});
- if(!r.ok)throw Error('Character sheets are not available from the local server.');
- const data=await r.json();
- return Array.isArray(data.characters)?data.characters:[];
+ if(session){
+  try{
+   const r=await fetch('/api/character/list',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session})});
+   if(r.ok){const data=await r.json();if(Array.isArray(data.characters)&&data.characters.length)return data.characters;}
+  }catch(e){console.info('RPGPOV: using built-in browser ARC reference',e);}
+ }
+ // Read-only offline roster: the browser demo does not require a local API server.
+ return RPGPOV_OFFLINE_ARCS.map(c=>({id:c.id,name:c.name,sheet:[
+  'Name: '+c.name,'Race: '+c.race,'Class: '+c.className,'Level: '+c.level,
+  'HIT POINTS: '+c.hp,'Weapons & Attacks',c.weapons,
+  'Spells',c.spells,'Special Abilities',c.abilities
+ ].join('\n')}));
 }
 function addDetail(card,label,value){
  if(!value||value==='None')return;
@@ -5816,7 +5825,7 @@ function render(rows){
   const top=document.createElement('div');top.className='arcQuickTop';
   const imageName=portraits[name]||portraits[stat(sheet,'Name')];
   if(imageName){
-   const img=document.createElement('img');img.src='arc_portraits/'+imageName+'.svg';
+   const img=document.createElement('img');img.src='arc_characters/animated/'+(RPGPOV_ANIMATED_FILES[name]||RPGPOV_ANIMATED_FILES[stat(sheet,'Name')]||'alaric.jpg');
    img.alt=name+' portrait';img.loading='lazy';
    img.onerror=()=>{img.replaceWith(fallback())};top.append(img);
   }else top.append(fallback());
