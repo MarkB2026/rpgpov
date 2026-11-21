@@ -5020,4 +5020,101 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
  }));
 })();
 </script>
+
+<!-- RPGPOV mobile single-window interface: presentation only; gameplay/AI/network untouched. -->
+<style id="rpgpov-mobile-one-window">
+@media (pointer:coarse) and (max-width:950px){
+ #rpgpovMobile .top{right:8px;left:8px;bottom:112px;justify-content:center;flex-wrap:wrap;gap:4px}
+ #rpgpovMobile .top button{min-width:0;min-height:36px;font-size:11px;padding:5px 9px}
+ #hud{height:40px!important;max-height:40px!important;width:min(210px,45vw)!important;overflow:hidden!important}
+ #hud p,#hud label,#hud select,#hud #reset,#hud #pos,#dndpovPrivateQuickLaunch{display:none!important}
+ #gamePanel,#minimap,#controlDeck{display:none!important}
+ #gamePanel.rpgpovMobileOpen,#minimap.rpgpovMobileOpen,#controlDeck.rpgpovMobileOpen{
+   display:block!important;position:fixed!important;top:50%!important;left:50%!important;
+   right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;
+   width:min(620px,calc(100vw - 26px))!important;max-width:calc(100vw - 26px)!important;
+   height:auto!important;max-height:calc(100dvh - 38px)!important;overflow:auto!important;
+   z-index:9510!important;box-sizing:border-box!important;
+ }
+ #aiDmPanel,#aiDmPartyBox,#mpPanel{
+   position:fixed!important;top:50%!important;left:50%!important;right:auto!important;
+   bottom:auto!important;transform:translate(-50%,-50%)!important;
+   width:min(720px,calc(100vw - 26px))!important;max-width:calc(100vw - 26px)!important;
+   height:min(590px,calc(100dvh - 38px))!important;max-height:calc(100dvh - 38px)!important;
+   z-index:9510!important;box-sizing:border-box!important;
+ }
+ #aiDmPartyBox,#mpPanel{overflow:auto!important}
+ #aiDmPanel[hidden],#aiDmPartyBox[hidden]{display:none!important}
+ #rpgpovMobile.rpgpovWindowActive .pad,
+ #rpgpovMobile.rpgpovWindowActive .actions{visibility:hidden}
+ #rpgpovMobile .top{z-index:9501}
+ #aiDmButton,#mpButton{display:none!important}
+ #rpgpovMobileShade{position:fixed;inset:0;background:#000b;z-index:9490;display:none}
+ #rpgpovMobileShade.open{display:block}
+ #rpgpovMobileClose{position:fixed;top:4px;right:5px;z-index:9600;display:none;
+   background:#6a392b;color:#fff3dc;border:1px solid #e3b475;border-radius:8px;
+   padding:7px 12px;font:bold 13px system-ui;min-height:34px}
+ #rpgpovMobileClose.open{display:block}
+}
+</style>
+<div id="rpgpovMobileShade" aria-hidden="true"></div>
+<button id="rpgpovMobileClose" type="button" aria-label="Close current window">✕ CLOSE</button>
+<script id="rpgpov-mobile-one-window-script">
+(()=>{
+ const root=document.getElementById('rpgpovMobile');
+ if(!root)return;
+ const mobile=()=>matchMedia('(pointer:coarse) and (max-width:950px)').matches;
+ const top=root.querySelector('.top');
+ top.innerHTML='<button data-view="ai">AI DM</button><button data-view="party">CHARACTERS</button><button data-view="read">READ</button><button data-view="map">MAP</button><button data-view="tools">TOOLS</button><button data-view="mp">MULTIPLAYER</button>';
+ const shade=document.getElementById('rpgpovMobileShade'),close=document.getElementById('rpgpovMobileClose');
+ const ids=['gamePanel','minimap','controlDeck','aiDmPanel','aiDmPartyBox','mpPanel'];
+ let current=null;
+ const el=id=>document.getElementById(id);
+ function dismiss(id){
+   const p=el(id);if(!p)return;
+   p.classList.remove('rpgpovMobileOpen');
+   if(id==='aiDmPanel'||id==='aiDmPartyBox')p.hidden=true;
+   if(id==='mpPanel')p.style.display='none';
+ }
+ function show(id){
+   if(!mobile())return;
+   ids.forEach(other=>{if(other!==id)dismiss(other)});
+   const p=el(id);if(!p)return;
+   document.exitPointerLock?.();
+   if(id==='aiDmPanel'||id==='aiDmPartyBox')p.hidden=false;
+   else if(id==='mpPanel')p.style.display='block';
+   else p.classList.add('rpgpovMobileOpen');
+   current=id;shade.classList.add('open');close.classList.add('open');
+   root.classList.add('rpgpovWindowActive');
+ }
+ function hide(){
+   ids.forEach(dismiss);current=null;
+   shade.classList.remove('open');close.classList.remove('open');
+   root.classList.remove('rpgpovWindowActive');
+ }
+ function open(view){
+   const target={ai:'aiDmPanel',party:'aiDmPartyBox',read:'gamePanel',map:'minimap',tools:'controlDeck',mp:'mpPanel'}[view];
+   if(!target)return;
+   if(current===target){hide();return}
+   if(view==='ai'&&el(target)?.hidden)el('aiDmButton')?.click();
+   if(view==='party'&&el(target)?.hidden){
+     const ai=el('aiDmPanel');
+     if(ai?.hidden)el('aiDmButton')?.click();
+     el('aiDmPartyOpen')?.click();
+   }
+   if(view==='mp'&&el(target)?.style.display!=='block')el('mpButton')?.click();
+   show(target);
+ }
+ top.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',e=>{
+   e.preventDefault();e.stopImmediatePropagation();open(b.dataset.view);
+ }));
+ close.addEventListener('click',hide);shade.addEventListener('click',hide);
+ window.addEventListener('keydown',e=>{if(mobile()&&e.key==='Escape'&&current)hide()},true);
+ // Preserve the existing close buttons, while keeping the overlay synchronized.
+ document.addEventListener('click',e=>{
+   if(!mobile()||!current)return;
+   if(e.target.closest('#aiDmClose,#partyClose,#mpClose,#gameClose'))setTimeout(hide,0);
+ },true);
+})();
+</script>
 </body></html>
