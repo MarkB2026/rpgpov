@@ -3838,11 +3838,11 @@ function addCard(kind,heading,message,label='ORIGINAL MODULE · READ-ALOUD'){
 }
 let aiServerOnline=false, aiUserChoice=true;
 function syncControls(){
- const enabled=aiServerOnline&&toggle.checked;
+ const enabled=(aiServerOnline||window.RPGPOV_AI_KEY_READY?.())&&toggle.checked;
  input.disabled=!enabled||busy;
  panel.querySelector('#aiDmSend').disabled=!enabled||busy;
  panel.querySelector('#aiDmConference').disabled=!enabled||busy;
- status.textContent=!aiServerOnline?'AI offline · descriptions available':enabled?(busy?'DM responding…':'AI ready'):'AI off · descriptions active';
+ status.textContent=!(aiServerOnline||window.RPGPOV_AI_KEY_READY?.())?'Connect your API key to activate AI DM':enabled?(busy?'DM responding…':'AI ready'):'AI off · descriptions active';
 }
 toggle.addEventListener('change',()=>{aiUserChoice=toggle.checked;syncControls()});
 async function checkAiConnection(){
@@ -3851,7 +3851,7 @@ async function checkAiConnection(){
  try{const r=await fetch('/api/module?location=ARRIVAL&position=outside',{cache:'no-store',signal:AbortSignal.timeout(2500)});
   online=r.ok&&(r.headers.get('content-type')||'').includes('json');}catch{}
  if(busy)return; // A late health-check response must not interrupt a battle.
- aiServerOnline=online;toggle.disabled=!online;toggle.checked=online&&aiUserChoice;syncControls();
+ aiServerOnline=online;const ready=online||window.RPGPOV_AI_KEY_READY?.();toggle.disabled=false;toggle.checked=!!ready&&aiUserChoice;syncControls();
 }
 syncControls();checkAiConnection();setInterval(checkAiConnection,12000);
 
@@ -5361,7 +5361,7 @@ body.rpgpovMobilePanelOpen #rpgpovMobileMenuButton{display:none!important}
 #rpgpovMobileSideClose.visible{display:block!important}
 body.rpgpovV5PanelOpen #rpgpovMobileMenuButton{display:none!important}
 </style>
-<div id="rpgpovV5Build">MOBILE v12</div>
+<div id="rpgpovV5Build">MOBILE v14</div>
 <script id="rpgpov-v5-script">
 (()=>{
  const ids=['gamePanel','minimap','controlDeck','aiDmPanel','aiDmPartyBox','mpPanel','rpgpovMobileSettings'];
@@ -5536,6 +5536,8 @@ body.rpgpovV6PartyOpen #rpgpovMobileSideClose { display:none!important; visibili
    const r=await fetch('https://api.openai.com/v1/models',{headers:{Authorization:'Bearer '+candidate}});
    if(!r.ok){const j=await r.json().catch(()=>({}));throw Error(j.error?.message||'Connection failed (HTTP '+r.status+')');}
    apiKey=candidate;hide();
+   const dmToggle=document.getElementById('aiDmToggle');
+   if(dmToggle){dmToggle.disabled=false;dmToggle.checked=true;dmToggle.dispatchEvent(new Event('change',{bubbles:true}));}
    document.getElementById('aiDmPanel')?.removeAttribute('hidden');
   }catch(e){status.textContent='Could not connect: '+e.message;}
   finally{connect.disabled=false;}
@@ -5562,10 +5564,18 @@ body.rpgpovV6PartyOpen #rpgpovMobileSideClose { display:none!important; visibili
   }catch(e){return new Response(JSON.stringify({error:e.message}),{status:502,headers:{'Content-Type':'application/json'}});}
  };
  document.querySelector('#rpgpovMobileMenu [data-mobile-view="ai"]')?.addEventListener('click',()=>{if(!apiKey)setTimeout(show,0)});
+ document.getElementById('aiDmToggleLabel')?.addEventListener('click',()=>{if(!apiKey)setTimeout(show,0)});
+ const dmLabel=document.getElementById('aiDmToggleLabel');if(dmLabel)dmLabel.lastChild.textContent=' AI DM · Personal API key';
  document.getElementById('rpgpovAiKeySetup')?.addEventListener('keydown',e=>{if(e.key==='Escape'){hide();e.stopPropagation()}},true);
  document.addEventListener('click',e=>{
   if(e.target.closest('#rpgpovAiCombatDock button,#dndpovEncounterBanner .encounter-ai-action')&&!apiKey)setTimeout(show,0);
  },true);
 })();
 </script>
+
+<!-- Mobile v13: single encounter control. The centered encounter/battle card remains;
+     remove the duplicate bottom dock that overlaps the touch movement pad. -->
+<style id="rpgpov-mobile-v13-single-encounter">
+#rpgpovOutdoorEncounterDock{display:none!important;pointer-events:none!important}
+</style>
 </body></html>
