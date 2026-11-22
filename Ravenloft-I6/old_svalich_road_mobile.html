@@ -5342,7 +5342,7 @@ body.rpgpovMobilePanelOpen #rpgpovMobileMenuButton{display:none!important}
 #rpgpovMobileSideClose.visible{display:block!important}
 body.rpgpovV5PanelOpen #rpgpovMobileMenuButton{display:none!important}
 </style>
-<div id="rpgpovV5Build">MOBILE v8</div>
+<div id="rpgpovV5Build">MOBILE v9</div>
 <script id="rpgpov-v5-script">
 (()=>{
  const ids=['gamePanel','minimap','controlDeck','aiDmPanel','aiDmPartyBox','mpPanel','rpgpovMobileSettings'];
@@ -5411,4 +5411,50 @@ body.rpgpovV6PartyOpen #rpgpovMobileSideClose { display:none!important; visibili
 #rpgpovMobile .pad button{pointer-events:auto!important;touch-action:none!important;user-select:none!important;-webkit-user-select:none!important}
 #rpgpovMobile .pad button.pressed{background:#936a35e8!important}
 </style>
+
+<!-- Mobile v9: restore the full original READ text suppressed by the desktop Journal CSS. -->
+<style id="rpgpov-mobile-v9-read-repair">
+#gamePanel.rpgpovMobileOpen .readaloud,
+#gamePanel.rpgpovMobileOpen .dmnote:not([hidden]) {
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  overflow:visible!important;
+  max-height:none!important;
+  height:auto!important;
+  white-space:pre-wrap!important;
+  overflow-wrap:anywhere!important;
+  line-height:1.6!important;
+}
+#gamePanel.rpgpovMobileOpen .readaloud[hidden],
+#gamePanel.rpgpovMobileOpen .dmnote[hidden] {display:none!important}
+#gamePanel.rpgpovMobileOpen {
+  display:block!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  max-height:calc(100dvh - 96px)!important;
+  padding:18px 18px 28px!important;
+}
+#gamePanel.rpgpovMobileOpen .smallCaption{display:block!important}
+#gamePanel.rpgpovMobileOpen #gameHint{margin:12px 0!important}
+</style>
+<script id="rpgpov-mobile-v9-read-refresh">
+(()=>{
+  const panel=document.getElementById('gamePanel');
+  const read=document.getElementById('gameRead');
+  const menu=document.getElementById('rpgpovMobileMenu');
+  if(!panel||!read||!menu)return;
+  // The old desktop 'Hide Descriptions' toggle can leave the source paragraph
+  // hidden. READ explicitly opts in to showing the existing, full source text.
+  menu.querySelector('[data-mobile-view="read"]')?.addEventListener('click',()=>{
+    requestAnimationFrame(()=>{
+      if(!panel.classList.contains('rpgpovMobileOpen'))return;
+      read.hidden=false;
+      panel.scrollTop=0;
+    });
+  });
+})();
+</script>
 </body></html>
