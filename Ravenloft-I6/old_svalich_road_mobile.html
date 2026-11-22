@@ -1405,7 +1405,7 @@ function rpgpovSpawnEncounterSprites(title){
  const nMatch=String(title).match(/(?:ENCOUNTER\s*[·:—-]\s*|ATTACK\s*[·:—-]?\s*)(\d+)\s/i);
  const count=Math.min(3,Math.max(1,Number(nMatch?.[1]||1)));
  for(let i=0;i<count;i++){
-  const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,transparent:true,depthWrite:false,alphaTest:0.035}));
+  const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,transparent:true,depthWrite:false,depthTest:false,alphaTest:0.035}));
   const offset=(i-(count-1)/2)*2.65;
   sprite.position.copy(camera.position).addScaledVector(forward,9+Math.abs(offset)*.6).addScaledVector(side,offset);
   const h=/bat|ghost|wraith/.test(asset)?3.7:/wolf|worg/.test(asset)?2.65:3.4;
@@ -4192,7 +4192,7 @@ setInterval(checkLocation,300);setTimeout(checkLocation,1000);
  function record(kind,detail,result=''){
   history.unshift({at:new Date().toLocaleTimeString(),kind,detail,result});history=history.slice(0,100);persist();renderOracle();
  }
- function notice(title,description){if(!state.enabled)return;window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK=true;bannerHead.textContent=title;bannerText.textContent=description;banner.style.display='none';document.exitPointerLock?.();window.dispatchEvent(new Event('rpgpov:outdoor-encounter'));}
+ function notice(title,description){if(!state.enabled)return;window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK=true;bannerHead.textContent=title;bannerText.textContent=description;banner.style.display='flex';document.exitPointerLock?.();window.dispatchEvent(new Event('rpgpov:outdoor-encounter'));}
  function renderOracle(){oracleBody.replaceChildren();
   const heartbeat=document.createElement('div');heartbeat.className='entry';
   const head=document.createElement('strong');head.textContent='AUTO DM · ORACLE HEARTBEAT';
@@ -5361,7 +5361,7 @@ body.rpgpovMobilePanelOpen #rpgpovMobileMenuButton{display:none!important}
 #rpgpovMobileSideClose.visible{display:block!important}
 body.rpgpovV5PanelOpen #rpgpovMobileMenuButton{display:none!important}
 </style>
-<div id="rpgpovV5Build">MOBILE v15</div>
+<div id="rpgpovV5Build">MOBILE v16</div>
 <script id="rpgpov-v5-script">
 (()=>{
  const ids=['gamePanel','minimap','controlDeck','aiDmPanel','aiDmPartyBox','mpPanel','rpgpovMobileSettings'];
@@ -5579,7 +5579,7 @@ body.rpgpovV6PartyOpen #rpgpovMobileSideClose { display:none!important; visibili
 #rpgpovOutdoorEncounterDock{display:none!important;pointer-events:none!important}
 </style>
 
-<!-- Mobile v15: restore the opening READ popup and enable road guidance from the inn approach. -->
+<!-- Mobile v16: restore the opening READ popup and enable road guidance from the inn approach. -->
 <style id="rpgpov-mobile-v15-opening">
 /* Preserve the single encounter card; never mask it behind the mobile controls. */
 #rpgpovAiCombatDock:not([hidden]){z-index:9750!important}
