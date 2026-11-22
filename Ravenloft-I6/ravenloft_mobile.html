@@ -19,7 +19,7 @@
   window.addEventListener('keydown',isolate,true);
   window.addEventListener('keyup',isolate,true);
 })();
-</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Castle Ravenloft — Full K1–K88 Module Index</title><style>
+</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Castle Ravenloft — Full K1–K88 Module Index</title><style>
 *{box-sizing:border-box}body{margin:0;overflow:hidden;background:#09090c;color:#e9dfcf;font:14px Georgia,serif}#scene{position:fixed;inset:0}#scene canvas{display:block}#hud,#mapbox,#help,#controls,#popup,#notes,#start{position:fixed;background:#0b0a0de8;border:1px solid #927b58;box-shadow:0 6px 30px #0009}#hud{top:16px;left:16px;padding:12px 18px}h2{font-size:21px;color:#e4c48a;margin:0 0 5px}#mapbox{right:16px;top:16px;width:475px;height:425px;min-width:310px;min-height:260px;max-width:95vw;max-height:90vh;padding:10px;resize:both;overflow:hidden;z-index:6;display:flex;flex-direction:column}#map{width:100%;height:100%;min-height:100px;display:block;background:#141319;flex:1;min-width:0}#maplabel{cursor:move;user-select:none;touch-action:none}#maptools{flex-shrink:0}#maplabel{font-size:12px;color:#edcb90;min-height:30px}#maptools{display:flex;align-items:center;justify-content:center;gap:12px}#help{left:16px;bottom:16px;padding:12px;line-height:1.7}#controls{right:16px;bottom:16px;padding:8px;display:flex;flex-wrap:wrap;gap:5px;justify-content:end;max-width:440px}button{font:13px Georgia,serif;color:#efdfbf;background:#302822;border:1px solid #9b825b;padding:7px 11px;cursor:pointer}button:hover{background:#5d4933}#popup{display:none;z-index:8;bottom:28px;top:auto;left:50%;transform:translateX(-50%);padding:15px 18px;width:min(840px,calc(100vw - 32px));max-height:82vh;overflow:auto;line-height:1.5;background:#12100fea;border:2px solid #b58b4f;box-shadow:0 10px 45px #000e}#popup h2{margin-top:5px}#popup p{font-size:15px;margin:7px 0 12px}#popup img{display:block;width:100%;height:min(35vh,310px);object-fit:contain;background:#0b0908;border:1px solid #927b58;border-radius:3px;margin:8px 0 12px}#popup small{color:#d3b784;letter-spacing:1px}#popup .foot{display:flex;justify-content:space-between;align-items:center;gap:12px}#popup .foot span{font-size:12px;color:#b9aa94}#popup h2{font-size:23px}#notes{display:none;top:130px;left:16px;max-width:340px;padding:15px;line-height:1.5}#start{z-index:10;top:50%;left:50%;transform:translate(-50%,-50%);padding:24px 32px;max-width:430px;line-height:1.6}#crosshair{position:fixed;top:50%;left:50%;width:12px;height:12px;transform:translate(-50%,-50%);pointer-events:none}#crosshair:before,#crosshair:after{content:'';position:absolute;background:#f4e3bc99}#crosshair:before{width:12px;height:1px;top:5px}#crosshair:after{height:12px;width:1px;left:5px}#error{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#421b1b;padding:10px;display:none;z-index:20}
 
 /* Illustrated AD&D-style open flame torch, UI only; existing WebGL lighting unchanged. */
@@ -2145,7 +2145,7 @@ const legacy=document.getElementById('aiDmPartyBox');if(legacy)legacy.hidden=tru
 </script>
 
 <style id="castle-mobile-v1-css">
-@media(max-width:800px){
+@media (max-width:800px), (orientation:landscape) and (pointer:coarse){
  #castleMobile{display:block!important;position:fixed;inset:0;z-index:9500;pointer-events:none;font:14px system-ui,sans-serif;color:#f8e5c4}
  #castleMobile button,#castleMobile nav,#castleMobile section,#castleMobile .cm-shade{pointer-events:auto}
  #hud,#mapbox,#help,#controls,#floorRibbon,#roomDirectoryButton,#ambientControl,#edgeBrowserTip,#castleKoboReopen,#oracleOrb{display:none!important}
@@ -2216,10 +2216,25 @@ const legacy=document.getElementById('aiDmPartyBox');if(legacy)legacy.hidden=tru
 })();
 </script>
 <style id="castle-mobile-v2-menu-layer-fix">
-@media(max-width:800px){
+@media (max-width:800px), (orientation:landscape) and (pointer:coarse){
  #castleMobile #cmMenu{position:fixed!important;z-index:12!important;top:calc(12px + env(safe-area-inset-top))!important;right:12px!important;pointer-events:auto!important}
  #castleMobile #cmNav{z-index:10!important;padding-top:calc(75px + env(safe-area-inset-top))!important}
  #castleMobile #cmShade{z-index:9!important}
  #castleMobile #cmNavClose{position:sticky!important;bottom:0!important;z-index:11!important;text-align:center!important;background:#684332!important;border-color:#d6a36b!important}
 }
-</style></body></html>
+</style><style id="rpgpov-mobile-landscape-v3">
+html,body{min-height:100%;overscroll-behavior:none}
+@media (orientation:landscape) and (pointer:coarse){
+ #rpgpovMobile .pad,#villageMobile .vm-pad,#tserMobile .tm-pad,#castleMobile .cm-pad{bottom:calc(6px + env(safe-area-inset-bottom))!important;left:calc(8px + env(safe-area-inset-left))!important}
+ #rpgpovMobileMenuButton,#vmMenu,#tmMenu,#cmMenu{right:calc(8px + env(safe-area-inset-right))!important;top:calc(8px + env(safe-area-inset-top))!important}
+ #rpgpovMobileMenu,#villageMobile .vm-dropdown,#tmDropdown,#cmNav{max-height:100dvh!important;overflow-y:auto!important;overscroll-behavior:contain!important}
+ #rpgpovMobile .pad button,#villageMobile .vm-pad button,#tserMobile .tm-pad button,#castleMobile .cm-pad button{touch-action:none!important}
+}
+</style>
+<script id="rpgpov-mobile-orientation-v3">(()=>{
+ const update=()=>{document.documentElement.style.setProperty('--rpgpov-vh',window.innerHeight+'px');window.dispatchEvent(new Event('resize'));};
+ let queued=false;
+ const onTurn=()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;document.documentElement.style.setProperty('--rpgpov-vh',window.innerHeight+'px');});setTimeout(update,180);setTimeout(update,650);};
+ window.addEventListener('orientationchange',onTurn,{passive:true});
+ window.visualViewport?.addEventListener('resize',onTurn,{passive:true});
+})();</script></body></html>

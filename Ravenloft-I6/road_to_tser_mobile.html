@@ -19,7 +19,7 @@
   window.addEventListener('keydown',isolate,true);
   window.addEventListener('keyup',isolate,true);
 })();
-</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DNDPOV — Road to Tser Pool v3.77 · Multiplayer + AI DM</title><style>
+</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>DNDPOV — Road to Tser Pool v3.77 · Multiplayer + AI DM</title><style>
 html,body{margin:0;height:100%;overflow:hidden;background:#10171a;color:#f4e4c6;font:14px Georgia,serif}canvas{display:block}#hud{position:fixed;left:12px;top:12px;background:#202327ee;border:1px solid #b08b57;padding:13px;z-index:5;width:290px}#hud h2{margin:0 0 8px;color:#ebc28b;font-size:19px}#hud p{line-height:1.5}select,button{background:#342b25;border:1px solid #a8895a;color:#f5e5c7;padding:7px;margin:3px;cursor:pointer}#map{position:fixed;right:15px;top:15px;background:#1c2526e8;border:1px solid #ac8c62;z-index:5;width:210px;height:280px}#help{position:fixed;bottom:12px;left:12px;background:#171c1ddd;padding:9px;z-index:5}#notice{position:fixed;top:40%;left:50%;transform:translate(-50%,-50%);background:#171b1ef0;border:1px solid #c5a16a;padding:20px;text-align:center;display:none;z-index:8;max-width:380px}#notice a{color:#ebc28b}#error{position:fixed;left:20%;top:40%;background:#511;color:white;padding:15px;display:none;z-index:20}
 #fade{position:fixed;inset:0;background:#11191c;opacity:0;pointer-events:none;z-index:30;transition:opacity 2.3s ease}#fade.active{opacity:1;pointer-events:auto}</style></head><body><div id="fade"></div><div id="hud"><h2>DNDPOV · ROAD TO TSER POOL v3.77 · BASIC</h2><p id="place">Leaving the Village of Barovia</p><p id="description">The road winds into the dark Svalich Woods. Somewhere beyond the mist lies Castle Ravenloft.</p><label>Time <select id="day"><option value="day">Day</option><option value="dawn">Dawn</option><option value="dusk">Dusk</option><option value="night">Night</option></select></label><label>Weather <select id="weather"><option value="mist">Mist</option><option value="clear">Clear</option><option value="fog">Fog</option></select></label><p><button id="reset">Restart Road</button></p><p><button id="wolfToggle">🐺 Wolves: ON</button><button id="wolfTest">▶ Test Howl</button></p><p id="wolfStatus" style="font:12px system-ui;color:#e8cda0">Wolves silent until dusk</p></div><canvas id="map" width="210" height="280"></canvas><div id="help">↑ ↓ walk · ← → turn · A / D sidestep · Shift jog</div><div id="notice"></div><div id="error"></div><script type="module">
 try{
@@ -2842,7 +2842,7 @@ function carriageFrame(dt){
  player.x=carriageGroup.position.x;player.z=rideZ;
  document.querySelector('#place').textContent='Inside the Black Carriage';
  document.querySelector('#description').textContent='The carriage sets off without a driver. Through the front window, the dirt road winds uphill toward Castle Ravenloft.';
- if(rideZ<=-613&&!transitionStarted){stopCarriageSoundtrack();transitionStarted=true;document.querySelector('#fade').classList.add('active');setTimeout(()=>{window.location.href='ravenloft.html?arrival=carriage&floor=walls'},2400)}
+ if(rideZ<=-613&&!transitionStarted){stopCarriageSoundtrack();transitionStarted=true;document.querySelector('#fade').classList.add('active');setTimeout(()=>{window.location.href='ravenloft_mobile.html?arrival=carriage&floor=walls'},2400)}
 }
 // Village-style optional read-aloud: the landmark panel opens once on approach,
 // with manual R reading and a complete location index always available.
@@ -3003,7 +3003,7 @@ document.getElementById('roadReturnYes').onclick=()=>{
  transitionStarted=true;clearRoadMovement();
  document.querySelector('#fade').classList.add('active');
  setTimeout(()=>{
-  window.location.href='village_of_barovia.html?arrival=west_exit';
+  window.location.href='village_of_barovia_mobile.html?arrival=west_exit';
  },1300);
 };
 window.addEventListener('keydown',event=>{
@@ -3157,7 +3157,7 @@ if(player.z>105){
  player.z=105;
  if(!roadReturnPromptLatched&&!transitionStarted)openRoadReturnPrompt();
 }
-if(player.z<-616&&!transitionStarted){transitionStarted=true;document.querySelector('#fade').classList.add('active');setTimeout(()=>{window.location.href='ravenloft.html?arrival=carriage&floor=walls'},2400)}
+if(player.z<-616&&!transitionStarted){transitionStarted=true;document.querySelector('#fade').classList.add('active');setTimeout(()=>{window.location.href='ravenloft_mobile.html?arrival=carriage&floor=walls'},2400)}
 updateEvaOutsidePrompt();
 updateEyes(now);updateMoon();updateRoadWeather(now);updateCastleApproach();minimap();renderer.render(scene,camera);requestAnimationFrame(frame)}requestAnimationFrame(frame);
 window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);resizePrecipitationCanvas()});
@@ -4603,7 +4603,7 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
 <style id="tser-ai-description-display-only">#aiDmPanel #aiDmPlace,#aiDmPanel #aiDmReadAgain,#aiDmPanel .aiDmScroll{display:none!important}</style>
 
 <style id="tser-mobile-v1-styles">
-@media(max-width:800px){
+@media (max-width:800px), (orientation:landscape) and (pointer:coarse){
  #tserMobile{display:block!important;position:fixed;inset:0;pointer-events:none;z-index:9800;font:14px system-ui;color:#f7dfb4}
  #tserMobile button,#tserMobile nav,#tserMobile section{pointer-events:auto}
  #hud,#map,#help,#aiDmButton,#arcQuickToggle,#mpButton,#koboReaderReopen{display:none!important}
@@ -4639,7 +4639,7 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
  #dndpovContextDock.kobo-maximized{z-index:9880!important}
  #notice{z-index:9920!important;max-width:calc(100vw - 50px)!important}
 }
-@media(min-width:801px){#tserMobile{display:none!important}}
+@media(min-width:801px) and (pointer:fine){#tserMobile{display:none!important}}
 </style>
 
 <div id="tserMobile" style="display:none">
@@ -4772,5 +4772,20 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
  document.addEventListener('keydown',e=>{if(e.key==='Escape'){setMenu(false);close()}});
 })();
 </script>
-<style id="tserMobileV2Fixes">@media(max-width:800px){#rpgpovAiCombatDock:not([hidden]){position:fixed!important;top:auto!important;bottom:124px!important;left:auto!important;right:8px!important;transform:none!important;width:min(230px,58vw)!important;z-index:9700!important;padding:8px!important}#rpgpovAiCombatDock p{display:none}#rpgpovAiCombatDock button{font-size:11px!important;padding:7px!important}#rpgpovAiCombatDock .battle-actions{display:flex;flex-direction:column;gap:4px}}#rpgpovAiCombatDock[hidden]{display:none!important}</style>
-</body></html>
+<style id="tserMobileV2Fixes">@media (max-width:800px), (orientation:landscape) and (pointer:coarse){#rpgpovAiCombatDock:not([hidden]){position:fixed!important;top:auto!important;bottom:124px!important;left:auto!important;right:8px!important;transform:none!important;width:min(230px,58vw)!important;z-index:9700!important;padding:8px!important}#rpgpovAiCombatDock p{display:none}#rpgpovAiCombatDock button{font-size:11px!important;padding:7px!important}#rpgpovAiCombatDock .battle-actions{display:flex;flex-direction:column;gap:4px}}#rpgpovAiCombatDock[hidden]{display:none!important}</style>
+<style id="rpgpov-mobile-landscape-v3">
+html,body{min-height:100%;overscroll-behavior:none}
+@media (orientation:landscape) and (pointer:coarse){
+ #rpgpovMobile .pad,#villageMobile .vm-pad,#tserMobile .tm-pad,#castleMobile .cm-pad{bottom:calc(6px + env(safe-area-inset-bottom))!important;left:calc(8px + env(safe-area-inset-left))!important}
+ #rpgpovMobileMenuButton,#vmMenu,#tmMenu,#cmMenu{right:calc(8px + env(safe-area-inset-right))!important;top:calc(8px + env(safe-area-inset-top))!important}
+ #rpgpovMobileMenu,#villageMobile .vm-dropdown,#tmDropdown,#cmNav{max-height:100dvh!important;overflow-y:auto!important;overscroll-behavior:contain!important}
+ #rpgpovMobile .pad button,#villageMobile .vm-pad button,#tserMobile .tm-pad button,#castleMobile .cm-pad button{touch-action:none!important}
+}
+</style>
+<script id="rpgpov-mobile-orientation-v3">(()=>{
+ const update=()=>{document.documentElement.style.setProperty('--rpgpov-vh',window.innerHeight+'px');window.dispatchEvent(new Event('resize'));};
+ let queued=false;
+ const onTurn=()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;document.documentElement.style.setProperty('--rpgpov-vh',window.innerHeight+'px');});setTimeout(update,180);setTimeout(update,650);};
+ window.addEventListener('orientationchange',onTurn,{passive:true});
+ window.visualViewport?.addEventListener('resize',onTurn,{passive:true});
+})();</script></body></html>

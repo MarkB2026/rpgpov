@@ -31,7 +31,7 @@
     }
   },true);
 })();
-</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DNDPOV — Old Svalich Road v2.35 · Multiplayer + AI DM</title><style>
+</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>DNDPOV — Old Svalich Road v2.35 · Multiplayer + AI DM</title><style>
 html,body{margin:0;height:100%;overflow:hidden;background:#10171a;color:#f5e6c8;font:14px Georgia,serif}canvas{display:block}#hud{position:absolute;top:14px;left:14px;background:#171914e6;border:1px solid #a38656;border-radius:8px;padding:13px;max-width:310px}#hud b{font-size:19px;color:#e5c48e}button{background:#40382b;color:#f6e4bd;border:1px solid #a38a61;padding:7px;border-radius:4px;cursor:pointer}#minimap{position:absolute;right:14px;top:14px;background:#181b17e8;border:1px solid #a38a61;padding:8px;border-radius:7px;width:160px}#minimap canvas{width:300px;height:160px}#help{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:#171914e0;padding:10px;border:1px solid #a38a61;border-radius:5px;white-space:nowrap}#notice{position:absolute;top:23%;left:50%;transform:translateX(-50%);background:#171914e6;color:#ead4ac;border:1px solid #9d8053;padding:13px 24px;border-radius:5px;display:none;font-size:19px;text-align:center}#loading{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#171914;color:#f8dba8;border:2px solid #a38a61;border-radius:8px;padding:24px;max-width:80vw;z-index:5}
 .arcStyleTabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 6px}.arcStyleTabs button{border:1px solid #756a55;border-radius:8px;padding:9px 18px;background:#201d19;color:#eee4d0;cursor:pointer;font-weight:700}.arcStyleTabs button.active{background:#bda474;color:#16130e;border-color:#dfc58d}</style><style id="arc-v224-pending">.arcPortraitPending{display:flex!important;align-items:center;justify-content:center;font:bold 42px Georgia,serif;color:#d5b78b;background:linear-gradient(135deg,#30283b,#17141b)!important}</style><style id="dndpov-gameplay-style">
 #gamePanel{position:fixed;left:12px;top:155px;z-index:18;width:min(335px,calc(100vw - 24px));max-height:calc(100vh - 245px);overflow:auto;background:rgba(34,38,43,.95);border:1px solid #9b8057;border-radius:6px;padding:12px;color:#f1e7d7;box-shadow:0 6px 24px #0009;font:13px/1.5 Georgia,serif}
@@ -1364,7 +1364,7 @@ function travelToVillage(){
  if(villageTransitionStarted)return;
  villageTransitionStarted=true;
  const fade=document.querySelector('#travelFade');fade.classList.add('active');
- const target=new URL('village_of_barovia.html',window.location.href);
+ const target=new URL('village_of_barovia_mobile.html',window.location.href);
  target.searchParams.set('arrival','road');
  target.searchParams.set('time',timeOfDay);
  target.searchParams.set('weather',effectiveRoadWeather());
@@ -2048,7 +2048,7 @@ window.addEventListener('keydown',e=>{
 const keyOverlay=document.createElement('canvas');keyOverlay.id='keyOverlay';keyOverlay.width=160;keyOverlay.height=240;GAME_MAP.style.position='absolute';GAME_MAP.append(keyOverlay);
 function drawKeys(){const c=keyOverlay.getContext('2d');c.clearRect(0,0,160,240);c.font='bold 9px Georgia';c.textAlign='center';for(const l of gameLocations){if(!l.r)continue;const x=MAP_X(l),y=MAP_Y(l);if(x<10||x>150||y<10||y>230)continue;c.fillStyle='#f4cf8a';c.fillRect(x-11,y-11,22,14);c.fillStyle='#3c2b1d';c.fillText(l.id,x,y-1)}}drawKeys();
 function gameNav(path){window.location.href=path}
-gameEl('castleBtn').onclick=async()=>{if(innInside&&!await window.DNDPOV_SVALICH_REQUIRE_PARTY?.())return;gameNav('ravenloft.html');};
+gameEl('castleBtn').onclick=async()=>{if(innInside&&!await window.DNDPOV_SVALICH_REQUIRE_PARTY?.())return;gameNav('ravenloft_mobile.html');};
 gameEl('encBtn').onclick=gameEncounter;
 gameRender();setInterval(()=>gameUpdateLocation(player.x,player.z),250);
 // v1.76 — I6 opening at The Last Chance Inn and a condensed 5-hour walk.
@@ -2396,10 +2396,10 @@ jump.onchange=async()=>{
  // The former selector changed only read-aloud text, which the location
  // tracker immediately replaced because the player had not actually moved.
  if(!destination.r){
-  if(destination.id==='E'){window.location.href='village_of_barovia.html';return;}
-  if(destination.id==='J'){window.location.href='ravenloft.html?arrival=carriage&floor=walls';return;}
+  if(destination.id==='E'){window.location.href='village_of_barovia_mobile.html';return;}
+  if(destination.id==='J'){window.location.href='ravenloft_mobile.html?arrival=carriage&floor=walls';return;}
   try{sessionStorage.setItem('rpgpov_direct_road_landmark_v1',destination.id)}catch(e){console.warn(e)}
-  window.location.href='road_to_tser.html';return;
+  window.location.href='road_to_tser_mobile.html';return;
  }
  gameClose();
  i6JourneyMode='';i6JourneyHours=0;
@@ -5631,4 +5631,19 @@ body.rpgpovV6PartyOpen #rpgpovMobileSideClose { display:none!important; visibili
  #aiDmPanel.rpgpovMobileOpen{display:flex!important;flex-direction:column!important;overflow:hidden!important}
  #aiDmPanel.rpgpovMobileOpen #aiDmLog{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important}
 }
-</style></body></html>
+</style><style id="rpgpov-mobile-landscape-v3">
+html,body{min-height:100%;overscroll-behavior:none}
+@media (orientation:landscape) and (pointer:coarse){
+ #rpgpovMobile .pad,#villageMobile .vm-pad,#tserMobile .tm-pad,#castleMobile .cm-pad{bottom:calc(6px + env(safe-area-inset-bottom))!important;left:calc(8px + env(safe-area-inset-left))!important}
+ #rpgpovMobileMenuButton,#vmMenu,#tmMenu,#cmMenu{right:calc(8px + env(safe-area-inset-right))!important;top:calc(8px + env(safe-area-inset-top))!important}
+ #rpgpovMobileMenu,#villageMobile .vm-dropdown,#tmDropdown,#cmNav{max-height:100dvh!important;overflow-y:auto!important;overscroll-behavior:contain!important}
+ #rpgpovMobile .pad button,#villageMobile .vm-pad button,#tserMobile .tm-pad button,#castleMobile .cm-pad button{touch-action:none!important}
+}
+</style>
+<script id="rpgpov-mobile-orientation-v3">(()=>{
+ const update=()=>{document.documentElement.style.setProperty('--rpgpov-vh',window.innerHeight+'px');window.dispatchEvent(new Event('resize'));};
+ let queued=false;
+ const onTurn=()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;document.documentElement.style.setProperty('--rpgpov-vh',window.innerHeight+'px');});setTimeout(update,180);setTimeout(update,650);};
+ window.addEventListener('orientationchange',onTurn,{passive:true});
+ window.visualViewport?.addEventListener('resize',onTurn,{passive:true});
+})();</script></body></html>
