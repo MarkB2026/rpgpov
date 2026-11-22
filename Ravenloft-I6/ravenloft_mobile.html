@@ -2179,7 +2179,7 @@ const legacy=document.getElementById('aiDmPartyBox');if(legacy)legacy.hidden=tru
 @media(min-width:801px){#castleMobile{display:none!important}}
 </style>
 <div id="castleMobile" style="display:none">
- <div class="cm-label">RAVENLOFT · MOBILE v1</div><button id="cmMenu">☰ MENU</button><div id="cmShade" class="cm-shade" hidden></div>
+ <div class="cm-label">RAVENLOFT · MOBILE v2</div><button id="cmMenu">☰ MENU</button><div id="cmShade" class="cm-shade" hidden></div>
  <nav id="cmNav" hidden><button data-cm="read">READ · ROOM DESCRIPTION</button><button data-cm="location">LOCATION</button><button data-cm="ai">AI DM · JOURNAL</button><button data-cm="party">CHARACTERS</button><button data-cm="floors">FLOORS</button><button data-cm="rooms">K-ROOM INDEX</button><button data-cm="map">MAP</button><button data-cm="torch">TORCH</button><button data-cm="sound">DUNGEON SOUNDS</button><button data-cm="multiplayer">MULTIPLAYER</button><button data-cm="restart">RESTART FLOOR</button><button id="cmNavClose">✕ CLOSE MENU</button></nav>
  <div class="cm-pad"><button data-key="ArrowUp">▲</button><button data-key="ArrowLeft">◀</button><button data-key="ArrowDown">▼</button><button data-key="ArrowRight">▶</button></div>
  <button id="cmRead">READ</button><button id="cmLocation">LOCATION</button><div id="cmToast" class="cm-toast" hidden></div>
@@ -2215,4 +2215,11 @@ const legacy=document.getElementById('aiDmPartyBox');if(legacy)legacy.hidden=tru
  addEventListener('load',()=>setTimeout(cleanup,250));setTimeout(cleanup,1300);
 })();
 </script>
-</body></html>
+<style id="castle-mobile-v2-menu-layer-fix">
+@media(max-width:800px){
+ #castleMobile #cmMenu{position:fixed!important;z-index:12!important;top:calc(12px + env(safe-area-inset-top))!important;right:12px!important;pointer-events:auto!important}
+ #castleMobile #cmNav{z-index:10!important;padding-top:calc(75px + env(safe-area-inset-top))!important}
+ #castleMobile #cmShade{z-index:9!important}
+ #castleMobile #cmNavClose{position:sticky!important;bottom:0!important;z-index:11!important;text-align:center!important;background:#684332!important;border-color:#d6a36b!important}
+}
+</style></body></html>
