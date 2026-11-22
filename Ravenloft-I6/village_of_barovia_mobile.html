@@ -2727,7 +2727,7 @@ const doorSites=keyedPlaces.filter(k=>entryOffsets[k.id]).map(k=>{
  return {id:k.id,name:k.name,
   x:cx+Math.sin(angle)*entryOffsets[k.id],
   z:cz+Math.cos(angle)*entryOffsets[k.id],
-  r:k.id==='E4'?3.6:3.0};
+  r:k.id==='E4'?5.5:5.0};
 });
 const doorHint=document.createElement('div');
 doorHint.id='doorHint';doorHint.hidden=true;document.body.append(doorHint);
@@ -6031,8 +6031,8 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
 @media(min-width:801px){#villageMobile{display:none!important}}
 </style>
 <div id="villageMobile" style="display:none">
- <span class="vm-version">VILLAGE · MOBILE v4</span>
- <button class="vm-menu" id="vmMenu" type="button">☰ MENU</button>
+ <span class="vm-version">VILLAGE · MOBILE v5</span>
+ <button class="vm-menu" id="vmMenu" type="button" aria-expanded="false">☰ MENU</button><button id="vmLocation" type="button">📍 LOCATION</button><div id="vmMenuShade" hidden></div>
  <nav class="vm-dropdown" id="vmDropdown" hidden>
   <button data-vm="read">READ</button><button data-vm="tools">TOOLS</button>
   <button data-vm="ai">AI DM</button><button data-vm="party">CHARACTERS</button>
@@ -6040,7 +6040,7 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
   <button data-vm="mp">MULTIPLAYER</button><button data-vm="explore">EXPLORE</button>
  </nav>
  <div class="vm-pad" aria-label="Movement controls"><button data-key="ArrowUp" aria-label="Forward">▲</button><button data-key="ArrowLeft" aria-label="Turn left">◀</button><button data-key="ArrowDown" aria-label="Backward">▼</button><button data-key="ArrowRight" aria-label="Turn right">▶</button></div>
- <div id="vmInteractHint" hidden aria-live="polite"></div><button class="vm-explore" id="vmExplore" aria-label="Enter or exit">⚒</button>
+ <div id="vmInteractHint" hidden aria-live="polite"></div><button class="vm-explore" id="vmExplore" aria-label="Enter or exit building">ENTER</button>
  <section class="vm-overlay" id="vmOverlay" hidden><div class="vm-sheet"><button class="vm-close" id="vmClose">×</button><h2 id="vmTitle">Village settings</h2><div id="vmContent"></div></div></section>
 </div>
 <script id="village-mobile-v2-script">
@@ -6057,10 +6057,14 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
  function tap(key){send(key,'keydown');setTimeout(()=>send(key,'keyup'),55)}
  function interact(){const result=window.VILLAGE_MOBILE_INTERACT?.();if(!result){tap('Enter');return}if(!result.ok){const hint=$('vmInteractHint');hint.textContent=result.message;hint.hidden=false;clearTimeout(window.vmHintTimer);window.vmHintTimer=setTimeout(()=>hint.hidden=true,2300)}}
  $('vmExplore').onclick=interact;
- $('vmMenu').onclick=()=>dropdown.hidden=!dropdown.hidden;
+ const menuShade=$('vmMenuShade');
+ function setMenu(open){dropdown.hidden=!open;menuShade.hidden=!open;$('vmMenu').setAttribute('aria-expanded',String(open));$('vmMenu').textContent=open?'✕ CLOSE':'☰ MENU'}
+ $('vmMenu').onclick=()=>setMenu(dropdown.hidden);
+ menuShade.onclick=()=>setMenu(false);
+ $('vmLocation').onclick=()=>{setMenu(false);const dock=$('dndpovContextDock');if(dock){dock.classList.remove('kobo-hidden','collapsed');dock.hidden=false;dock.style.display='';$('koboReaderReopen')?.setAttribute('hidden','');}else showDescription()};
  function close(){overlay.hidden=true;content.replaceChildren()}
  $('vmClose').onclick=close;overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
- function sheet(title){dropdown.hidden=true;$('vmTitle').textContent=title;content.replaceChildren();overlay.hidden=false}
+ function sheet(title){setMenu(false);$('vmTitle').textContent=title;content.replaceChildren();overlay.hidden=false}
  function action(label,fn){const b=document.createElement('button');b.className='vm-action';b.textContent=label;b.onclick=fn;content.append(b);return b}
  function original(id){return $(id)}
  const click=id=>{const el=original(id);if(el)el.click();return !!el};
@@ -6075,7 +6079,7 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
  }
 
  function show(which){
-  dropdown.hidden=true;
+  setMenu(false);
   if(which==='explore'){interact();return}
   if(which==='read'){showDescription();return}
   if(which==='ai'){click('aiDmButton');return}
@@ -6086,9 +6090,9 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
   if(which==='tools'){sheet('Village tools');action('Read nearby location',()=>{close();showDescription()});action('Toggle DM notes',()=>{click('dmMode');const enabled=original('dmMode')?.getAttribute('aria-pressed')==='true';const b=[...content.querySelectorAll('button')].find(b=>b.textContent.startsWith('DM notes:'));if(b)b.textContent='DM notes: '+(enabled?'ON':'OFF')});action('Enter / exit building',()=>{close();interact()});action('Overhead / first-person view',()=>{click('overview');close()});action('Restart at east entrance',()=>{click('reset');close()});action('Browse locations E1–E7',()=>{close();click('indexOpen')});return}
  }
  root.querySelectorAll('[data-vm]').forEach(b=>b.onclick=()=>show(b.dataset.vm));
- document.addEventListener('keydown',e=>{if(e.key==='Escape'){dropdown.hidden=true;close()}});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'){setMenu(false);close()}});
  // Re-open the AI journal when combat narration arrives, without stealing input focus.
- const ai=original('aiDmPanel');if(ai){const obs=new MutationObserver(()=>{if(ai.hidden===false)dropdown.hidden=true});obs.observe(ai,{attributes:true,attributeFilter:['hidden']})}
+ const ai=original('aiDmPanel');if(ai){const obs=new MutationObserver(()=>{if(ai.hidden===false)setMenu(false)});obs.observe(ai,{attributes:true,attributeFilter:['hidden']})}
 })();
 </script>
 <style id="village-mobile-v4-layout-fixes">
@@ -6108,6 +6112,21 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
  #villageMobile .vm-explore{z-index:9802!important}
  /* Hide redundant old location tab; READ is now the dedicated description control. */
  #koboReaderReopen{display:none!important}
+}
+</style>
+
+<style id="village-mobile-v5-fixes">
+@media(max-width:800px){
+ #villageMobile .vm-dropdown{z-index:9912!important;top:0!important;right:0!important;bottom:0!important;left:auto!important;width:min(315px,85vw)!important;height:100dvh!important;display:flex!important;flex-direction:column!important;gap:10px!important;padding:88px 16px 22px!important;box-sizing:border-box!important;overflow-y:auto!important;background:#231e27!important;box-shadow:-15px 0 50px #000c!important}
+ #villageMobile .vm-dropdown[hidden],#vmMenuShade[hidden]{display:none!important}
+ #vmMenuShade:not([hidden]){display:block!important;position:fixed;inset:0;background:#0009;z-index:9910!important}
+ #villageMobile .vm-menu{z-index:9913!important}
+ #villageMobile .vm-explore{right:16px!important;bottom:calc(110px + env(safe-area-inset-bottom))!important;width:86px!important;height:54px!important;font:700 14px system-ui!important;z-index:9803!important}
+ #vmLocation{position:fixed;right:16px;bottom:calc(27px + env(safe-area-inset-bottom));z-index:9803;border-radius:12px;padding:12px 10px;background:#2c2432;color:#ffe0b0;border:1px solid #d5a46a;font:700 12px system-ui}
+ #vmInteractHint:not([hidden]){bottom:calc(190px + env(safe-area-inset-bottom))!important;max-width:calc(100vw - 28px)!important}
+ #villageMobile .vm-pad{left:10px!important;bottom:calc(12px + env(safe-area-inset-bottom))!important;grid-template-columns:repeat(3,60px)!important;grid-template-rows:repeat(2,55px)!important}
+ #locationPanel:not([hidden]){display:flex!important;z-index:9920!important}
+ #dndpovContextDock:not(.kobo-hidden){z-index:9890!important}
 }
 </style>
 </body></html>
