@@ -5129,4 +5129,91 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
  },true);
 })();
 </script>
+<!-- Mobile minimal-start interface: independent of desktop build. -->
+<style id="rpgpov-mobile-minimal-start">
+@media (pointer:coarse) and (max-width:950px){
+ #hud,#help,#gamePanel,#minimap,#controlDeck,#aiDmPanel,#aiDmPartyBox,#mpPanel,
+ #dndpovContextDock,#dndpovPrivateQuickLaunch,#aiDmButton,#mpButton,
+ #svalichJourneyBadge,#svalichJourneyToast{display:none!important}
+ #rpgpovMobile{z-index:9700!important}
+ #rpgpovMobile .top{display:none!important}
+ #rpgpovMobile .actions{display:none!important}
+ #rpgpovMobile .pad{bottom:max(14px,env(safe-area-inset-bottom))!important}
+ #rpgpovMobile .pad button{width:55px;height:53px;font-size:27px}
+ #rpgpovMobileMenuButton{display:block!important;position:fixed;top:max(10px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));z-index:9750;background:#251c1be8;border:1px solid #caa46b;color:#ffe2b1;border-radius:9px;padding:10px 14px;font:bold 14px system-ui;min-height:44px}
+ #rpgpovMobileMenu{display:none;position:fixed;right:10px;top:62px;z-index:9760;width:min(240px,calc(100vw - 20px));max-height:calc(100dvh - 80px);overflow:auto;padding:9px;background:#201b20f5;border:1px solid #bd9663;border-radius:10px;box-shadow:0 12px 40px #000c;grid-template-columns:1fr 1fr;gap:7px}
+ #rpgpovMobileMenu.open{display:grid}
+ #rpgpovMobileMenu button{font:12px system-ui;background:#49372c;color:#ffe5b9;border:1px solid #a98961;border-radius:7px;padding:12px 4px;min-height:45px}
+ #rpgpovMobileShade.open{display:block!important;z-index:9770!important}
+ #rpgpovMobileClose.open{display:block!important;z-index:9790!important}
+ #gamePanel.rpgpovMobileOpen,#minimap.rpgpovMobileOpen,#controlDeck.rpgpovMobileOpen,
+ #aiDmPanel.rpgpovMobileOpen,#aiDmPartyBox.rpgpovMobileOpen,#mpPanel.rpgpovMobileOpen,
+ #rpgpovMobileSettings.rpgpovMobileOpen{display:block!important;position:fixed!important;top:50%!important;left:50%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;width:min(640px,calc(100vw - 24px))!important;max-width:calc(100vw - 24px)!important;max-height:calc(100dvh - 40px)!important;overflow:auto!important;z-index:9780!important;box-sizing:border-box!important}
+ #rpgpovMobileSettings{display:none;background:#26242b;color:#f5dfb8;border:1px solid #b38a54;border-radius:9px;padding:20px;font:14px system-ui}
+ #rpgpovMobileSettings label{display:inline-block;margin:10px 7px 10px 0}
+ #rpgpovMobileSettings select{background:#382c26;color:#f9e2b8;border:1px solid #aa885d;padding:9px}
+ #rpgpovMobile.rpgpovWindowActive .pad{visibility:hidden!important}
+ /* Prevent story, intro and encounter windows from auto-covering the first view.
+    They remain available via their dedicated menu buttons. */
+ body:not(.rpgpovMobileReady) #svalichJourneyOverlay{display:none!important}
+}
+@media not all and (pointer:coarse) and (max-width:950px){#rpgpovMobileMenuButton,#rpgpovMobileMenu,#rpgpovMobileSettings{display:none!important}}
+</style>
+<button id="rpgpovMobileMenuButton" type="button" style="display:none" aria-label="Open mobile menu">☰ MENU</button>
+<nav id="rpgpovMobileMenu" aria-label="Mobile panels">
+ <button data-mobile-view="read">READ</button><button data-mobile-view="tools">TOOLS</button>
+ <button data-mobile-view="ai">AI DM</button><button data-mobile-view="party">CHARACTERS</button>
+ <button data-mobile-view="settings">WEATHER / TIME</button><button data-mobile-view="map">MAP</button>
+ <button data-mobile-view="mp">MULTIPLAYER</button><button data-mobile-view="explore">EXPLORE</button>
+</nav>
+<section id="rpgpovMobileSettings"><h2>Weather &amp; Time</h2><div id="rpgpovMobileSettingsControls"></div></section>
+<script id="rpgpov-mobile-minimal-script">
+(()=>{
+ const isMobile=()=>matchMedia('(pointer:coarse) and (max-width:950px)').matches;
+ const menu=document.getElementById('rpgpovMobileMenu'),trigger=document.getElementById('rpgpovMobileMenuButton');
+ const root=document.getElementById('rpgpovMobile'),shade=document.getElementById('rpgpovMobileShade'),close=document.getElementById('rpgpovMobileClose');
+ const settings=document.getElementById('rpgpovMobileSettings');
+ const panels={read:'gamePanel',tools:'controlDeck',ai:'aiDmPanel',party:'aiDmPartyBox',settings:'rpgpovMobileSettings',map:'minimap',mp:'mpPanel'};
+ let active=null;
+ // Move the REAL time/weather controls, preserving existing event handlers.
+ const holder=document.getElementById('rpgpovMobileSettingsControls');
+ for(const id of ['day','weather']){const select=document.getElementById(id);if(select){const label=document.querySelector('label[for="'+id+'"]');if(label)holder.appendChild(label);holder.appendChild(select);}}
+ const reset=document.getElementById('reset');if(reset)holder.appendChild(reset);
+ function dismiss(){
+   for(const id of Object.values(panels)){
+     const p=document.getElementById(id);if(!p)continue;
+     p.classList.remove('rpgpovMobileOpen');
+     if(id==='aiDmPanel'||id==='aiDmPartyBox')p.hidden=true;
+     if(id==='mpPanel')p.style.display='none';
+   }
+   active=null;shade?.classList.remove('open');close?.classList.remove('open');root?.classList.remove('rpgpovWindowActive');
+ }
+ function open(view){
+   if(!isMobile())return;
+   menu.classList.remove('open');
+   if(view==='explore'){document.getElementById('rpgpovMobileExplore')?.click();return;}
+   const id=panels[view];if(!id)return;
+   if(active===id){dismiss();return;}
+   dismiss();const p=document.getElementById(id);if(!p)return;
+   document.exitPointerLock?.();
+   if(view==='ai'&&p.hidden)document.getElementById('aiDmButton')?.click();
+   if(view==='party'&&p.hidden){if(document.getElementById('aiDmPanel')?.hidden)document.getElementById('aiDmButton')?.click();document.getElementById('aiDmPartyOpen')?.click();}
+   if(view==='mp')p.style.display='block';
+   if(view==='ai'||view==='party')p.hidden=false;
+   p.classList.add('rpgpovMobileOpen');active=id;
+   shade?.classList.add('open');close?.classList.add('open');root?.classList.add('rpgpovWindowActive');
+ }
+ trigger.addEventListener('click',()=>{if(!isMobile())return;dismiss();menu.classList.toggle('open')});
+ menu.querySelectorAll('[data-mobile-view]').forEach(b=>b.addEventListener('click',()=>open(b.dataset.mobileView)));
+ close?.addEventListener('click',dismiss);shade?.addEventListener('click',dismiss);
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&isMobile()){dismiss();menu.classList.remove('open');}},true);
+ // The earlier single-window handlers may open windows asynchronously; keep the
+ // new interface authoritative on startup and when closing.
+ function startup(){if(!isMobile())return;dismiss();menu.classList.remove('open');
+   document.getElementById('svalichJourneyOverlay')?.setAttribute('hidden','');
+   document.getElementById('gameModal')?.style.setProperty('display','none');
+   document.body.classList.add('rpgpovMobileReady');}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',startup,{once:true});else startup();
+})();
+</script>
 </body></html>
