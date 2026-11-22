@@ -5017,19 +5017,39 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
 <script id="rpgpov-mobile-full-script">
 (()=>{
  const root=document.getElementById('rpgpovMobile');if(!root)return;
+ // The same press-and-hold arrow handling as phone.html, with direct gameplay
+ // key-state synchronization so desktop mouse and mobile touch both work.
  const active=new Map();
- function send(key,type){window.RPGPOV_MOBILE_SET_KEY?.(key,type==='keydown');window.dispatchEvent(new KeyboardEvent(type,{key,code:key,bubbles:true,cancelable:true}));}
- function release(pointerId){const key=active.get(pointerId);if(!key)return;active.delete(pointerId);if(![...active.values()].includes(key))send(key,'keyup');}
+ function send(key,type){
+   window.RPGPOV_MOBILE_SET_KEY?.(key,type==='keydown');
+   window.dispatchEvent(new KeyboardEvent(type,{key,code:key,bubbles:true,cancelable:true}));
+ }
+ function release(pointerId){
+   const key=active.get(pointerId);if(!key)return;
+   active.delete(pointerId);
+   if(![...active.values()].includes(key))send(key,'keyup');
+   root.querySelectorAll('[data-key="'+key+'"]').forEach(b=>b.classList.remove('pressed'));
+ }
  root.querySelectorAll('[data-key]').forEach(b=>{
-  b.addEventListener('pointerdown',e=>{e.preventDefault();if(active.has(e.pointerId))return;const key=b.dataset.key;active.set(e.pointerId,key);b.classList.add('pressed');b.setPointerCapture(e.pointerId);send(key,'keydown');});
-  for(const name of ['pointerup','pointercancel','lostpointercapture'])b.addEventListener(name,e=>{release(e.pointerId);b.classList.remove('pressed')});
+   b.addEventListener('pointerdown',e=>{
+     e.preventDefault();
+     if(active.has(e.pointerId))return;
+     const key=b.dataset.key;
+     active.set(e.pointerId,key);
+     b.classList.add('pressed');
+     try{b.setPointerCapture(e.pointerId)}catch(_){}
+     send(key,'keydown');
+   });
+   for(const name of ['pointerup','pointercancel','lostpointercapture'])
+     b.addEventListener(name,e=>release(e.pointerId));
  });
  window.addEventListener('blur',()=>{for(const id of [...active.keys()])release(id)});
- document.getElementById('rpgpovMobileExplore').addEventListener('click',()=>{send('e','keydown');send('e','keyup')});
- root.querySelectorAll('[data-panel]').forEach(b=>b.addEventListener('click',()=>{
-  const panel=document.getElementById(b.dataset.panel);if(!panel)return;
-  panel.classList.toggle('rpgpovMobileOpen');
- }));
+ document.addEventListener('visibilitychange',()=>{
+   if(document.hidden)for(const id of [...active.keys()])release(id);
+ });
+ document.getElementById('rpgpovMobileExplore')?.addEventListener('click',()=>{
+   send('e','keydown');send('e','keyup');
+ });
 })();
 </script>
 
@@ -5322,7 +5342,7 @@ body.rpgpovMobilePanelOpen #rpgpovMobileMenuButton{display:none!important}
 #rpgpovMobileSideClose.visible{display:block!important}
 body.rpgpovV5PanelOpen #rpgpovMobileMenuButton{display:none!important}
 </style>
-<div id="rpgpovV5Build">MOBILE v6</div>
+<div id="rpgpovV5Build">MOBILE v8</div>
 <script id="rpgpov-v5-script">
 (()=>{
  const ids=['gamePanel','minimap','controlDeck','aiDmPanel','aiDmPartyBox','mpPanel','rpgpovMobileSettings'];
@@ -5380,4 +5400,15 @@ body.rpgpovV6PartyOpen #rpgpovMobileMenuButton{display:none!important}
  oldSync();
 })();
 </script>
+<!-- Mobile v7: use existing top-right X to close drawers; remove redundant side tab. -->
+<style id="rpgpov-mobile-v7-no-side-close">
+#rpgpovMobileSideClose, #rpgpovMobileSideClose.visible,
+body.rpgpovV6PartyOpen #rpgpovMobileSideClose { display:none!important; visibility:hidden!important; pointer-events:none!important; }
+</style>
+<!-- Mobile v8: retain phone.html's working arrow pad; side close stays removed. -->
+<style id="rpgpov-mobile-v8-pad">
+#rpgpovMobile .pad{z-index:9800!important;pointer-events:auto!important}
+#rpgpovMobile .pad button{pointer-events:auto!important;touch-action:none!important;user-select:none!important;-webkit-user-select:none!important}
+#rpgpovMobile .pad button.pressed{background:#936a35e8!important}
+</style>
 </body></html>
