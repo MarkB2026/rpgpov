@@ -1928,6 +1928,15 @@ function leaveInn(route=null){
  }
  if(i6DepartureSelected||!innInside)return;
  i6DepartureSelected=true;
+ // Mobile v11: leaving the inn must dismiss the mobile READ drawer as well as
+ // the original Kobo reader. Otherwise its full-screen pane masks the road.
+ const mobileRead=document.getElementById('dndpovContextDock');
+ mobileRead?.classList.remove('rpgpovMobileOpen');
+ document.getElementById('rpgpovMobileShade')?.classList.remove('open');
+ document.getElementById('rpgpovMobileClose')?.classList.remove('open');
+ document.getElementById('rpgpovMobileMenu')?.classList.remove('open');
+ document.getElementById('rpgpovMobile')?.classList.remove('rpgpovWindowActive');
+ document.getElementById('svalichKoboChoices')?.setAttribute('hidden','');
  i6StopInnAmbience();
  gameClose();i6JourneyHide();innInside=false;
  wolfFirst=true;wolfSchedule();
@@ -4909,13 +4918,22 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
    // Do not scroll the reader: the player controls their reading position.
  };
  const close=()=>{card.hidden=true;};
+ // The mobile panel must close as part of the departure, not only by tapping
+ // the empty backdrop. This also restores the on-screen movement arrows.
+ const closeMobileRead=()=>{
+   dock.classList.remove('rpgpovMobileOpen');
+   document.getElementById('rpgpovMobileShade')?.classList.remove('open');
+   document.getElementById('rpgpovMobileClose')?.classList.remove('open');
+   document.getElementById('rpgpovMobile')?.classList.remove('rpgpovWindowActive');
+ };
+
  window.DNDPOV_KOBO_CHOICE=()=>{close();};
  window.DNDPOV_KOBO_DEPARTURE=()=>{
   if(window.DNDPOV_SVALICH_DEPARTED?.())return;
   show('When will you depart?',
    'Your party is assembled. Will you leave now for the full five-hour journey, or stay at the inn and depart at dawn?',[
-   {label:'Leave Now · Full Journey',primary:true,action:()=>{close();window.DNDPOV_KOBO_LEAVE?.();}},
-   {label:'Stay the Night · Leave at Dawn',action:()=>{close();window.DNDPOV_KOBO_STAY?.();}},
+   {label:'Leave Now · Full Journey',primary:true,action:()=>{close();window.DNDPOV_KOBO_LEAVE?.();if(window.DNDPOV_SVALICH_DEPARTED?.())closeMobileRead();}},
+   {label:'Stay the Night · Leave at Dawn',action:()=>{close();window.DNDPOV_KOBO_STAY?.();if(window.DNDPOV_SVALICH_DEPARTED?.())closeMobileRead();}},
    {label:'Select your party',action:()=>{window.DNDPOV_OPEN_PARTY_MANAGER?.();}}
   ]);
  };
@@ -5343,7 +5361,7 @@ body.rpgpovMobilePanelOpen #rpgpovMobileMenuButton{display:none!important}
 #rpgpovMobileSideClose.visible{display:block!important}
 body.rpgpovV5PanelOpen #rpgpovMobileMenuButton{display:none!important}
 </style>
-<div id="rpgpovV5Build">MOBILE v10</div>
+<div id="rpgpovV5Build">MOBILE v11</div>
 <script id="rpgpov-v5-script">
 (()=>{
  const ids=['gamePanel','minimap','controlDeck','aiDmPanel','aiDmPartyBox','mpPanel','rpgpovMobileSettings'];
