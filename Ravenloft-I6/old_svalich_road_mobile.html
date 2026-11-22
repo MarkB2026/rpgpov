@@ -3984,6 +3984,8 @@ function inactiveArcQuestion(message){
 // character sheets saved for this session, not the optional arcParty field.
 // Register only selected ARCs; never alter AIDM, Village, or Multiplayer files.
 async function ensureRoadCombatSheets(){
+ // Personal-key mode sends sheets in the combat payload; no local AIDM server exists.
+ if(window.RPGPOV_AI_KEY_READY?.())return (window.DNDPOV_ARC_ROSTER?.()||[]).filter(c=>c.sheet);
  const selected=(window.DNDPOV_ARC_ROSTER?.()||[]).filter(c=>c.sheet);
  if(selected.length<3)throw Error('Select at least three ARCs before combat.');
  const response=await fetch('/api/character/list',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session})});
@@ -4012,7 +4014,7 @@ window.DNDPOV_AI_SEND_COMBAT=async(packet)=>{
   await ensureRoadCombatSheets();
   const response=await fetch('/api/dm',{method:'POST',headers:{'Content-Type':'application/json'},signal:AbortSignal.timeout(74000),body:JSON.stringify({session,...c,message:buildRoadDmMessage(message+' MONSTER STATS: '+String(packet.stats||'').slice(0,400),c),verbosity:dmSettings().verbosity,arcParty:party,combat:{action:'start',room:packet.room,monsterId:packet.monsterId,count:packet.count,rule:packet.rule,stats:packet.stats}})});
   const data=await response.json();if(!response.ok)throw Error(data.error||'Combat start failed');
-  if(!data.reply)throw Error('AI DM returned no combat response. Check the AI DM server window.');
+  if(!data.reply)throw Error('OpenAI returned no combat response.');
   addCard('dm','AI DUNGEON MASTER',data.reply);return data;
  }catch(e){addCard('error','COMBAT START FAILED',e.message);throw e}
  finally{busy=false;syncControls()}
@@ -4024,7 +4026,7 @@ window.DNDPOV_AI_END_COMBAT=async()=>{
  addCard('dm','AI DUNGEON MASTER',data.reply);
 };
 async function send(message){if(busy||!toggle.checked||!message.trim())return;const inactiveReply=inactiveArcQuestion(message);if(inactiveReply){addCard('user','YOU',message);input.value='';addCard('dm','AI DUNGEON MASTER',inactiveReply);return;}await checkLocation();busy=true;syncControls();addCard('user','YOU',message);input.value='';
- try{const response=await fetch('/api/dm',{method:'POST',headers:{'Content-Type':'application/json'},signal:AbortSignal.timeout(74000),body:JSON.stringify({session,...context(),message:buildRoadDmMessage(message,context()),verbosity:dmSettings().verbosity,arcParty:(window.DNDPOV_ARC_ROSTER?.()||[]).filter(c=>c.sheet).map(c=>({id:c.id,name:c.name,sheet:c.sheet}))})});const data=await response.json();if(!response.ok)throw Error(data.error||'AI DM request failed (HTTP '+response.status+')');if(!data.reply)throw Error('AI DM returned an empty response.');addCard('dm','AI DUNGEON MASTER',data.reply)}catch(e){addCard('error','AI DM REQUEST FAILED',e.name==='TimeoutError'?'AI DM did not respond within 74 seconds. Check the AIDM server window and its OpenAI connection.':e.message)}finally{busy=false;syncControls()}}
+ try{const response=await fetch('/api/dm',{method:'POST',headers:{'Content-Type':'application/json'},signal:AbortSignal.timeout(74000),body:JSON.stringify({session,...context(),message:buildRoadDmMessage(message,context()),verbosity:dmSettings().verbosity,arcParty:(window.DNDPOV_ARC_ROSTER?.()||[]).filter(c=>c.sheet).map(c=>({id:c.id,name:c.name,sheet:c.sheet}))})});const data=await response.json();if(!response.ok)throw Error(data.error||'AI DM request failed (HTTP '+response.status+')');if(!data.reply)throw Error('AI DM returned an empty response.');addCard('dm','AI DUNGEON MASTER',data.reply)}catch(e){addCard('error','AI DM REQUEST FAILED',e.name==='TimeoutError'?'AI DM did not respond within 74 seconds. Check your OpenAI connection.':e.message)}finally{busy=false;syncControls()}}
 window.DNDPOV_AI_DM_SEND=send;
 panel.querySelector('#aiDmSend').onclick=()=>send(input.value);panel.querySelector('#aiDmConference').onclick=()=>send('We have a conference. Have the party members discuss our present situation and possible next steps, without deciding for me.');
 input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send(input.value)}});
@@ -4764,7 +4766,7 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
    // The AI journal must remain visible even when the AI service is offline.
    banner.style.display='none';
    if(!panel||!panel.querySelector('#aiDmToggle')?.checked){
-    throw Error('AI DM is offline. Check that AIDM is running on port 8766; Svalich now connects directly and does not require API proxy forwarding.');
+    throw Error(window.RPGPOV_AI_KEY_READY?.()?'Enable AI DM in the Journal before starting combat.':'Enter your personal OpenAI API key using MENU → AI DM.');
    }
    if(typeof window.DNDPOV_AI_SEND_COMBAT!=='function')throw Error('Structured AI combat handler unavailable.');
    const packet=encounterPacket(title,description);
@@ -4791,7 +4793,7 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
    const error=document.createElement('p');error.className='encounter-status';error.textContent=errorText;
    bannerCardError(error);
    const journal=document.getElementById('aiDmLog');
-   if(journal){const note=document.createElement('article');note.className='aiDmChat error';note.textContent=errorText;journal.append(note);journal.scrollTop=journal.scrollHeight;}
+   if(journal){journal.scrollTop=journal.scrollHeight;}
    // The encounter card remains available through this retry button, without covering the journal.
    dock.hidden=false;combatTitle.textContent='⚠ Encounter waiting · '+title;
    help.textContent=errorText;finish.disabled=true;
@@ -5351,7 +5353,7 @@ body.rpgpovMobilePanelOpen #rpgpovMobileMenuButton{display:none!important}
 #rpgpovMobileSideClose.visible{display:block!important}
 body.rpgpovV5PanelOpen #rpgpovMobileMenuButton{display:none!important}
 </style>
-<div id="rpgpovV5Build">MOBILE v17</div>
+<div id="rpgpovV5Build">MOBILE v18</div>
 <script id="rpgpov-v5-script">
 (()=>{
  const ids=['gamePanel','minimap','controlDeck','aiDmPanel','aiDmPartyBox','mpPanel','rpgpovMobileSettings'];
@@ -5540,9 +5542,9 @@ body.rpgpovV6PartyOpen #rpgpovMobileSideClose { display:none!important; visibili
   let request={};try{request=JSON.parse(options?.body||'{}')}catch(_){}
   const message=String(request.message||'Continue the adventure.');
   const combat=request.combat||null;
-  const instructions='You are the AI Dungeon Master for RPGPOV Old Svalich Road, Barovia. Respect the provided location, adventure text, module references and party character sheets. Never contradict established facts. Describe exploration, choices, and combat clearly. For combat, narrate initiative and actions only as supported by provided stats and context. Do not claim to change the game engine state. Keep the player in control of their characters unless they delegated actions. Return a plain-text reply.';
+  const instructions='You are the AI Dungeon Master for RPGPOV Old Svalich Road, Barovia. Respect the provided location, adventure text, module references and party character sheets. Never contradict established facts. Describe exploration, choices, and combat clearly. For combat, act as the tabletop referee: determine initiative, narrate and resolve actions for AI-controlled companions and enemies, track the ongoing battle within this chat, and request human-controlled character decisions when necessary. Use only supplied verified monster statistics; when unavailable say so rather than inventing them. Do not claim to change the 3D game engine state. Keep the player in control of their characters unless they delegated actions. Return a plain-text reply.';
   const recent=history.slice(-12);
-  const payload={model:'gpt-4.1-mini',instructions,input:[...recent,{role:'user',content:message+'\n\nGAME CONTEXT: '+JSON.stringify({location:request.location||request.place||request.area,arcParty:request.arcParty,combat,context:request.context}).slice(0,16000)}],max_output_tokens:1400};
+  const payload={model:'gpt-4.1-mini',instructions,input:[...recent,{role:'user',content:message+'\n\nGAME CONTEXT: '+JSON.stringify({location:request.location||request.place||request.area,arcParty:request.arcParty,combat,context:request.context,room:request.room,position:request.position,heroism:request.heroism,verbosity:request.verbosity}).slice(0,26000)}],max_output_tokens:1400};
   try{
    const r=await nativeFetch('https://api.openai.com/v1/responses',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+apiKey},body:JSON.stringify(payload),signal:options?.signal});
    const data=await r.json();
