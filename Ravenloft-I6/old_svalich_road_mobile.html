@@ -848,7 +848,7 @@ const i6GateStructures=new Set([i6GateLandmark]);
 function blocksGateWall(x,z){
  return Math.abs(x)>4.35&&Math.abs(x)<121.5&&Math.abs(z-gateZ)<1.25;
 }
-const player={x:0,z:183,angle:0},keys={};let triggered=false,progress=0,night=false,noticeUntil=0,gateApproach=false,gateOpenProgress=0;
+const player={x:0,z:183,angle:0},keys={};window.RPGPOV_MOBILE_SET_KEY=(key,down)=>{keys[String(key).toLowerCase()]=!!down;};let triggered=false,progress=0,night=false,noticeUntil=0,gateApproach=false,gateOpenProgress=0;
 window.addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();if(document.getElementById('gameModal')?.style.display!=='flex')keys[e.key.toLowerCase()]=true});window.addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
 function reset(){player.x=0;player.z=183;player.angle=0;triggered=false;progress=0;gateApproach=false;gateOpenProgress=0;gateL.rotation.y=0;gateR.rotation.y=0;document.querySelector('#notice').style.display='none';window.DNDPOV_RESET_SVALICH_CROSSINGS?.();window.DNDPOV_RESET_I6_JOURNEY?.()}document.querySelector('#reset').onclick=reset;
 // v1.22: Tser Pool's softer, layered distance mist and dusk/night palette.
@@ -5018,7 +5018,7 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
 (()=>{
  const root=document.getElementById('rpgpovMobile');if(!root)return;
  const active=new Map();
- function send(key,type){window.dispatchEvent(new KeyboardEvent(type,{key,code:key,bubbles:true,cancelable:true}));}
+ function send(key,type){window.RPGPOV_MOBILE_SET_KEY?.(key,type==='keydown');window.dispatchEvent(new KeyboardEvent(type,{key,code:key,bubbles:true,cancelable:true}));}
  function release(pointerId){const key=active.get(pointerId);if(!key)return;active.delete(pointerId);if(![...active.values()].includes(key))send(key,'keyup');}
  root.querySelectorAll('[data-key]').forEach(b=>{
   b.addEventListener('pointerdown',e=>{e.preventDefault();if(active.has(e.pointerId))return;const key=b.dataset.key;active.set(e.pointerId,key);b.classList.add('pressed');b.setPointerCapture(e.pointerId);send(key,'keydown');});
@@ -5212,7 +5212,7 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
  function startup(){if(!isMobile())return;dismiss();menu.classList.remove('open');
    document.getElementById('svalichJourneyOverlay')?.setAttribute('hidden','');
    document.getElementById('gameModal')?.style.setProperty('display','none');
-   document.body.classList.add('rpgpovMobileReady');}
+   window.DNDPOV_INTRO_LOCK=false;document.body.classList.add('rpgpovMobileReady');}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',startup,{once:true});else startup();
 })();
 </script>
@@ -5253,7 +5253,22 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
   document.getElementById('rpgpovMobile')?.classList.remove('rpgpovWindowActive');
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',clean,{once:true});else clean();
- window.addEventListener('load',clean,{once:true});
+ window.addEventListener('load',()=>{clean();if(document.getElementById('svalichJourneyOverlay')?.hidden)window.DNDPOV_INTRO_LOCK=false;},{once:true});
+})();
+</script>
+
+<!-- Mobile v3: functional touch keys and unobstructed side-close control. -->
+<style id="rpgpov-mobile-v3-touch-close">
+#rpgpovMobileClose.open{position:fixed!important;left:max(4px,env(safe-area-inset-left))!important;right:auto!important;top:50%!important;transform:translateY(-50%)!important;min-width:45px!important;min-height:76px!important;padding:12px 7px!important;z-index:9900!important;writing-mode:vertical-rl!important;display:block!important}
+body.rpgpovMobilePanelOpen #rpgpovMobileMenuButton{display:none!important}
+#rpgpovMobile .pad button{touch-action:none!important;pointer-events:auto!important}
+</style>
+<script id="rpgpov-mobile-v3-close-sync">
+(()=>{
+ const close=document.getElementById('rpgpovMobileClose');if(close)close.textContent='➜ CLOSE';
+ const root=document.body;
+ const observer=new MutationObserver(()=>root.classList.toggle('rpgpovMobilePanelOpen',close?.classList.contains('open')||false));
+ if(close)observer.observe(close,{attributes:true,attributeFilter:['class']});
 })();
 </script>
 </body></html>
