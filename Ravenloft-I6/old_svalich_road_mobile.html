@@ -5193,7 +5193,7 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
  const menu=document.getElementById('rpgpovMobileMenu'),trigger=document.getElementById('rpgpovMobileMenuButton');
  const root=document.getElementById('rpgpovMobile'),shade=document.getElementById('rpgpovMobileShade'),close=document.getElementById('rpgpovMobileClose');
  const settings=document.getElementById('rpgpovMobileSettings');
- const panels={read:'gamePanel',tools:'controlDeck',ai:'aiDmPanel',party:'aiDmPartyBox',settings:'rpgpovMobileSettings',map:'minimap',mp:'mpPanel'};
+ const panels={read:'dndpovContextDock',tools:'controlDeck',ai:'aiDmPanel',party:'aiDmPartyBox',settings:'rpgpovMobileSettings',map:'minimap',mp:'mpPanel'};
  let active=null;
  // Move the REAL time/weather controls, preserving existing event handlers.
  const holder=document.getElementById('rpgpovMobileSettingsControls');
@@ -5218,6 +5218,7 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
    document.exitPointerLock?.();
    if(view==='ai'&&p.hidden)document.getElementById('aiDmButton')?.click();
    if(view==='party'&&p.hidden){if(document.getElementById('aiDmPanel')?.hidden)document.getElementById('aiDmButton')?.click();document.getElementById('aiDmPartyOpen')?.click();}
+   if(view==='read')p.classList.remove('kobo-hidden','collapsed');
    if(view==='mp')p.style.display='block';
    if(view==='ai'||view==='party')p.hidden=false;
    p.classList.add('rpgpovMobileOpen');active=id;
@@ -5342,7 +5343,7 @@ body.rpgpovMobilePanelOpen #rpgpovMobileMenuButton{display:none!important}
 #rpgpovMobileSideClose.visible{display:block!important}
 body.rpgpovV5PanelOpen #rpgpovMobileMenuButton{display:none!important}
 </style>
-<div id="rpgpovV5Build">MOBILE v9</div>
+<div id="rpgpovV5Build">MOBILE v10</div>
 <script id="rpgpov-v5-script">
 (()=>{
  const ids=['gamePanel','minimap','controlDeck','aiDmPanel','aiDmPartyBox','mpPanel','rpgpovMobileSettings'];
@@ -5412,49 +5413,67 @@ body.rpgpovV6PartyOpen #rpgpovMobileSideClose { display:none!important; visibili
 #rpgpovMobile .pad button.pressed{background:#936a35e8!important}
 </style>
 
-<!-- Mobile v9: restore the full original READ text suppressed by the desktop Journal CSS. -->
-<style id="rpgpov-mobile-v9-read-repair">
-#gamePanel.rpgpovMobileOpen .readaloud,
-#gamePanel.rpgpovMobileOpen .dmnote:not([hidden]) {
-  display:block!important;
-  visibility:visible!important;
-  opacity:1!important;
-  overflow:visible!important;
-  max-height:none!important;
-  height:auto!important;
-  white-space:pre-wrap!important;
-  overflow-wrap:anywhere!important;
-  line-height:1.6!important;
+<!-- Mobile v10: READ uses the BASIC edition's full Kobo reader, including
+     departure choices and the original DM notes/actions. -->
+<style id="rpgpov-mobile-v10-kobo-read">
+#dndpovContextDock:not(.rpgpovMobileOpen){display:none!important}
+#dndpovContextDock.rpgpovMobileOpen{
+ display:flex!important;flex-direction:column!important;
+ position:fixed!important;
+ top:max(54px,env(safe-area-inset-top))!important;
+ bottom:max(12px,env(safe-area-inset-bottom))!important;
+ left:12px!important;right:12px!important;
+ transform:none!important;
+ width:auto!important;min-width:0!important;max-width:none!important;
+ height:auto!important;min-height:0!important;max-height:none!important;
+ overflow:hidden!important;resize:none!important;
+ z-index:9780!important;
 }
-#gamePanel.rpgpovMobileOpen .readaloud[hidden],
-#gamePanel.rpgpovMobileOpen .dmnote[hidden] {display:none!important}
-#gamePanel.rpgpovMobileOpen {
-  display:block!important;
-  overflow-y:auto!important;
-  overflow-x:hidden!important;
-  overscroll-behavior:contain;
-  -webkit-overflow-scrolling:touch;
-  max-height:calc(100dvh - 96px)!important;
-  padding:18px 18px 28px!important;
+#dndpovContextDock.rpgpovMobileOpen #dndpovContextDockHead{
+ flex:none!important;min-height:46px!important;padding-right:12px!important;
 }
-#gamePanel.rpgpovMobileOpen .smallCaption{display:block!important}
-#gamePanel.rpgpovMobileOpen #gameHint{margin:12px 0!important}
+#dndpovContextDock.rpgpovMobileOpen #dndpovContextDockBody{
+ display:block!important;flex:1 1 auto!important;min-height:0!important;
+ max-height:none!important;overflow-y:auto!important;overflow-x:hidden!important;
+ overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+ padding:12px 14px 36px!important;
+}
+#dndpovContextDock.rpgpovMobileOpen #dndpovContextExcerpt{
+ display:block!important;font:400 17px/1.7 'Segoe UI',Arial,sans-serif!important;
+ font-style:normal!important;white-space:pre-wrap!important;
+ max-height:none!important;overflow:visible!important;
+}
+#dndpovContextDock.rpgpovMobileOpen #svalichKoboChoices,
+#dndpovContextDock.rpgpovMobileOpen #dndpovContextDmInfo,
+#dndpovContextDock.rpgpovMobileOpen .contextCommands{
+ flex-shrink:0!important;
+}
+#dndpovContextDock.rpgpovMobileOpen.kobo-maximized{
+ top:max(54px,env(safe-area-inset-top))!important;
+ bottom:max(12px,env(safe-area-inset-bottom))!important;
+ left:12px!important;right:12px!important;transform:none!important;
+ width:auto!important;height:auto!important;max-height:none!important;
+}
+@media(max-width:600px){
+ #dndpovContextDock.rpgpovMobileOpen{left:6px!important;right:6px!important}
+ #dndpovContextDock.rpgpovMobileOpen #dndpovContextDockBody{padding:9px 9px 30px!important}
+ #dndpovContextDock.rpgpovMobileOpen #dndpovContextExcerpt{
+  font-size:16px!important;line-height:1.65!important;padding:15px!important;
+ }
+}
 </style>
-<script id="rpgpov-mobile-v9-read-refresh">
+<script id="rpgpov-mobile-v10-read-scroll">
 (()=>{
-  const panel=document.getElementById('gamePanel');
-  const read=document.getElementById('gameRead');
-  const menu=document.getElementById('rpgpovMobileMenu');
-  if(!panel||!read||!menu)return;
-  // The old desktop 'Hide Descriptions' toggle can leave the source paragraph
-  // hidden. READ explicitly opts in to showing the existing, full source text.
-  menu.querySelector('[data-mobile-view="read"]')?.addEventListener('click',()=>{
-    requestAnimationFrame(()=>{
-      if(!panel.classList.contains('rpgpovMobileOpen'))return;
-      read.hidden=false;
-      panel.scrollTop=0;
-    });
-  });
+ const menu=document.getElementById('rpgpovMobileMenu');
+ const dock=document.getElementById('dndpovContextDock');
+ menu?.querySelector('[data-mobile-view="read"]')?.addEventListener('click',()=>{
+   requestAnimationFrame(()=>{
+     if(!dock?.classList.contains('rpgpovMobileOpen'))return;
+     dock.classList.remove('kobo-hidden','collapsed');
+     const body=document.getElementById('dndpovContextDockBody');
+     if(body)body.scrollTop=0;
+   });
+ });
 })();
 </script>
 </body></html>
