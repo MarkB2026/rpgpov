@@ -5322,7 +5322,7 @@ body.rpgpovMobilePanelOpen #rpgpovMobileMenuButton{display:none!important}
 #rpgpovMobileSideClose.visible{display:block!important}
 body.rpgpovV5PanelOpen #rpgpovMobileMenuButton{display:none!important}
 </style>
-<div id="rpgpovV5Build">MOBILE v5</div>
+<div id="rpgpovV5Build">MOBILE v6</div>
 <script id="rpgpov-v5-script">
 (()=>{
  const ids=['gamePanel','minimap','controlDeck','aiDmPanel','aiDmPartyBox','mpPanel','rpgpovMobileSettings'];
@@ -5344,6 +5344,40 @@ body.rpgpovV5PanelOpen #rpgpovMobileMenuButton{display:none!important}
  for(const p of [oldClose,shade])if(p)observer.observe(p,{attributes:true,attributeFilter:['class']});
  window.addEventListener('load',()=>{closeAll();setTimeout(closeAll,200);},{once:true});
  sync();
+})();
+</script>
+
+<!-- Mobile v6: close control for the actual Party Battle Reference drawer. -->
+<style id="rpgpov-v6-party-close-style">
+#rpgpovMobileSideClose.visible{display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important}
+body.rpgpovV6PartyOpen #rpgpovMobileSideClose{left:auto!important;right:min(365px,92vw)!important;top:50%!important;transform:translateY(-50%)!important;display:block!important;visibility:visible!important;opacity:1!important;z-index:2147483647!important}
+body.rpgpovV6PartyOpen #rpgpovMobileMenuButton{display:none!important}
+</style>
+<script id="rpgpov-v6-party-close-script">
+(()=>{
+ const party=document.getElementById('arcQuickPanel');
+ const side=document.getElementById('rpgpovMobileSideClose');
+ const toggle=document.getElementById('arcQuickToggle');
+ if(!party||!side)return;
+ const oldSync=()=>{
+   const open=party.classList.contains('open');
+   document.body.classList.toggle('rpgpovV6PartyOpen',open);
+   if(open){side.classList.add('visible');side.textContent='➜ CLOSE';}
+   else if(!document.body.classList.contains('rpgpovV5PanelOpen'))side.classList.remove('visible');
+ };
+ // This drawer is independent of the other mobile panels.
+ party.classList.remove('open');
+ if(toggle)toggle.hidden=false;
+ const observer=new MutationObserver(oldSync);
+ observer.observe(party,{attributes:true,attributeFilter:['class']});
+ side.addEventListener('click',()=>{
+   if(!party.classList.contains('open'))return;
+   party.classList.remove('open');
+   if(toggle)toggle.hidden=false;
+   document.body.classList.remove('rpgpovV6PartyOpen');
+   side.classList.remove('visible');
+ },true);
+ oldSync();
 })();
 </script>
 </body></html>
