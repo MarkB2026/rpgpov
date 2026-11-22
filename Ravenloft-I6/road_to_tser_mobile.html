@@ -3135,7 +3135,18 @@ if(carriageMode==='opening'||carriageMode==='offered'){
  updateEyes(now);updateMoon();updateRoadWeather(now);updateCastleApproach();minimap();renderer.render(scene,camera);requestAnimationFrame(frame);return;
 }
 if(window.DNDPOV_ENCOUNTER_PENDING){camera.updateMatrixWorld(true);updateEyes(now);updateMoon();updateRoadWeather(now);updateCastleApproach();minimap();renderer.render(scene,camera);requestAnimationFrame(frame);return;}
-const speed=(keys.shift?17:8)*dt;if(keys.arrowleft)player.angle+=1.8*dt;if(keys.arrowright)player.angle-=1.8*dt;let f=(keys.arrowup?1:0)-(keys.arrowdown?1:0),side=(keys.d?1:0)-(keys.a?1:0);const nx=player.x+Math.sin(player.angle)*f*speed+Math.cos(player.angle)*side*speed,nz=player.z+Math.cos(player.angle)*f*speed-Math.sin(player.angle)*side*speed;
+const speed=(keys.shift?17:8)*dt;
+// Mobile road assist: follow the centreline while walking forward on the main road.
+// A manual turn always wins, and the Vistani / western forks remain player-controlled.
+if(window.matchMedia('(max-width:800px)').matches && keys.arrowup && !keys.arrowleft && !keys.arrowright && !keys.a && !keys.d && !keys.arrowdown &&
+   Math.abs(player.x-pathX(player.z))<4.8 && !onFork(player.x,player.z,5.4) && !nearWesternGateRoad(player.x,player.z,7)){
+ const za=Math.max(-624,Math.min(104,player.z+2));
+ const zb=Math.max(-624,Math.min(104,player.z-2));
+ const target=Math.atan2(pathX(zb)-pathX(za),zb-za);
+ const delta=Math.atan2(Math.sin(target-player.angle),Math.cos(target-player.angle));
+ player.angle+=Math.max(-2.4*dt,Math.min(2.4*dt,delta));
+}
+if(keys.arrowleft)player.angle+=1.8*dt;if(keys.arrowright)player.angle-=1.8*dt;let f=(keys.arrowup?1:0)-(keys.arrowdown?1:0),side=(keys.d?1:0)-(keys.a?1:0);const nx=player.x+Math.sin(player.angle)*f*speed+Math.cos(player.angle)*side*speed,nz=player.z+Math.cos(player.angle)*f*speed-Math.sin(player.angle)*side*speed;
 if(!blockedByWesternGate(player.x,player.z,nx,nz)&&(Math.abs(nx-pathX(nz))<5.1||Math.abs(nz-riverZ)<12&&Math.abs(nx-bridgeX)<5.2||onFork(nx,nz,4.2)||Math.abs(nz-campZ)<19&&Math.abs(nx-campX)<22)){player.x=nx;player.z=nz}
 camera.position.set(player.x,2.1+westernBranchGroundHeight(player.x,player.z),player.z);camera.rotation.set(0,0,0);camera.rotation.y=player.angle+Math.PI;const desc=document.querySelector('#description'),place=document.querySelector('#place');if(Math.hypot(player.x-westernGate.position.x,player.z-westernGate.position.z)<17){place.textContent='B · Western Gates of Barovia';desc.textContent='The road ends at towering, rusted iron gates flanked by headless stone guardians. From within Barovia the gates remain sealed.'}else if(nearWesternGateRoad(player.x,player.z,5.6)){place.textContent='Western Road · Gates of Barovia';desc.textContent='A northwest branch leaves the carriage crossroads, vanishing among the spruces toward the second Gates of Barovia.'}else if(player.z>-18){place.textContent='The Old Svalich Road';desc.textContent='Ancient spruce trees close around the winding road.'}else if(player.z>-62){place.textContent='Bridge over the Tser River';desc.textContent='Cold dark water passes beneath the wooden bridge.'}else if(player.z>-245){place.textContent=onFork(player.x,player.z,6)||Math.hypot(player.x-campX,player.z-campZ)<26?'Vistani Encampment':'The Road to the Vistani Camp';desc.textContent='After the River Ivlis bridge, continue to F. Straight follows the forest road; right follows the river past the Vistani camp. Both routes meet before Tser Falls Bridge.'}else{place.textContent='The Road to Castle Ravenloft';desc.textContent='The road winds through the fog. Castle Ravenloft stands faintly ahead.'}
 // Keep the boundary at the actual last road waypoint (z=105). Declining the
@@ -3551,18 +3562,18 @@ function addCard(kind,heading,message,label='ORIGINAL MODULE · READ-ALOUD'){
 }
 let aiServerOnline=false, aiUserChoice=true;
 function syncControls(){
- const enabled=aiServerOnline&&toggle.checked;
+ const enabled=(aiServerOnline||window.RPGPOV_AI_KEY_READY?.())&&toggle.checked;
  input.disabled=!enabled||busy;
  panel.querySelector('#aiDmSend').disabled=!enabled||busy;
  panel.querySelector('#aiDmConference').disabled=!enabled||busy;
- status.textContent=!aiServerOnline?'AI offline · descriptions available':enabled?(busy?'DM responding…':'AI ready'):'AI off · descriptions active';
+ status.textContent=!(aiServerOnline||window.RPGPOV_AI_KEY_READY?.())?'Connect your personal API key to enable AI DM':enabled?(busy?'DM responding…':'AI ready'):'AI off · descriptions active';
 }
 toggle.addEventListener('change',()=>{aiUserChoice=toggle.checked;syncControls()});
 async function checkAiConnection(){
  let online=false;
  try{const r=await fetch('/api/module?location=ARRIVAL&position=outside',{cache:'no-store',signal:AbortSignal.timeout(2500)});
   online=r.ok&&(r.headers.get('content-type')||'').includes('json');}catch{}
- aiServerOnline=online;toggle.disabled=!online;toggle.checked=online&&aiUserChoice;syncControls();
+ aiServerOnline=online;const ready=online||window.RPGPOV_AI_KEY_READY?.();toggle.disabled=false;toggle.checked=!!ready&&aiUserChoice;syncControls();
 }
 syncControls();checkAiConnection();setInterval(checkAiConnection,12000);
 
@@ -4307,7 +4318,8 @@ function syncControls(){
  const openPanel=()=>{
   const panel=document.getElementById('aiDmPanel');
   if(panel?.hidden)document.getElementById('aiDmButton')?.click();
-  return panel&&!panel.hidden?panel:null;
+  if(panel)panel.hidden=false;
+  return panel;
  };
  returnToAi.onclick=()=>{openPanel();document.getElementById('aiDmInput')?.focus();};
  finish.onclick=()=>{
@@ -4319,16 +4331,11 @@ function syncControls(){
   starting=true;ai.disabled=true;
   try{
    document.exitPointerLock?.();
-   const response=await fetch('/api/desktop/status',{cache:'no-store',signal:AbortSignal.timeout(3000)}).catch(()=>null);
-   if(response?.ok&&!(await response.json()).key_configured){
-    const keyButton=document.getElementById('rpgpovKey');
-    if(keyButton)keyButton.click();else alert('Set up your OpenAI API key to use AI DM.');
-    return;
-   }
+   if(!window.RPGPOV_AI_KEY_READY?.()){window.RPGPOV_AI_KEY_PROMPT?.();return;}
    const panel=openPanel();
    const input=panel?.querySelector('#aiDmInput'),send=panel?.querySelector('#aiDmSend');
    if(!panel||!input||!send||send.disabled||!panel.querySelector('#aiDmToggle')?.checked){
-    alert('AI DM is not connected. Use the manual encounter option, or open Set Up AI in the Windows app.');
+    window.RPGPOV_AI_KEY_PROMPT?.();alert('Connect your personal OpenAI API key, then enable AI DM in the Journal.');
     return;
    }
    const title=head.textContent,description=details.textContent;
@@ -4636,7 +4643,7 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
 </style>
 
 <div id="tserMobile" style="display:none">
- <span class="tm-version">TSER POOL · MOBILE v1</span>
+ <span class="tm-version">TSER POOL · MOBILE v2</span>
  <button id="tmMenu" aria-expanded="false">☰ MENU</button><div id="tmShade" hidden></div>
  <nav id="tmDropdown" hidden>
   <button data-tm="read">READ · DESCRIPTION</button><button data-tm="location">LOCATION</button>
@@ -4648,7 +4655,96 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
  <div id="tmHint" hidden></div><button id="tmExplore">ENTER / USE</button><button id="tmLocation">LOCATION</button>
  <section id="tmOverlay" hidden><div class="tm-sheet"><button class="tm-close" id="tmClose">×</button><h2 id="tmTitle"></h2><div id="tmContent"></div></div></section>
 </div>
-<script id="tser-mobile-v1-script">
+<style id="rpgpov-v12-ai-key-css">
+#rpgpovAiKeySetup[hidden]{display:none!important}
+#rpgpovAiKeySetup{position:fixed;inset:0;z-index:20000;background:#08090edb;display:flex;align-items:center;justify-content:center;padding:15px;box-sizing:border-box}
+#rpgpovAiKeySetup .key-card{width:min(440px,100%);max-height:90dvh;overflow:auto;background:#25232c;border:2px solid #aa85d4;border-radius:12px;padding:20px;color:#f5e9ff;box-shadow:0 12px 50px #000}
+#rpgpovAiKeySetup h2{font:700 21px system-ui;margin:0 0 10px;color:#e9caff}
+#rpgpovAiKeySetup p,#rpgpovAiKeySetup small{font:14px/1.5 system-ui}
+#rpgpovAiKeySetup label{display:block;margin:15px 0 5px;font:600 13px system-ui}
+#rpgpovAiKeySetup input{width:100%;box-sizing:border-box;padding:12px;background:#13141b;color:#fff;border:1px solid #aa85d4;border-radius:6px;font:15px system-ui}
+#rpgpovAiKeySetup .key-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+#rpgpovAiKeySetup button{padding:10px 14px;font:600 14px system-ui;border-radius:6px}
+#rpgpovAiKeySetup #rpgpovAiKeyConnect{background:#7853a6;color:white}
+#rpgpovAiKeyStatus{margin-top:10px;color:#ffd18c;min-height:20px;font:13px/1.5 system-ui}
+#aiDmPanel.rpgpovMobileOpen{z-index:9790!important;top:max(55px,env(safe-area-inset-top))!important;bottom:max(10px,env(safe-area-inset-bottom))!important;left:6px!important;right:6px!important;width:auto!important;height:auto!important;max-height:none!important;transform:none!important}
+</style>
+<div id="rpgpovAiKeySetup" hidden role="dialog" aria-modal="true" aria-labelledby="rpgpovAiKeyTitle">
+ <div class="key-card"><h2 id="rpgpovAiKeyTitle">✦ Connect Your AI Dungeon Master</h2>
+ <p>Enter your own OpenAI API key to enable the AI DM during exploration and combat.</p>
+ <label for="rpgpovAiKeyInput">OpenAI Secret API Key</label><input id="rpgpovAiKeyInput" type="password" placeholder="sk-..." autocomplete="off" autocapitalize="off" spellcheck="false"/>
+ <p><small>Your key is retained in this tab's session across reloads. If you select Remember, it is stored unencrypted in this browser's local storage until cleared. It is sent directly to OpenAI, not stored in this HTML. Browser-based keys can still be exposed by browser extensions or scripts, so use a restricted, low-budget key. API billing is separate from ChatGPT.</small></p>
+ <p><a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" style="color:#d9b9ff">Create an OpenAI API key</a></p>
+ <label style="display:flex;align-items:center;gap:9px;font:13px/1.5 system-ui;margin:12px 0"><input id="rpgpovAiRememberKey" type="checkbox" style="width:18px;height:18px;flex:none"/> Remember this key on this device (not recommended on shared devices)</label>
+ <div class="key-actions"><button type="button" id="rpgpovAiKeyConnect">Connect AI DM</button><button type="button" id="rpgpovAiKeyCancel">Cancel</button></div>
+ <div id="rpgpovAiKeyStatus" role="status"></div></div>
+</div>
+<script id="rpgpov-v12-ai-key-script">
+(()=>{
+ const dialog=document.getElementById('rpgpovAiKeySetup'),input=document.getElementById('rpgpovAiKeyInput'),status=document.getElementById('rpgpovAiKeyStatus');
+ const connect=document.getElementById('rpgpovAiKeyConnect');
+ const sessionKey='rpgpov_personal_openai_key_session_v1';
+ const savedKey='rpgpov_personal_openai_key_device_v1';
+ const remember=document.getElementById('rpgpovAiRememberKey');
+ let apiKey='';const history=[];
+ try{apiKey=sessionStorage.getItem(sessionKey)||localStorage.getItem(savedKey)||'';}catch(_){}
+ if(remember){try{remember.checked=!!localStorage.getItem(savedKey)}catch(_){}}
+ function show(){if(apiKey)return;dialog.hidden=false;status.textContent='';input.focus();}
+ function hide(){dialog.hidden=true;input.value='';}
+ window.RPGPOV_AI_KEY_READY=()=>!!apiKey;
+ window.RPGPOV_AI_KEY_PROMPT=show;
+ if(apiKey)queueMicrotask(()=>{const t=document.getElementById('aiDmToggle');if(t){t.disabled=false;t.checked=true;t.dispatchEvent(new Event('change',{bubbles:true}));}});
+ document.getElementById('rpgpovAiKeyCancel').onclick=hide;
+ connect.onclick=async()=>{
+  const candidate=input.value.trim();
+  if(!candidate.startsWith('sk-')){status.textContent='Enter a valid OpenAI secret key (sk-...).';return;}
+  connect.disabled=true;status.textContent='Checking OpenAI connection…';
+  try{
+   const r=await fetch('https://api.openai.com/v1/models',{headers:{Authorization:'Bearer '+candidate}});
+   if(!r.ok){const j=await r.json().catch(()=>({}));throw Error(j.error?.message||'Connection failed (HTTP '+r.status+')');}
+   apiKey=candidate;
+   try{sessionStorage.setItem(sessionKey,candidate);
+    if(remember?.checked)localStorage.setItem(savedKey,candidate);
+    else localStorage.removeItem(savedKey);
+   }catch(_){}
+   hide();
+   const dmToggle=document.getElementById('aiDmToggle');
+   if(dmToggle){dmToggle.disabled=false;dmToggle.checked=true;dmToggle.dispatchEvent(new Event('change',{bubbles:true}));}
+   document.getElementById('aiDmPanel')?.removeAttribute('hidden');
+  }catch(e){status.textContent='Could not connect: '+e.message;}
+  finally{connect.disabled=false;}
+ };
+ const nativeFetch=window.fetch.bind(window);
+ window.fetch=async function(resource,options){
+  const url=typeof resource==='string'?resource:resource?.url;
+  if(!url||!/^\/api\/dm(?:[?#]|$)/.test(url))return nativeFetch(resource,options);
+  if(!apiKey){show();return new Response(JSON.stringify({error:'Connect your personal OpenAI API key in the AI DM setup, then retry.'}),{status:401,headers:{'Content-Type':'application/json'}});}
+  let request={};try{request=JSON.parse(options?.body||'{}')}catch(_){}
+  const message=String(request.message||'Continue the adventure.');
+  const combat=request.combat||null;
+  const instructions='You are the AI Dungeon Master for RPGPOV Road to Tser Pool, Barovia. Respect the provided location, adventure text, module references and party character sheets. Never contradict established facts. Describe exploration, choices, and combat clearly. For combat, act as the tabletop referee: determine initiative, narrate and resolve actions for AI-controlled companions and enemies, track the ongoing battle within this chat, and request human-controlled character decisions when necessary. Use only supplied verified monster statistics; when unavailable say so rather than inventing them. Do not claim to change the 3D game engine state. Keep the player in control of their characters unless they delegated actions. Return a plain-text reply.';
+  const recent=history.slice(-12);
+  const payload={model:'gpt-4.1-mini',instructions,input:[...recent,{role:'user',content:message+'\n\nGAME CONTEXT: '+JSON.stringify({location:request.location||request.place||request.area,arcParty:request.arcParty,combat,context:request.context,room:request.room,position:request.position,heroism:request.heroism,verbosity:request.verbosity}).slice(0,26000)}],max_output_tokens:1400};
+  try{
+   const r=await nativeFetch('https://api.openai.com/v1/responses',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+apiKey},body:JSON.stringify(payload),signal:options?.signal});
+   const data=await r.json();
+   if(!r.ok)return new Response(JSON.stringify({error:data.error?.message||'OpenAI request failed'}),{status:r.status,headers:{'Content-Type':'application/json'}});
+   const reply=(data.output||[]).flatMap(x=>x.content||[]).filter(x=>x.type==='output_text').map(x=>x.text).join('\n').trim();
+   if(!reply)throw Error('OpenAI returned no text.');
+   history.push({role:'user',content:message},{role:'assistant',content:reply});if(history.length>24)history.splice(0,history.length-24);
+   return new Response(JSON.stringify({reply}),{status:200,headers:{'Content-Type':'application/json'}});
+  }catch(e){return new Response(JSON.stringify({error:e.message}),{status:502,headers:{'Content-Type':'application/json'}});}
+ };
+ document.querySelector('#tmDropdown [data-tm="ai"]')?.addEventListener('click',()=>{if(!apiKey)setTimeout(show,0)});
+ document.getElementById('aiDmToggleLabel')?.addEventListener('click',()=>{if(!apiKey)setTimeout(show,0)});
+ const dmLabel=document.getElementById('aiDmToggleLabel');if(dmLabel)dmLabel.lastChild.textContent=' AI DM · Personal API key';
+ document.getElementById('rpgpovAiKeySetup')?.addEventListener('keydown',e=>{if(e.key==='Escape'){hide();e.stopPropagation()}},true);
+ document.addEventListener('click',e=>{
+  if(e.target.closest('#rpgpovAiCombatDock button,#dndpovEncounterBanner .encounter-ai-action')&&!apiKey)setTimeout(show,0);
+ },true);
+})();
+</script>
+<script id="tser-mobile-v2-script">
 (()=>{
  if(!matchMedia('(max-width:800px)').matches)return;
  const $=id=>document.getElementById(id),root=$('tserMobile'),menu=$('tmDropdown'),shade=$('tmShade'),overlay=$('tmOverlay'),content=$('tmContent');
@@ -4668,7 +4764,7 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
  function read(){setMenu(false);if(click('dndpovContextRead')){const d=$('dndpovContextDock');if(d){d.classList.remove('kobo-hidden');d.classList.add('kobo-maximized');d.hidden=false;d.style.display=''}return}if(window.DNDPOV_AI_READ_NEARBY)window.DNDPOV_AI_READ_NEARBY();else tap('r')}
  function explore(){setMenu(false);const result=window.TSER_MOBILE_INTERACT?.();if(result?.ok)return;if(result?.message){hint(result.message);return}tap('e')}
  function select(label,id){const src=$(id);if(!src)return;const l=document.createElement('label');l.textContent=label;const s=src.cloneNode(true);s.removeAttribute('id');s.value=src.value;s.onchange=()=>{src.value=s.value;src.dispatchEvent(new Event('change',{bubbles:true}))};l.append(s);content.append(l)}
- function show(v){setMenu(false);if(v==='explore'){explore();return}if(v==='read'){read();return}if(v==='location'){location();return}if(v==='ai'){if(!click('aiDmButton'))hint('AI journal is loading');return}if(v==='party'){if(!click('arcQuickToggle'))hint('Character panel is loading');return}if(v==='mp'){if(!click('mpButton'))hint('Multiplayer is loading');return}
+ function show(v){setMenu(false);if(v==='explore'){explore();return}if(v==='read'){read();return}if(v==='location'){location();return}if(v==='ai'){if(!click('aiDmButton'))hint('AI journal is loading');if(!window.RPGPOV_AI_KEY_READY?.())window.RPGPOV_AI_KEY_PROMPT?.();return}if(v==='party'){if(!click('arcQuickToggle'))hint('Character panel is loading');return}if(v==='mp'){if(!click('mpButton'))hint('Multiplayer is loading');return}
  if(v==='weather'){sheet('Weather / Time');select('Time of day','day');select('Weather','weather');action('Done',close);return}
  if(v==='map'){sheet('Road map');const m=$('map');if(m){const c=document.createElement('canvas');c.width=m.width;c.height=m.height;c.style.cssText='width:100%;height:auto;max-height:65dvh;object-fit:contain';c.getContext('2d').drawImage(m,0,0);content.append(c)}action('Close map',close);return}
  if(v==='tools'){sheet('Road tools');action('Read nearby description',()=>{close();read()});action('Current location',()=>{close();location()});action('Enter / exit',()=>{close();explore()});action('Restart road',()=>{click('reset');close()});action('Toggle wolves',()=>{click('wolfToggle');close()});action('Test wolf howl',()=>{click('wolfTest');close()});return}}
@@ -4676,4 +4772,5 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
  document.addEventListener('keydown',e=>{if(e.key==='Escape'){setMenu(false);close()}});
 })();
 </script>
+<style id="tserMobileV2Fixes">@media(max-width:800px){#rpgpovAiCombatDock:not([hidden]){position:fixed!important;top:auto!important;bottom:124px!important;left:auto!important;right:8px!important;transform:none!important;width:min(230px,58vw)!important;z-index:9700!important;padding:8px!important}#rpgpovAiCombatDock p{display:none}#rpgpovAiCombatDock button{font-size:11px!important;padding:7px!important}#rpgpovAiCombatDock .battle-actions{display:flex;flex-direction:column;gap:4px}}#rpgpovAiCombatDock[hidden]{display:none!important}</style>
 </body></html>
