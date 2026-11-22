@@ -3791,6 +3791,18 @@ function refreshDoorHint(){
  doorHint.hidden=!entry||!locationPanel.hidden;
  if(entry)doorHint.textContent='E / Enter — '+'enter '+entry.name;
 }
+window.VILLAGE_MOBILE_INTERACT=()=>{
+ if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.())return {ok:false,message:'Finish the active encounter first'};
+ if(!locationPanel.hidden){closeLocation();}
+ if(activeInterior){
+  const distance=Math.hypot(insidePlayer.x,insidePlayer.z-(activeRoom.userData.d/2-1.0));
+  if(distance<3.0){leaveBuilding();return {ok:true,message:'Exited building'}};
+  return {ok:false,message:'Move to the front door to leave'};
+ }
+ const entrance=closestEntrance();
+ if(entrance){enterBuilding(entrance.id);return {ok:true,message:'Entering '+entrance.name}};
+ return {ok:false,message:'Move closer to a building entrance'};
+};
 function enterBuilding(id){
  // BASIC DOWNLOAD: all village interiors are unlocked; browser preview remains restricted.
  if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.())return;
@@ -5851,7 +5863,8 @@ function addDetail(card,label,value){
 function render(rows){
  const host=panel.querySelector('#arcQuickCards');host.replaceChildren();
  const active=activeIds();
- const selected=active?active.map(id=>rows.find(c=>String(c.id)===String(id))).filter(Boolean):rows;
+ const matched=active?active.map(id=>rows.find(c=>String(c.id)===String(id))).filter(Boolean):[];
+ const selected=matched.length?matched:rows;
  for(const c of selected){
   const sheet=c.sheet||'',name=c.name||stat(sheet,'Name')||'Adventurer';
   const card=document.createElement('section');card.className='arcQuickCard';
@@ -5980,7 +5993,7 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
 </script>
 <style id="village-ai-chat-display-only">#aiDmPanel #aiDmPlace,#aiDmPanel #aiDmReadAgain,#aiDmPanel .aiDmScroll{display:none!important}</style>
 
-<style id="village-mobile-v1-css">
+<style id="village-mobile-v2-css">
 @media(max-width:800px){
  html,body{overscroll-behavior:none;touch-action:pan-x pan-y}
  #hud,#mapbox,#help,#mpButton,#aiDmButton,#arcQuickToggle,#insideLabel,#doorHint,#locationHint{display:none!important}
@@ -5994,6 +6007,7 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
  #villageMobile .vm-pad [data-key="ArrowLeft"]{grid-column:1;grid-row:2}
  #villageMobile .vm-pad [data-key="ArrowDown"]{grid-column:2;grid-row:2}
  #villageMobile .vm-pad [data-key="ArrowRight"]{grid-column:3;grid-row:2}
+ #vmInteractHint:not([hidden]){display:block;position:fixed;bottom:100px;left:50%;transform:translateX(-50%);z-index:9804;max-width:85vw;padding:10px 15px;background:#251d25f0;color:#ffe0b0;border:1px solid #bd955e;border-radius:9px;font:14px system-ui;text-align:center}
  #villageMobile .vm-explore{position:fixed;right:18px;bottom:calc(19px + env(safe-area-inset-bottom));z-index:9802;width:64px;height:64px;border-radius:14px;background:#b48141;color:#24150c;font:bold 20px system-ui}
  #villageMobile .vm-dropdown{position:fixed;right:14px;top:75px;z-index:9805;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:min(370px,calc(100vw - 28px));padding:13px;box-sizing:border-box;background:#241d1bed;border:1px solid #bb915b;border-radius:12px;box-shadow:0 10px 35px #0009}
  #villageMobile .vm-dropdown[hidden]{display:none!important}
@@ -6017,7 +6031,7 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
 @media(min-width:801px){#villageMobile{display:none!important}}
 </style>
 <div id="villageMobile" style="display:none">
- <span class="vm-version">VILLAGE · MOBILE v1</span>
+ <span class="vm-version">VILLAGE · MOBILE v2</span>
  <button class="vm-menu" id="vmMenu" type="button">☰ MENU</button>
  <nav class="vm-dropdown" id="vmDropdown" hidden>
   <button data-vm="read">READ</button><button data-vm="tools">TOOLS</button>
@@ -6026,10 +6040,10 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
   <button data-vm="mp">MULTIPLAYER</button><button data-vm="explore">EXPLORE</button>
  </nav>
  <div class="vm-pad" aria-label="Movement controls"><button data-key="ArrowUp" aria-label="Forward">▲</button><button data-key="ArrowLeft" aria-label="Turn left">◀</button><button data-key="ArrowDown" aria-label="Backward">▼</button><button data-key="ArrowRight" aria-label="Turn right">▶</button></div>
- <button class="vm-explore" id="vmExplore" aria-label="Enter or exit">⚒</button>
+ <div id="vmInteractHint" hidden aria-live="polite"></div><button class="vm-explore" id="vmExplore" aria-label="Enter or exit">⚒</button>
  <section class="vm-overlay" id="vmOverlay" hidden><div class="vm-sheet"><button class="vm-close" id="vmClose">×</button><h2 id="vmTitle">Village settings</h2><div id="vmContent"></div></div></section>
 </div>
-<script id="village-mobile-v1-script">
+<script id="village-mobile-v2-script">
 (()=>{
  const root=document.getElementById('villageMobile');if(!root||!matchMedia('(max-width:800px)').matches)return;
  const $=id=>document.getElementById(id),dropdown=$('vmDropdown'),overlay=$('vmOverlay'),content=$('vmContent');
@@ -6041,7 +6055,8 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
  });
  addEventListener('blur',()=>[...active.keys()].forEach(release));document.addEventListener('visibilitychange',()=>{if(document.hidden)[...active.keys()].forEach(release)});
  function tap(key){send(key,'keydown');setTimeout(()=>send(key,'keyup'),55)}
- $('vmExplore').onclick=()=>tap('Enter');
+ function interact(){const result=window.VILLAGE_MOBILE_INTERACT?.();if(!result){tap('Enter');return}if(!result.ok){const hint=$('vmInteractHint');hint.textContent=result.message;hint.hidden=false;clearTimeout(window.vmHintTimer);window.vmHintTimer=setTimeout(()=>hint.hidden=true,2300)}}
+ $('vmExplore').onclick=interact;
  $('vmMenu').onclick=()=>dropdown.hidden=!dropdown.hidden;
  function close(){overlay.hidden=true;content.replaceChildren()}
  $('vmClose').onclick=close;overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
@@ -6053,14 +6068,14 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
  function selectControl(label,id){const src=original(id);if(!src)return;const wrap=document.createElement('label');wrap.textContent=label;const s=src.cloneNode(true);s.removeAttribute('id');s.value=src.value;s.style.width='100%';s.onchange=()=>{src.value=s.value;src.dispatchEvent(new Event('change',{bubbles:true}))};wrap.append(s);content.append(wrap)}
  function show(which){
   dropdown.hidden=true;
-  if(which==='explore'){tap('Enter');return}
+  if(which==='explore'){interact();return}
   if(which==='read'){tap('r');if(original('aiDmPanel')?.hidden===false)return;click('aiDmButton');return}
   if(which==='ai'){click('aiDmButton');return}
-  if(which==='party'){const panel=original('arcQuickPanel');if(panel){panel.classList.add('open');return}click('arcQuickToggle');return}
+  if(which==='party'){click('arcQuickToggle');return}
   if(which==='mp'){click('mpButton');return}
   if(which==='map'){sheet('Village map');const canvas=original('map');if(canvas){const img=document.createElement('canvas');img.width=canvas.width;img.height=canvas.height;img.style.cssText='width:100%;height:auto;max-height:65dvh;object-fit:contain';img.getContext('2d').drawImage(canvas,0,0);content.append(img)}action('Close map',close);return}
   if(which==='weather'){sheet('Weather and time');selectControl('Time of day','timeofday');selectControl('Weather','visibility');action('Done',close);return}
-  if(which==='tools'){sheet('Village tools');action('Read nearby location',()=>{close();tap('r');click('aiDmButton')});action('Enter / exit building',()=>{close();tap('Enter')});action('Overhead / first-person view',()=>{click('overview');close()});action('Restart at east entrance',()=>{click('reset');close()});action('Browse locations E1–E7',()=>{close();click('indexOpen');click('aiDmButton')});return}
+  if(which==='tools'){sheet('Village tools');action('Read nearby location',()=>{close();tap('r');click('aiDmButton')});action('Enter / exit building',()=>{close();interact()});action('Overhead / first-person view',()=>{click('overview');close()});action('Restart at east entrance',()=>{click('reset');close()});action('Browse locations E1–E7',()=>{close();click('indexOpen');click('aiDmButton')});return}
  }
  root.querySelectorAll('[data-vm]').forEach(b=>b.onclick=()=>show(b.dataset.vm));
  document.addEventListener('keydown',e=>{if(e.key==='Escape'){dropdown.hidden=true;close()}});
