@@ -1439,7 +1439,7 @@ function loop(now){requestAnimationFrame(loop);const dt=Math.min((now-prev)/1000
 // the road always take precedence. Desktop movement remains unchanged.
 if(!journeyLocked&&!innInside&&keys.arrowup&&!keys.arrowdown&&!keys.arrowleft&&!keys.arrowright&&!keys.a&&!keys.d&&
    window.matchMedia('(pointer:coarse) and (max-width:950px)').matches&&
-   player.z<143&&player.z>-195&&Math.abs(player.x-pathX(player.z))<5.5){
+   player.z<190&&player.z>-195&&Math.abs(player.x-pathX(player.z))<7.5){
  const aheadZ=Math.max(-205,player.z-9);
  const desired=Math.atan2(pathX(aheadZ)-player.x,player.z-aheadZ);
  let difference=Math.atan2(Math.sin(desired-player.angle),Math.cos(desired-player.angle));
@@ -5361,7 +5361,7 @@ body.rpgpovMobilePanelOpen #rpgpovMobileMenuButton{display:none!important}
 #rpgpovMobileSideClose.visible{display:block!important}
 body.rpgpovV5PanelOpen #rpgpovMobileMenuButton{display:none!important}
 </style>
-<div id="rpgpovV5Build">MOBILE v14</div>
+<div id="rpgpovV5Build">MOBILE v15</div>
 <script id="rpgpov-v5-script">
 (()=>{
  const ids=['gamePanel','minimap','controlDeck','aiDmPanel','aiDmPartyBox','mpPanel','rpgpovMobileSettings'];
@@ -5578,4 +5578,32 @@ body.rpgpovV6PartyOpen #rpgpovMobileSideClose { display:none!important; visibili
 <style id="rpgpov-mobile-v13-single-encounter">
 #rpgpovOutdoorEncounterDock{display:none!important;pointer-events:none!important}
 </style>
+
+<!-- Mobile v15: restore the opening READ popup and enable road guidance from the inn approach. -->
+<style id="rpgpov-mobile-v15-opening">
+/* Preserve the single encounter card; never mask it behind the mobile controls. */
+#rpgpovAiCombatDock:not([hidden]){z-index:9750!important}
+#rpgpovMobileMenuButton{z-index:9805!important}
+</style>
+<script id="rpgpov-mobile-v15-opening-script">
+(()=>{
+ let attempted=false;
+ function openOpeningReader(){
+  if(attempted||window.DNDPOV_SVALICH_DEPARTED?.())return;
+  const dock=document.getElementById('dndpovContextDock');
+  const read=document.querySelector('#rpgpovMobileMenu [data-mobile-view="read"]');
+  if(!dock||!read)return;
+  attempted=true;
+  // Startup cleanup from earlier mobile builds runs on window.load; reopen afterwards.
+  setTimeout(()=>{
+   if(window.DNDPOV_SVALICH_DEPARTED?.())return;
+   if(document.getElementById('rpgpovAiKeySetup')?.hidden===false)return;
+   if(document.getElementById('rpgpovMobile')?.classList.contains('rpgpovWindowActive'))return;
+   read.click();
+  },550);
+ }
+ if(document.readyState==='complete')openOpeningReader();
+ else window.addEventListener('load',openOpeningReader,{once:true});
+})();
+</script>
 </body></html>
