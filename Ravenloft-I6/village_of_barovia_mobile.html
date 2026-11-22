@@ -6031,7 +6031,7 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
 @media(min-width:801px){#villageMobile{display:none!important}}
 </style>
 <div id="villageMobile" style="display:none">
- <span class="vm-version">VILLAGE · MOBILE v2</span>
+ <span class="vm-version">VILLAGE · MOBILE v4</span>
  <button class="vm-menu" id="vmMenu" type="button">☰ MENU</button>
  <nav class="vm-dropdown" id="vmDropdown" hidden>
   <button data-vm="read">READ</button><button data-vm="tools">TOOLS</button>
@@ -6066,16 +6066,24 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
  const click=id=>{const el=original(id);if(el)el.click();return !!el};
  function openPanel(id){const el=original(id);if(!el)return false;el.hidden=false;el.style.display='flex';return true}
  function selectControl(label,id){const src=original(id);if(!src)return;const wrap=document.createElement('label');wrap.textContent=label;const s=src.cloneNode(true);s.removeAttribute('id');s.value=src.value;s.style.width='100%';s.onchange=()=>{src.value=s.value;src.dispatchEvent(new Event('change',{bubbles:true}))};wrap.append(s);content.append(wrap)}
+ function showDescription(){
+  // READ always invokes the village's native description reader.
+  // That reader supplies E-number, title, read-aloud and optional DM notes.
+  const panel=original('locationPanel');
+  if(panel&&!panel.hidden){panel.hidden=true;return}
+  if(!click('readNearbyButton'))click('indexOpen');
+ }
+
  function show(which){
   dropdown.hidden=true;
   if(which==='explore'){interact();return}
-  if(which==='read'){tap('r');if(original('aiDmPanel')?.hidden===false)return;click('aiDmButton');return}
+  if(which==='read'){showDescription();return}
   if(which==='ai'){click('aiDmButton');return}
   if(which==='party'){click('arcQuickToggle');return}
   if(which==='mp'){click('mpButton');return}
   if(which==='map'){sheet('Village map');const canvas=original('map');if(canvas){const img=document.createElement('canvas');img.width=canvas.width;img.height=canvas.height;img.style.cssText='width:100%;height:auto;max-height:65dvh;object-fit:contain';img.getContext('2d').drawImage(canvas,0,0);content.append(img)}action('Close map',close);return}
   if(which==='weather'){sheet('Weather and time');selectControl('Time of day','timeofday');selectControl('Weather','visibility');action('Done',close);return}
-  if(which==='tools'){sheet('Village tools');action('Read nearby location',()=>{close();tap('r');click('aiDmButton')});action('Enter / exit building',()=>{close();interact()});action('Overhead / first-person view',()=>{click('overview');close()});action('Restart at east entrance',()=>{click('reset');close()});action('Browse locations E1–E7',()=>{close();click('indexOpen');click('aiDmButton')});return}
+  if(which==='tools'){sheet('Village tools');action('Read nearby location',()=>{close();showDescription()});action('Toggle DM notes',()=>{click('dmMode');const enabled=original('dmMode')?.getAttribute('aria-pressed')==='true';const b=[...content.querySelectorAll('button')].find(b=>b.textContent.startsWith('DM notes:'));if(b)b.textContent='DM notes: '+(enabled?'ON':'OFF')});action('Enter / exit building',()=>{close();interact()});action('Overhead / first-person view',()=>{click('overview');close()});action('Restart at east entrance',()=>{click('reset');close()});action('Browse locations E1–E7',()=>{close();click('indexOpen')});return}
  }
  root.querySelectorAll('[data-vm]').forEach(b=>b.onclick=()=>show(b.dataset.vm));
  document.addEventListener('keydown',e=>{if(e.key==='Escape'){dropdown.hidden=true;close()}});
@@ -6083,4 +6091,23 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
  const ai=original('aiDmPanel');if(ai){const obs=new MutationObserver(()=>{if(ai.hidden===false)dropdown.hidden=true});obs.observe(ai,{attributes:true,attributeFilter:['hidden']})}
 })();
 </script>
+<style id="village-mobile-v4-layout-fixes">
+@media(max-width:800px){
+ /* Keep the Location link clear of the movement pad. */
+ #koboReaderReopen{left:auto!important;right:94px!important;bottom:calc(25px + env(safe-area-inset-bottom))!important;z-index:9803!important;max-width:calc(100vw - 325px);font:12px system-ui!important;padding:11px 8px!important}
+ /* The actual Village location description must be visible on mobile. */
+ #locationPanel:not([hidden]){display:flex!important;z-index:9850!important;top:50%!important;left:50%!important;width:calc(100vw - 22px)!important;max-height:85dvh!important}
+ #locationPanel[hidden]{display:none!important}
+ #locationHint:not([hidden]){display:block!important;z-index:9700!important;bottom:165px!important;max-width:85vw!important}
+ /* Use a genuine right-hand slideout instead of a floating grid dropdown. */
+ #villageMobile .vm-dropdown{top:0!important;right:0!important;bottom:0!important;left:auto!important;width:min(310px,85vw)!important;height:100dvh!important;max-height:100dvh!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;justify-content:flex-start!important;gap:10px!important;padding:90px 16px 22px!important;border-radius:0!important;border-top:0!important;border-bottom:0!important;border-right:0!important;z-index:9800!important;background:#231e27f8!important}
+ #villageMobile .vm-dropdown[hidden]{display:none!important}
+ #villageMobile .vm-dropdown button{text-align:left!important;min-height:49px!important;flex:none!important}
+ #villageMobile .vm-menu{z-index:9806!important}
+ #villageMobile .vm-pad{z-index:9802!important}
+ #villageMobile .vm-explore{z-index:9802!important}
+ /* Hide redundant old location tab; READ is now the dedicated description control. */
+ #koboReaderReopen{display:none!important}
+}
+</style>
 </body></html>
