@@ -5361,7 +5361,7 @@ body.rpgpovMobilePanelOpen #rpgpovMobileMenuButton{display:none!important}
 #rpgpovMobileSideClose.visible{display:block!important}
 body.rpgpovV5PanelOpen #rpgpovMobileMenuButton{display:none!important}
 </style>
-<div id="rpgpovV5Build">MOBILE v11</div>
+<div id="rpgpovV5Build">MOBILE v12</div>
 <script id="rpgpov-v5-script">
 (()=>{
  const ids=['gamePanel','minimap','controlDeck','aiDmPanel','aiDmPartyBox','mpPanel','rpgpovMobileSettings'];
@@ -5492,6 +5492,80 @@ body.rpgpovV6PartyOpen #rpgpovMobileSideClose { display:none!important; visibili
      if(body)body.scrollTop=0;
    });
  });
+})();
+</script>
+
+<style id="rpgpov-v12-ai-key-css">
+#rpgpovAiKeySetup[hidden]{display:none!important}
+#rpgpovAiKeySetup{position:fixed;inset:0;z-index:20000;background:#08090edb;display:flex;align-items:center;justify-content:center;padding:15px;box-sizing:border-box}
+#rpgpovAiKeySetup .key-card{width:min(440px,100%);max-height:90dvh;overflow:auto;background:#25232c;border:2px solid #aa85d4;border-radius:12px;padding:20px;color:#f5e9ff;box-shadow:0 12px 50px #000}
+#rpgpovAiKeySetup h2{font:700 21px system-ui;margin:0 0 10px;color:#e9caff}
+#rpgpovAiKeySetup p,#rpgpovAiKeySetup small{font:14px/1.5 system-ui}
+#rpgpovAiKeySetup label{display:block;margin:15px 0 5px;font:600 13px system-ui}
+#rpgpovAiKeySetup input{width:100%;box-sizing:border-box;padding:12px;background:#13141b;color:#fff;border:1px solid #aa85d4;border-radius:6px;font:15px system-ui}
+#rpgpovAiKeySetup .key-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+#rpgpovAiKeySetup button{padding:10px 14px;font:600 14px system-ui;border-radius:6px}
+#rpgpovAiKeySetup #rpgpovAiKeyConnect{background:#7853a6;color:white}
+#rpgpovAiKeyStatus{margin-top:10px;color:#ffd18c;min-height:20px;font:13px/1.5 system-ui}
+#aiDmPanel.rpgpovMobileOpen{z-index:9790!important;top:max(55px,env(safe-area-inset-top))!important;bottom:max(10px,env(safe-area-inset-bottom))!important;left:6px!important;right:6px!important;width:auto!important;height:auto!important;max-height:none!important;transform:none!important}
+</style>
+<div id="rpgpovAiKeySetup" hidden role="dialog" aria-modal="true" aria-labelledby="rpgpovAiKeyTitle">
+ <div class="key-card"><h2 id="rpgpovAiKeyTitle">✦ Connect Your AI Dungeon Master</h2>
+ <p>Enter your own OpenAI API key to enable the AI DM during exploration and combat.</p>
+ <label for="rpgpovAiKeyInput">OpenAI Secret API Key</label><input id="rpgpovAiKeyInput" type="password" placeholder="sk-..." autocomplete="off" autocapitalize="off" spellcheck="false"/>
+ <p><small>Your key stays in this browser tab's memory and is cleared on reload. It is sent directly to OpenAI, not stored in this HTML. Browser-based keys can still be exposed by browser extensions or scripts, so use a restricted, low-budget key. API billing is separate from ChatGPT.</small></p>
+ <p><a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" style="color:#d9b9ff">Create an OpenAI API key</a></p>
+ <div class="key-actions"><button type="button" id="rpgpovAiKeyConnect">Connect AI DM</button><button type="button" id="rpgpovAiKeyCancel">Cancel</button></div>
+ <div id="rpgpovAiKeyStatus" role="status"></div></div>
+</div>
+<script id="rpgpov-v12-ai-key-script">
+(()=>{
+ const dialog=document.getElementById('rpgpovAiKeySetup'),input=document.getElementById('rpgpovAiKeyInput'),status=document.getElementById('rpgpovAiKeyStatus');
+ const connect=document.getElementById('rpgpovAiKeyConnect');
+ let apiKey='';const history=[];
+ function show(){if(apiKey)return;dialog.hidden=false;status.textContent='';input.focus();}
+ function hide(){dialog.hidden=true;input.value='';}
+ window.RPGPOV_AI_KEY_READY=()=>!!apiKey;
+ window.RPGPOV_AI_KEY_PROMPT=show;
+ document.getElementById('rpgpovAiKeyCancel').onclick=hide;
+ connect.onclick=async()=>{
+  const candidate=input.value.trim();
+  if(!candidate.startsWith('sk-')){status.textContent='Enter a valid OpenAI secret key (sk-...).';return;}
+  connect.disabled=true;status.textContent='Checking OpenAI connection…';
+  try{
+   const r=await fetch('https://api.openai.com/v1/models',{headers:{Authorization:'Bearer '+candidate}});
+   if(!r.ok){const j=await r.json().catch(()=>({}));throw Error(j.error?.message||'Connection failed (HTTP '+r.status+')');}
+   apiKey=candidate;hide();
+   document.getElementById('aiDmPanel')?.removeAttribute('hidden');
+  }catch(e){status.textContent='Could not connect: '+e.message;}
+  finally{connect.disabled=false;}
+ };
+ const nativeFetch=window.fetch.bind(window);
+ window.fetch=async function(resource,options){
+  const url=typeof resource==='string'?resource:resource?.url;
+  if(!url||!/^\/api\/dm(?:[?#]|$)/.test(url))return nativeFetch(resource,options);
+  if(!apiKey){show();return new Response(JSON.stringify({error:'Connect your personal OpenAI API key in the AI DM setup, then retry.'}),{status:401,headers:{'Content-Type':'application/json'}});}
+  let request={};try{request=JSON.parse(options?.body||'{}')}catch(_){}
+  const message=String(request.message||'Continue the adventure.');
+  const combat=request.combat||null;
+  const instructions='You are the AI Dungeon Master for RPGPOV Old Svalich Road, Barovia. Respect the provided location, adventure text, module references and party character sheets. Never contradict established facts. Describe exploration, choices, and combat clearly. For combat, narrate initiative and actions only as supported by provided stats and context. Do not claim to change the game engine state. Keep the player in control of their characters unless they delegated actions. Return a plain-text reply.';
+  const recent=history.slice(-12);
+  const payload={model:'gpt-4.1-mini',instructions,input:[...recent,{role:'user',content:message+'\n\nGAME CONTEXT: '+JSON.stringify({location:request.location||request.place||request.area,arcParty:request.arcParty,combat,context:request.context}).slice(0,16000)}],max_output_tokens:1400};
+  try{
+   const r=await nativeFetch('https://api.openai.com/v1/responses',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+apiKey},body:JSON.stringify(payload),signal:options?.signal});
+   const data=await r.json();
+   if(!r.ok)return new Response(JSON.stringify({error:data.error?.message||'OpenAI request failed'}),{status:r.status,headers:{'Content-Type':'application/json'}});
+   const reply=(data.output||[]).flatMap(x=>x.content||[]).filter(x=>x.type==='output_text').map(x=>x.text).join('\n').trim();
+   if(!reply)throw Error('OpenAI returned no text.');
+   history.push({role:'user',content:message},{role:'assistant',content:reply});if(history.length>24)history.splice(0,history.length-24);
+   return new Response(JSON.stringify({reply}),{status:200,headers:{'Content-Type':'application/json'}});
+  }catch(e){return new Response(JSON.stringify({error:e.message}),{status:502,headers:{'Content-Type':'application/json'}});}
+ };
+ document.querySelector('#rpgpovMobileMenu [data-mobile-view="ai"]')?.addEventListener('click',()=>{if(!apiKey)setTimeout(show,0)});
+ document.getElementById('rpgpovAiKeySetup')?.addEventListener('keydown',e=>{if(e.key==='Escape'){hide();e.stopPropagation()}},true);
+ document.addEventListener('click',e=>{
+  if(e.target.closest('#rpgpovAiCombatDock button,#dndpovEncounterBanner .encounter-ai-action')&&!apiKey)setTimeout(show,0);
+ },true);
 })();
 </script>
 </body></html>
