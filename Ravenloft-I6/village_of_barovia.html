@@ -3739,20 +3739,6 @@ function makeInteriorRoom(id){
   for(const x of [-1.6,1.6])add(x,2.4,-d/2+2.0,.17,.53,.17,candle);
   add(0,6.1,-d/2+.5,.45,4.2,.32,oldStone);
   add(0,7.4,-d/2+.5,2.0,.38,.32,oldStone);
-  // Standing congregation: occupy the side aisles, NOT the wooden pews.
-  // The nave's pews occupy x roughly -5.35..-1.15 and 1.15..5.35;
-  // the wall-side walking margins are narrow, so keep sprites just beside
-  // the ends of the pews, never embedded in bench backs or seats.
-  const parishioners=[
-   {role:'elder',x:-5.70,z:6.25},
-   {role:'woman',x:5.70,z:5.75},
-   {role:'villager',x:-5.70,z:1.90},
-   {role:'woman',x:5.70,z:-1.90},
-   {role:'elder',x:-5.70,z:-5.80},
-   {role:'woman',x:5.70,z:-6.40}
-  ];
-  group.userData.villageStandingChurch=true;
-  group.userData.villagePatronSprites=parishioners.map(p=>villagePatronSprite(group,p));
   buildChurchOrgan(group,add,furniture);
  }else if(id==='E1'){ // Mercantile counters, shelves and stock.
   for(const x of [-w/2+1.2,w/2-1.2])for(const z of [-3.6,0,3.3])
