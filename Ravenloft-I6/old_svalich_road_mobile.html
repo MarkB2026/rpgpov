@@ -4739,8 +4739,7 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
  }
  const isCombat=(title,description)=>/^(RANDOM ENCOUNTER|ENCOUNTER|WORG WOLVES ATTACK)/i.test(title)&&
   !/Role-play or acknowledge this encounter|non-hostile unless/i.test(description);
- const sync=()=>{if(battleActive)return;ai.hidden=banner.style.display==='none'||
-  getComputedStyle(banner).display==='none'||!isCombat(head.textContent,details.textContent);};
+ const sync=()=>{if(battleActive)return;ai.hidden=!isCombat(head.textContent,details.textContent);};
  new MutationObserver(sync).observe(banner,{attributes:true,attributeFilter:['style']});sync();
  const openPanel=()=>{
   const panel=document.getElementById('aiDmPanel');
@@ -4819,36 +4818,27 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
 #rpgpovOutdoorEncounterDock button:last-child{background:#59452c;border-color:#d0aa73;color:#ffebc6}
 </style>
 <script id="rpgpovOutdoorEncounterDockScript">
+/* Mobile v17: the old 250ms refresh forcibly hid the encounter banner.
+   Keep the original single centered encounter dialog; no duplicate bottom dock. */
 (()=>{
  const banner=document.getElementById('dndpovEncounterBanner');
- const title=banner?.querySelector('#dndpovEncounterTitle');
- const details=banner?.querySelector('#dndpovEncounterDetails');
- const card=banner?.querySelector('.encounter-card');
- const resolve=card?.querySelector('button:not(.encounter-ai-action)');
- const ai=card?.querySelector('.encounter-ai-action');
- if(!banner||!title||!details||!resolve)return;
- const dock=document.createElement('aside');dock.id='rpgpovOutdoorEncounterDock';dock.hidden=true;
- const heading=document.createElement('strong'),desc=document.createElement('div');
- const actions=document.createElement('div');actions.className='encounter-buttons';
- const fight=document.createElement('button');fight.type='button';fight.textContent='⚔ Let AI DM Run Encounter';
- const done=document.createElement('button');done.type='button';done.textContent='✓ Encounter Resolved';
- fight.onclick=()=>{if(ai)ai.click();else document.getElementById('aiDmButton')?.click()};
- done.onclick=()=>resolve.click();actions.append(fight,done);dock.append(heading,desc,actions);document.body.append(dock);
- const isCombat=t=>/^(?:RANDOM ENCOUNTER|ENCOUNTER|WORG WOLVES ATTACK)/i.test(t);
- function refresh(){
-  const active=!!window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK;
-  const battle=!!window.DNDPOV_ACTIVE_AI_BATTLE?.active;
-  const t=title.textContent||'';
-  // The AI battle dock takes over once the handoff begins.
-  dock.hidden=!active||battle||!t;
-  if(!dock.hidden){heading.textContent=t;desc.textContent=details.textContent;
-   fight.hidden=!isCombat(t);}
-  // Never let the old centered overlay obstruct the 3D encounter.
-  if(banner.style.display!=='none')banner.style.display='none';
+ if(!banner)return;
+ const head=banner.querySelector('#dndpovEncounterTitle');
+ function sync(){
+  const locked=!!window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK;
+  const combat=!!window.DNDPOV_ACTIVE_AI_BATTLE?.active;
+  if(locked&&!combat&&head?.textContent){
+   banner.style.display='flex';
+   banner.style.pointerEvents='none';
+   const card=banner.querySelector('.encounter-card');
+   if(card)card.style.pointerEvents='auto';
+  }else if(!locked||combat){banner.style.display='none';}
  }
- window.addEventListener('rpgpov:outdoor-encounter',refresh);
- window.addEventListener('rpgpov:combat-state',refresh);
- setInterval(refresh,250);refresh();
+ window.addEventListener('rpgpov:outdoor-encounter',sync);
+ window.addEventListener('rpgpov:combat-state',sync);
+ new MutationObserver(()=>{if(window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK&&!window.DNDPOV_ACTIVE_AI_BATTLE?.active&&banner.style.display==='none')sync()})
+   .observe(banner,{attributes:true,attributeFilter:['style']});
+ sync();
 })();
 </script>
 <style id="kobo-reader-only-v2">
@@ -5361,7 +5351,7 @@ body.rpgpovMobilePanelOpen #rpgpovMobileMenuButton{display:none!important}
 #rpgpovMobileSideClose.visible{display:block!important}
 body.rpgpovV5PanelOpen #rpgpovMobileMenuButton{display:none!important}
 </style>
-<div id="rpgpovV5Build">MOBILE v16</div>
+<div id="rpgpovV5Build">MOBILE v17</div>
 <script id="rpgpov-v5-script">
 (()=>{
  const ids=['gamePanel','minimap','controlDeck','aiDmPanel','aiDmPartyBox','mpPanel','rpgpovMobileSettings'];
@@ -5606,4 +5596,9 @@ body.rpgpovV6PartyOpen #rpgpovMobileSideClose { display:none!important; visibili
  else window.addEventListener('load',openOpeningReader,{once:true});
 })();
 </script>
-</body></html>
+<style id="rpgpov-v17-encounter-visibility">
+#dndpovEncounterBanner{z-index:9740!important;pointer-events:none!important;padding:12px!important}
+#dndpovEncounterBanner .encounter-card{pointer-events:auto!important;max-height:min(72dvh,640px)!important;overflow-y:auto!important;overscroll-behavior:contain!important}
+#dndpovEncounterBanner button{touch-action:manipulation!important}
+#rpgpovMobile .pad{z-index:9800!important}
+</style></body></html>
