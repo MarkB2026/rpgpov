@@ -1020,16 +1020,13 @@ margin-top:auto!important;transform:none!important;min-height:42px!important;hei
 #edition-comparison .original-editions-hero .edition-choice.adventure .edition-details{border-color:#80646a!important;background:#30272d!important}
 @media(max-width:900px){#edition-comparison .original-editions-hero .edition-choice{min-height:700px!important}}
 </style>
-
 <style id="rpgpov-gallery-grouping">
 #rpgpov-image-gallery .gallery-subheading{grid-column:1/-1;color:#e6c58e;font:700 15px/1.5 Georgia,serif;text-align:left;margin:9px 0 0;padding:9px 0 5px;border-bottom:1px solid #82644477}
 </style>
-
 <style id="mobile-desktop-entry-v1">
 .core-entry{flex-wrap:wrap!important}.core-entry-button.mobile{border:1px solid #8bb7c6;background:linear-gradient(135deg,#183946,#12242e);color:#e4f7ff}.core-entry-button.mobile:hover{background:#245164}.core-entry-button.mobile span{font-weight:700}
 .rpg-device-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:0 0 10px}.rpg-device-link{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:54px;padding:9px 7px;text-align:center;text-decoration:none!important;font:700 12px/1.4 Arial,sans-serif;letter-spacing:.02em;border:1px solid #a98c66;border-radius:6px;background:#372b27;color:#f9e4c4!important}.rpg-device-link.mobile{background:#183744;border-color:#75a6b9;color:#e5f6ff!important}.rpg-device-link:hover{filter:brightness(1.22)}.rpg-device-link small{font:400 11px/1.35 Arial,sans-serif;opacity:.85}.rpg-device-note{margin:0 0 11px!important;min-height:0!important;font:12px/1.45 Arial,sans-serif;color:#c7d5db!important}.rpg-device-note strong{color:#d4e9f1}.core-entry-button.mobile small{color:#c6dfe7}@media(max-width:480px){.rpg-device-choices{grid-template-columns:1fr}}
 </style>
-
 <style id="rpgpov-entry-order-v2">
 /* Desktop left; Mobile and Download stacked in right column. */
 @media(min-width:601px){
@@ -1040,7 +1037,33 @@ margin-top:auto!important;transform:none!important;min-height:42px!important;hei
 }
 @media(max-width:600px){.hero .core-entry{grid-template-columns:1fr!important}.hero .core-entry-button{grid-column:auto!important;grid-row:auto!important}}
 </style>
-</head>
+<style id="rpgpov-playmode-redesign-v1">
+.rpg-playmode{margin:24px 0 28px;padding:clamp(16px,3vw,30px);background:radial-gradient(ellipse at 95% 0%,#48332455,transparent 48%),linear-gradient(145deg,#1b1920,#15151b);border:1px solid #9d8059;border-radius:15px;box-shadow:0 12px 36px #0006;color:#e8dcc9}
+.rpg-playmode-heading{text-align:center;max-width:700px;margin:0 auto 22px}.rpg-playmode-kicker{color:#dbb77d;font:700 11px Arial,sans-serif;letter-spacing:2.2px}.rpg-playmode-heading h3{font:700 clamp(25px,4vw,39px)/1.15 Georgia,serif;color:#f6d9a5;margin:10px 0}.rpg-playmode-heading p{font:15px/1.65 Arial,sans-serif;color:#d8c9ba;margin:0}
+.rpg-playmode-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.rpg-playmode-card{display:flex;flex-direction:column;align-items:flex-start;padding:22px;border-radius:12px;background:#242128;border:1px solid #756149;min-width:0}.rpg-playmode-card.ai{background:linear-gradient(155deg,#2e2527,#211d27);border-color:#ac895a}.rpg-playmode-symbol{font:32px Georgia,serif;color:#edc489;line-height:1;margin-bottom:13px}.rpg-playmode-tag{font:700 10px Arial,sans-serif;letter-spacing:1.3px;color:#d7b87d}.rpg-playmode-card h4{font:700 23px Georgia,serif;color:#ffe3b3;margin:10px 0}.rpg-playmode-card p{font:14px/1.65 Arial,sans-serif;color:#e0d3c3;margin:0 0 17px;flex:1}.rpg-playmode-status{font:700 12px/1.45 Arial,sans-serif;color:#e8c891;margin-bottom:17px}.rpg-playmode-action{display:block;box-sizing:border-box;text-align:center;text-decoration:none;border:1px solid #d1aa6b;border-radius:7px;background:#8b6538;color:#fff6e6!important;padding:12px 17px;font:700 13px Arial,sans-serif;cursor:pointer;width:100%}.rpg-playmode-action:hover{background:#aa7c43}.rpg-playmode-foot{margin-top:17px;padding:13px 16px;background:#29252b;border-left:3px solid #cba66c;color:#d6c8b7;font:12px/1.65 Arial,sans-serif}.rpg-playmode-foot strong{color:#f0ce94}
+@media(max-width:700px){.rpg-playmode-grid{grid-template-columns:1fr}.rpg-playmode-card{padding:18px}.rpg-playmode-heading h3{font-size:28px}}
+</style><style id="rpg-entry-mode-v2">
+.rpg-entry-mode-heading{display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;margin:18px 0 12px}.rpg-entry-mode-heading strong{font:700 15px/1.3 Georgia,serif;letter-spacing:2px;color:#f2d6a3}.rpg-entry-mode-heading span{font:12px/1.5 system-ui,sans-serif;color:#d0bfb1}
+.rpg-entry-mode-choices{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 15px}.rpg-entry-mode-choice{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;text-decoration:none;padding:21px 13px;min-height:166px;border:2px solid #c39b60;border-radius:8px;background:linear-gradient(135deg,#423322,#221a1b);color:#fff0d4;box-shadow:0 6px 22px #0006;transition:transform .2s,border-color .2s}.rpg-entry-mode-choice.ai{background:linear-gradient(135deg,#30243c,#181520);border-color:#a28ac8}.rpg-entry-mode-choice:hover{transform:translateY(-2px);border-color:#ffdb94}.rpg-entry-mode-icon{font-size:29px;line-height:1}.rpg-entry-mode-choice strong{font:700 clamp(16px,2vw,22px)/1.2 Georgia,serif}.rpg-entry-mode-choice small{font:12px/1.5 system-ui,sans-serif;color:#e5d7c4}.rpg-entry-mode-cta{font:700 12px/1.3 system-ui,sans-serif;color:#f5cb86;margin-top:3px}.rpg-entry-platform-label{text-align:center;color:#d7c6ae;letter-spacing:1.5px;font:700 11px system-ui,sans-serif;margin:12px 0 10px;scroll-margin-top:90px}
+@media(max-width:600px){.rpg-entry-mode-choices{grid-template-columns:1fr}.rpg-entry-mode-choice{min-height:130px;padding:16px 12px}}
+</style><style id="rpgpov-two-choice-entry-css">/* Only two primary choices appear until the player selects Traditional DM. */
+#rpg-platform-choice,.core-hero > .core-entry{display:none!important}
+#rpg-platform-choice:target{display:block!important;scroll-margin-top:100px}
+#rpg-platform-choice:target + .core-entry{display:grid!important}
+</style><style id="rpg-two-choices-first">
+/* The two play modes are the only initial entry actions. */
+#rpg-platform-choice,.core-hero > .core-entry,.core-hero > .core-entry-links{display:none}
+.core-hero.rpg-show-traditional #rpg-platform-choice{display:block}
+.core-hero.rpg-show-traditional > .core-entry{display:grid}
+.core-hero.rpg-show-traditional > .core-entry-links{display:flex}
+</style>
+<script id="rpg-two-choices-first-script">
+document.addEventListener('DOMContentLoaded',function(){
+  var choice=document.querySelector('.rpg-entry-mode-choice.traditional');
+  var hero=document.querySelector('.core-hero');
+  if(choice && hero){choice.addEventListener('click',function(){hero.classList.add('rpg-show-traditional');});}
+});
+</script></head>
 <body>
 <header><div class="wrap nav"><a class="brand" href="#top">RPGPOV<small>ROLEPLAYING GAMES • POINT OF VIEW</small></a><nav aria-label="Main navigation" class="navlinks"><a href="#explore">Explore the browser adventure</a><a href="#solo">Solo + AI DM</a><a href="#multiplayer">Multiplayer</a></nav></div></header>
 <main id="top">
@@ -1048,17 +1071,46 @@ margin-top:auto!important;transform:none!important;min-height:42px!important;hei
 <div class="core-hero">
 <h1>Step Inside the Adventure.</h1>
 <p class="core-intro">Two breakthroughs. One living adventure. Explore Ravenloft in first person, with an AI Dungeon Master that understands your location and your characters.</p>
-<div class="core-pillars">
-<a class="core-pillar" href="#explore"><span class="core-pillar-number">01 · THE WORLD</span><strong>Explore in 3D</strong><span>Walk the original Ravenloft I6 locations, follow the roads, enter the castle, and encounter its creatures.</span><em>Explore the 3D world ↓</em></a>
-<a class="core-pillar" href="#solo"><span class="core-pillar-number">02 · THE INTELLIGENCE</span><strong>Adventure with AI</strong><span>Your AI Dungeon Master knows the location, the story and your characters. It doesn't just say yes to every action.</span><em>See the AI in action ↓</em></a>
+<div class="rpg-entry-mode-heading" id="choose-play-mode"><strong>CHOOSE YOUR RPGPOV EXPERIENCE</strong><span>Explore the free browser preview, or get the full Basic edition for Windows or mobile.</span></div>
+<div class="rpg-entry-mode-choices">
+<a aria-expanded="false" class="rpg-entry-mode-choice traditional" data-rpg-choice="browser" href="#rpg-browser-options" role="button"><span class="rpg-entry-mode-icon">🧭</span><strong>EXPLORE RPGPOV — BROWSER DEMO</strong><small>Explore the 3D maps, discover locations and try traditional battles. No download or API key required. No AI Dungeon Master or multiplayer.</small><span class="rpg-entry-mode-cta">Choose Desktop or Mobile Demo ↓</span></a>
+<a aria-expanded="false" class="rpg-entry-mode-choice ai" data-rpg-choice="basic" href="#rpg-basic-options" role="button"><span class="rpg-entry-mode-icon">⚔</span><strong>PLAY RPGPOV BASIC — AI DM + MULTIPLAYER</strong><small>Full Basic edition for Windows or Mobile. AI Dungeon Master needs an OpenAI Platform secret key (created at platform.openai.com — NOT your ChatGPT password or subscription).</small><span class="rpg-entry-mode-cta">Choose Windows Download or Mobile ↓</span></a>
 </div>
-<div class="core-entry">
-<a class="core-entry-button browser" href="Ravenloft-I6/old_svalich_road.html"><span>🖥 DESKTOP BROWSER BETA</span><small>Keyboard controls · Play instantly</small></a>
-<a class="core-entry-button mobile" href="Ravenloft-I6/old_svalich_road_mobile.html"><span>📱 MOBILE BROWSER BETA</span><small>Touch controls · AI chat &amp; multiplayer being developed</small></a>
-<a aria-label="Compare Browser, Basic, and Full versions of RPGPOV" class="core-entry-button windows" href="#edition-comparison"><span>↓ DOWNLOAD / COMPARE VERSIONS</span><small>Browser vs Basic vs Full · Choose your edition</small></a>
-</div>
-<div class="core-entry-links"><a href="#explore">Choose another adventure location</a><a href="#edition-comparison">Compare editions &amp; setup</a></div>
-</div>
+<p class="rpg-entry-key-note" style="margin:12px 0 2px;font-size:13px;color:#e6cda4;line-height:1.5">The browser is a free preview. For AI DM, multiplayer and full features, choose RPGPOV Basic. AI Dungeon Master uses a personal OpenAI Platform secret key, created through the OpenAI developer website. This is NOT a ChatGPT login or subscription; usage is charged separately. <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" style="color:#f2cf93;text-decoration:underline">Get your OpenAI secret key</a> · <a href="https://platform.openai.com/docs/quickstart" target="_blank" rel="noopener noreferrer" style="color:#f2cf93;text-decoration:underline">How it works</a> · <a href="https://platform.openai.com/settings/organization/billing/overview" target="_blank" rel="noopener noreferrer" style="color:#f2cf93;text-decoration:underline">API billing</a>.</p>
+<div class="rpg-conditional-options" hidden="" id="rpg-basic-options"><div class="rpg-entry-platform-label" style="scroll-margin-top:110px;margin-top:20px">PLAY RPGPOV BASIC — CHOOSE YOUR DEVICE</div><div aria-label="Choose full Basic edition" class="core-entry">
+<a class="core-entry-button browser" id="rpg-windows-editions-link" href="#edition-comparison"><span>⬇ WINDOWS BASIC / FULL DOWNLOADS</span><small>Basic Beta is free · 2 dungeon levels · Compare editions before downloading</small></a>
+<a class="core-entry-button mobile" href="Ravenloft-I6/old_svalich_road_mobile.html"><span>📱 PLAY ON MOBILE</span><small>Mobile Basic · touch controls · AI connection being tested</small></a>
+</div><p style="margin:8px 0 18px;font-size:12px;color:#d5bfa0"><strong>For AI DM:</strong> Create an <strong>OpenAI Platform secret key</strong> in your own OpenAI developer account, then enter it in RPGPOV’s AI settings. It is not your ChatGPT password and is billed separately. <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" style="color:#f2cf93">Create key</a> · <a href="https://platform.openai.com/docs/quickstart" target="_blank" rel="noopener noreferrer" style="color:#f2cf93">Setup guide</a> · <a href="https://platform.openai.com/settings/organization/billing/overview" target="_blank" rel="noopener noreferrer" style="color:#f2cf93">Billing</a>. Never paste your secret into the public website. Mobile AI connectivity is still being tested.</p></div>
+
+
+<div class="rpg-conditional-options" hidden="" id="rpg-browser-options"><div class="rpg-entry-platform-label">CHOOSE YOUR BROWSER DEMO DEVICE</div><div class="core-entry">
+<a class="core-entry-button browser" href="Ravenloft-I6/old_svalich_road.html"><span>🖥 DESKTOP · BROWSER DEMO</span><small>Keyboard controls · Play instantly</small></a>
+<a class="core-entry-button mobile" href="Ravenloft-I6/old_svalich_road_mobile.html"><span>📱 MOBILE · BROWSER DEMO</span><small>Touch controls · Explore and battle</small></a>
+</div></div>
+
+<div class="core-entry-links"><a href="#explore">Choose another adventure location</a><a href="#edition-comparison">Get the full Basic edition</a></div>
+<style>
+/* RPGPOV entry: reveal only the platform choices selected by the visitor. */
+.rpg-conditional-options[hidden]{display:none!important}
+.rpg-conditional-options{margin-top:16px;padding:16px;border:1px solid #a88a59;border-radius:10px;background:rgba(18,16,20,.85)}
+.rpg-entry-mode-choice[aria-expanded="true"]{outline:2px solid #e4bb79;outline-offset:2px}
+</style><script>
+(function(){
+  const choices=document.querySelectorAll('[data-rpg-choice]');
+  choices.forEach(choice=>choice.addEventListener('click',function(event){
+    event.preventDefault();
+    const mode=choice.getAttribute('data-rpg-choice');
+    choices.forEach(item=>{
+      const active=item===choice;
+      item.setAttribute('aria-expanded',String(active));
+      const panel=document.getElementById('rpg-'+item.getAttribute('data-rpg-choice')+'-options');
+      if(panel)panel.hidden=!active;
+    });
+    const target=document.getElementById('rpg-'+mode+'-options');
+    if(target)target.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }));
+})();
+</script></div>
 </div></div>
 <div aria-label="RPGPOV exploration and guides" class="rpgpov-section-accordions"><details class="rpgpov-section-panel rpgpov-media-panel rpgpov-refined-panel"><summary><span class="rpgpov-panel-index">01</span><span class="rpgpov-panel-glyph rpgpov-uniform-icon">▣</span><span class="rpgpov-panel-label"><strong class="rpgpov-panel-heading">See the Adventure</strong><small>3D screenshots and scenes from Ravenloft</small></span><span class="rpgpov-panel-action">57 screenshots</span></summary><section aria-labelledby="rpgpov-gallery-title" id="rpgpov-image-gallery">
 <div class="wrap">
@@ -1075,8 +1127,6 @@ margin-top:auto!important;transform:none!important;min-height:42px!important;hei
 <a class="gallery-item" data-gallery-title="Gates Closing" href="beta/images/gates_close.png"><img alt="Gates Closing" decoding="async" loading="lazy" src="beta/images/gates_close.png"/><span>Gates Closing</span></a>
 <a class="gallery-item" data-gallery-title="Gates from Afar" href="beta/images/gates_far.png"><img alt="Gates from Afar" decoding="async" loading="lazy" src="beta/images/gates_far.png"/><span>Gates from Afar</span></a>
 <a class="gallery-item" data-gallery-title="Messenger's Cart" href="beta/images/messsengers_cart.png"><img alt="Messenger's Cart" decoding="async" loading="lazy" src="beta/images/messsengers_cart.png"/><span>Messenger's Cart</span></a>
-
-
 <h3 class="gallery-subheading">Village of Barovia</h3>
 <a class="gallery-item" data-gallery-title="Village of Barovia — Screenshot 23" href="beta/images/Screenshot%20%2823%29.png"><img alt="Village of Barovia — Screenshot 23" decoding="async" loading="lazy" src="beta/images/Screenshot%20%2823%29.png"/><span>Village of Barovia — Screenshot 23</span></a>
 <a class="gallery-item" data-gallery-title="Village of Barovia — Screenshot 24" href="beta/images/Screenshot%20%2824%29.png"><img alt="Village of Barovia — Screenshot 24" decoding="async" loading="lazy" src="beta/images/Screenshot%20%2824%29.png"/><span>Village of Barovia — Screenshot 24</span></a>
@@ -1294,7 +1344,14 @@ margin-top:auto!important;transform:none!important;min-height:42px!important;hei
 <details class="rpgpov-section-panel rpgpov-refined-panel" name="rpgpov-sections">
 <summary><span class="rpgpov-panel-index">04</span><span aria-hidden="true" class="rpgpov-panel-glyph rpgpov-uniform-icon">✧</span><span class="rpgpov-panel-label"><strong class="rpgpov-panel-heading">AI Dungeon Master</strong><small>Solo adventures, characters and AI storytelling</small></span><span class="rpgpov-panel-action">AI-led adventure</span></summary>
 <div class="rpgpov-panel-content">
-<section class="spotlight" id="solo"><div class="wrap split"><div><div class="section-label" style="text-align:left">The other half of RPGPOV</div><h2>Explore in 3D. Adventure with AI.</h2><p>RPGPOV combines two major advances: a first-person, module-accurate world to explore and an AI Dungeon Master connected to your current location. It can bring in the adventure text, portray NPCs, speak as party members, and use your uploaded character sheets—without you having to explain every room you enter.</p><p>Adventure alone whenever you want, or play with friends and a conventional DM who uses the AI as a companion. The local AI beta supports conversations, location-aware narration, and character-sheet PDFs; automatic battle-state tracking is still being developed.</p><div class="disclaimer">AI DM beta: character-sheet PDF upload and conversation are available in the local build. Automated combat resolution is not yet fully implemented.</div></div><div class="callout"><strong>How AI-assisted adventuring works</strong><ol><li>Start the local AI DM beta and connect your own OpenAI API key.</li><li>Upload a text-based PDF character sheet in the Character Party Manager, then review and save it.</li><li>Explore Barovia in first person; the Adventure Journal provides module-based descriptions.</li><li>Ask your AI DM questions, role-play decisions, and discuss encounters. Full combat automation is coming later.</li></ol><p style="margin:13px 0 12px;color:#f0d9ad;font:14px/1.55 Arial,sans-serif"><strong>AI play requires your own OpenAI API key.</strong> This is a secret key from the OpenAI API Platform, with usage billed separately from ChatGPT. No key is needed to explore without AI.</p><button type="button" class="beta-key-guide-link" onclick="document.getElementById('apiKeySteps').showModal()">How to get your OpenAI API key</button><a class="btn" href="#explore">Explore the browser beta</a></div></div><div class="ai-dm-capabilities" id="ai-dm-capabilities"><div class="section-label">YOUR AI DUNGEON MASTER KNOWS THE ADVENTURE</div><h3>A world that knows where you are—and can talk back.</h3><p>As you explore, RPGPOV supplies mapped location and module context to the AI. You make the decisions; your AI Dungeon Master helps bring the adventure to life.</p><div class="ai-dm-cap-grid">
+<section class="spotlight" id="solo"><div class="wrap split"><div><div class="section-label" style="text-align:left">The other half of RPGPOV</div><h2>Explore in 3D. Adventure with AI.</h2><p>RPGPOV combines two major advances: a first-person, module-accurate world to explore and an AI Dungeon Master connected to your current location. It can bring in the adventure text, portray NPCs, speak as party members, and use your uploaded character sheets—without you having to explain every room you enter.</p><p>Adventure alone whenever you want, or play with friends and a conventional DM who uses the AI as a companion. The local AI beta supports conversations, location-aware narration, and character-sheet PDFs; automatic battle-state tracking is still being developed.</p><div class="disclaimer">AI DM beta: character-sheet PDF upload and conversation are available in the local build. Automated combat resolution is not yet fully implemented.</div></div><div aria-label="Choose how to play RPGPOV" class="rpg-playmode">
+<div class="rpg-playmode-heading"><span class="rpg-playmode-kicker">BEFORE YOU ENTER BAROVIA</span><h3>Two ways to adventure.</h3><p>The maps and battles work without AI. A live AI Dungeon Master is an optional feature that needs an OpenAI API key and a supported AI-connected edition.</p></div>
+<div class="rpg-playmode-grid">
+<article class="rpg-playmode-card traditional"><div aria-hidden="true" class="rpg-playmode-symbol">⚔</div><span class="rpg-playmode-tag">READY TO PLAY · NO KEY</span><h4>Traditional Adventure</h4><p>Explore Ravenloft in first person, discover locations, manage your party and fight using the built-in battle system. No AI Dungeon Master is speaking or making decisions for you.</p><div class="rpg-playmode-status">✓ No OpenAI account or API charges</div><a class="rpg-playmode-action" href="#explore">Play with Traditional DM</a></article>
+<article class="rpg-playmode-card ai"><div aria-hidden="true" class="rpg-playmode-symbol">✦</div><span class="rpg-playmode-tag">OPTIONAL · API KEY REQUIRED</span><h4>AI Dungeon Master</h4><p>Speak naturally with a live AI DM for roleplay, questions and dynamic storytelling in AI-enabled builds. AI is not the same as the built-in traditional battle system.</p><div class="rpg-playmode-status">🔑 Your own OpenAI API key · separate usage charges</div><button class="rpg-playmode-action" onclick="document.getElementById('apiKeySteps').showModal()" type="button">Play with AI DM · Setup</button></article>
+</div>
+<div class="rpg-playmode-foot"><strong>Why doesn’t the browser demo include AI?</strong><p>The browser is a free preview of RPGPOV, with 3D exploration, party management and traditional battles. For the complete Windows experience, download <strong>RPGPOV Basic (free)</strong>, including its AI Dungeon Master features, character saving and supported multiplayer tools.</p><p><strong>AI DM requires your own OpenAI API key</strong> and a working AI connection; API usage is billed separately. The public browser demo does not currently provide AI.</p><a href="#edition-comparison" style="display:inline-block;margin-top:7px;color:#ffe0a0;text-decoration:underline;font-weight:bold">Download RPGPOV Basic / Compare Editions →</a></div>
+</div></div><div class="ai-dm-capabilities" id="ai-dm-capabilities"><div class="section-label">YOUR AI DUNGEON MASTER KNOWS THE ADVENTURE</div><h3>A world that knows where you are—and can talk back.</h3><p>As you explore, RPGPOV supplies mapped location and module context to the AI. You make the decisions; your AI Dungeon Master helps bring the adventure to life.</p><div class="ai-dm-cap-grid">
 <div><strong>📍 Location aware</strong><span>Receives your current mapped location as you move through Barovia.</span></div>
 <div><strong>📜 Knows the module</strong><span>References the original Ravenloft I6 room descriptions, encounters, characters, and secrets.</span></div>
 <div><strong>📖 Original narration</strong><span>Displays the module's player-facing descriptions verbatim where available.</span></div>
@@ -1629,5 +1686,20 @@ margin-top:auto!important;transform:none!important;min-height:42px!important;hei
  button.addEventListener('click',function(event){event.preventDefault();history.replaceState(null,'','#edition-comparison');reveal(true);});
  if(location.hash==='#edition-comparison')reveal(true);
  window.addEventListener('hashchange',function(){if(location.hash==='#edition-comparison')reveal(true)});
-})();</script></body>
+})();</script><script id="rpg-windows-editions-navigation">
+(function(){
+  var link=document.getElementById('rpg-windows-editions-link');
+  if(!link)return;
+  link.addEventListener('click',function(event){
+    var comparison=document.getElementById('edition-comparison');
+    if(!comparison)return;
+    event.preventDefault();
+    var parent=comparison.parentElement;
+    while(parent){if(parent.tagName==='DETAILS')parent.open=true;parent=parent.parentElement;}
+    comparison.open=true;
+    comparison.scrollIntoView({behavior:'smooth',block:'start'});
+    if(history.replaceState)history.replaceState(null,'','#edition-comparison');
+  });
+})();
+</script></body>
 </html>
