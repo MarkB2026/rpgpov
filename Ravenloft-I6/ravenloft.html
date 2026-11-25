@@ -19,7 +19,7 @@
   window.addEventListener('keydown',isolate,true);
   window.addEventListener('keyup',isolate,true);
 })();
-</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Castle Ravenloft — Full K1–K88 Module Index · 3/4 View</title><style>
+</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Castle Ravenloft — Full K1–K88 Module Index · 3/4 View v2 · Torchlight</title><style>
 *{box-sizing:border-box}body{margin:0;overflow:hidden;background:#09090c;color:#e9dfcf;font:14px Georgia,serif}#scene{position:fixed;inset:0}#scene canvas{display:block}#hud,#mapbox,#help,#controls,#popup,#notes,#start{position:fixed;background:#0b0a0de8;border:1px solid #927b58;box-shadow:0 6px 30px #0009}#hud{top:16px;left:16px;padding:12px 18px}h2{font-size:21px;color:#e4c48a;margin:0 0 5px}#mapbox{right:16px;top:16px;width:475px;height:425px;min-width:310px;min-height:260px;max-width:95vw;max-height:90vh;padding:10px;resize:both;overflow:hidden;z-index:6;display:flex;flex-direction:column}#map{width:100%;height:100%;min-height:100px;display:block;background:#141319;flex:1;min-width:0}#maplabel{cursor:move;user-select:none;touch-action:none}#maptools{flex-shrink:0}#maplabel{font-size:12px;color:#edcb90;min-height:30px}#maptools{display:flex;align-items:center;justify-content:center;gap:12px}#help{left:16px;bottom:16px;padding:12px;line-height:1.7}#controls{right:16px;bottom:16px;padding:8px;display:flex;flex-wrap:wrap;gap:5px;justify-content:end;max-width:440px}button{font:13px Georgia,serif;color:#efdfbf;background:#302822;border:1px solid #9b825b;padding:7px 11px;cursor:pointer}button:hover{background:#5d4933}#popup{display:none;z-index:8;bottom:28px;top:auto;left:50%;transform:translateX(-50%);padding:15px 18px;width:min(840px,calc(100vw - 32px));max-height:82vh;overflow:auto;line-height:1.5;background:#12100fea;border:2px solid #b58b4f;box-shadow:0 10px 45px #000e}#popup h2{margin-top:5px}#popup p{font-size:15px;margin:7px 0 12px}#popup img{display:block;width:100%;height:min(35vh,310px);object-fit:contain;background:#0b0908;border:1px solid #927b58;border-radius:3px;margin:8px 0 12px}#popup small{color:#d3b784;letter-spacing:1px}#popup .foot{display:flex;justify-content:space-between;align-items:center;gap:12px}#popup .foot span{font-size:12px;color:#b9aa94}#popup h2{font-size:23px}#notes{display:none;top:130px;left:16px;max-width:340px;padding:15px;line-height:1.5}#start{z-index:10;top:50%;left:50%;transform:translate(-50%,-50%);padding:24px 32px;max-width:430px;line-height:1.6}#crosshair{position:fixed;top:50%;left:50%;width:12px;height:12px;transform:translate(-50%,-50%);pointer-events:none}#crosshair:before,#crosshair:after{content:'';position:absolute;background:#f4e3bc99}#crosshair:before{width:12px;height:1px;top:5px}#crosshair:after{height:12px;width:1px;left:5px}#error{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#421b1b;padding:10px;display:none;z-index:20}
 
 /* Illustrated AD&D-style open flame torch, UI only; existing WebGL lighting unchanged. */
@@ -1111,6 +1111,10 @@ renderer.domElement.onclick=()=>{if(!window.RPGPOV_COMBAT_LOCK&&mouseLookEnabled
 let last=performance.now(),mapTime=0;
 // RPGPOV desktop three-quarter camera. Simulation camera is restored after each render.
 let rpgViewMode=0,rpgViewDistance=12;
+const rpgGroundTorch=new THREE.PointLight(0xffc080,105,24,1.5);
+rpgGroundTorch.visible=false;scene.add(rpgGroundTorch);
+const rpgTorchFill=new THREE.HemisphereLight(0xffdfb0,0x514237,.32);
+rpgTorchFill.visible=false;scene.add(rpgTorchFill);
 const rpgMarker=new THREE.Group();
 const rpgRing=new THREE.Mesh(new THREE.RingGeometry(.65,.83,40),new THREE.MeshBasicMaterial({color:0xffd071,side:THREE.DoubleSide}));rpgRing.rotation.x=-Math.PI/2;rpgRing.position.y=.07;rpgMarker.add(rpgRing);
 const rpgBody=new THREE.Mesh(new THREE.ConeGeometry(.48,1.5,8),new THREE.MeshStandardMaterial({color:0x9c733f}));rpgBody.position.y=.8;rpgMarker.add(rpgBody);rpgMarker.visible=false;scene.add(rpgMarker);
@@ -1118,14 +1122,19 @@ const rpgViewButton=document.createElement('button');rpgViewButton.textContent='
 rpgViewButton.onclick=()=>{rpgViewMode=(rpgViewMode+1)%3;rpgViewButton.textContent=['View: 3/4','View: Overhead','View: First person'][rpgViewMode];};
 renderer.domElement.addEventListener('wheel',e=>{if(rpgViewMode===2||!(true))return;e.preventDefault();rpgViewDistance=Math.max(6,Math.min(24,rpgViewDistance+e.deltaY*.025));},{passive:false});
 function rpgRenderView(){
- if(rpgViewMode===2||!(true)){rpgMarker.visible=false;return renderer.render(scene,camera);}
+ if(rpgViewMode===2||!(true)){rpgMarker.visible=false;rpgGroundTorch.visible=false;rpgTorchFill.visible=false;return renderer.render(scene,camera);}
  const pos=camera.position.clone(),quat=camera.quaternion.clone();const forward=new THREE.Vector3(0,0,-1).applyQuaternion(quat);forward.y=0;forward.normalize();const ground=pos.y-1.75;
  if(rpgMarker.parent!==scene)scene.add(rpgMarker);rpgMarker.position.set(pos.x,ground,pos.z);rpgMarker.visible=true;
  const d=rpgViewDistance;camera.position.set(pos.x-forward.x*d*.72,ground+d,pos.z-forward.z*d*.72);
  if(rpgViewMode===1)camera.position.set(pos.x,ground+d*1.8,pos.z+.05);
  camera.lookAt(pos.x+forward.x*(rpgViewMode===0?3:0),ground,pos.z+forward.z*(rpgViewMode===0?3:0));
+ const oldLanternVisible=lanternLight.visible;
+ rpgGroundTorch.position.set(pos.x,ground+3.1,pos.z);
+ rpgGroundTorch.visible=lanternOn;rpgTorchFill.visible=lanternOn;
+ rpgGroundTorch.intensity=105*(.97+.03*Math.sin(performance.now()*.009));
+ lanternLight.visible=false;
  const oldCeiling=ceilingMesh.visible,oldWallScale=wallMesh.scale.y;ceilingMesh.visible=false;wallMesh.scale.y=.48;wallMesh.updateMatrixWorld(true);
- try{renderer.render(scene,camera);}finally{ceilingMesh.visible=oldCeiling;wallMesh.scale.y=oldWallScale;wallMesh.updateMatrixWorld(true); rpgMarker.visible=false;camera.position.copy(pos);camera.quaternion.copy(quat);camera.updateMatrixWorld(true);}
+ try{renderer.render(scene,camera);}finally{rpgGroundTorch.visible=false;rpgTorchFill.visible=false;lanternLight.visible=oldLanternVisible;ceilingMesh.visible=oldCeiling;wallMesh.scale.y=oldWallScale;wallMesh.updateMatrixWorld(true); rpgMarker.visible=false;camera.position.copy(pos);camera.quaternion.copy(quat);camera.updateMatrixWorld(true);}
 }
 function animate(now){requestAnimationFrame(animate);updateMonsterReveal(now);let dt=Math.min(.05,(now-last)/1000);last=now;let active=!window.RPGPOV_COMBAT_LOCK && $('popup').style.display!=='block' && $('start').style.display==='none' && ($('encounterShock').style.display!=='block'||$('encounterShock').classList.contains('monsterEncounterNotice')) && $('roomArtOverlay').style.display!=='flex';let forward=active?((keys.KeyW||keys.ArrowUp?1:0)-(keys.KeyS||keys.ArrowDown?1:0)):0;let turning=active?((keys.KeyA||keys.ArrowLeft?1:0)-(keys.KeyD||keys.ArrowRight?1:0)):0;player.a+=turning*2.15*dt;$('heldTorch').classList.toggle('walking',!!forward);let speed=(keys.ShiftLeft||keys.ShiftRight?6.5:3.5)*dt;let dx=-Math.sin(player.a)*forward*speed,dz=-Math.cos(player.a)*forward*speed;if(!collides(player.x+dx,player.y))player.x+=dx;if(!collides(player.x,player.y+dz))player.y+=dz;camera.position.set(player.x,1.75,player.y);camera.rotation.set(0,player.a,0,'YXZ');lanternLight.intensity=43*(.975+.025*Math.sin(now*.009)+.012*Math.sin(now*.023));for(let i=0;i<torches.length;i++){torches[i].intensity=13;const f=wallFlames[i],t=now*.006+f.phase;if(activeFloor===0){f.art.quaternion.copy(camera.quaternion);f.art.scale.set(1,1,1);}}rpgRenderView();if(now-mapTime>110){recordVisited();trackExplorationMovement();refresh();if(mapVisible)mapDraw();mapTime=now}}requestAnimationFrame(animate);
 // Explicit bridge from the Three.js ES module to the multiplayer controller.
