@@ -19,9 +19,9 @@
   window.addEventListener('keydown',isolate,true);
   window.addEventListener('keyup',isolate,true);
 })();
-</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>DNDPOV — Road to Tser Pool v3.77 · Multiplayer + AI DM</title><style>
+</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DNDPOV — Road to Tser Pool v3.78 · Multiplayer + AI DM</title><style>
 html,body{margin:0;height:100%;overflow:hidden;background:#10171a;color:#f4e4c6;font:14px Georgia,serif}canvas{display:block}#hud{position:fixed;left:12px;top:12px;background:#202327ee;border:1px solid #b08b57;padding:13px;z-index:5;width:290px}#hud h2{margin:0 0 8px;color:#ebc28b;font-size:19px}#hud p{line-height:1.5}select,button{background:#342b25;border:1px solid #a8895a;color:#f5e5c7;padding:7px;margin:3px;cursor:pointer}#map{position:fixed;right:15px;top:15px;background:#1c2526e8;border:1px solid #ac8c62;z-index:5;width:210px;height:280px}#help{position:fixed;bottom:12px;left:12px;background:#171c1ddd;padding:9px;z-index:5}#notice{position:fixed;top:40%;left:50%;transform:translate(-50%,-50%);background:#171b1ef0;border:1px solid #c5a16a;padding:20px;text-align:center;display:none;z-index:8;max-width:380px}#notice a{color:#ebc28b}#error{position:fixed;left:20%;top:40%;background:#511;color:white;padding:15px;display:none;z-index:20}
-#fade{position:fixed;inset:0;background:#11191c;opacity:0;pointer-events:none;z-index:30;transition:opacity 2.3s ease}#fade.active{opacity:1;pointer-events:auto}</style></head><body><div id="fade"></div><div id="hud"><h2>DNDPOV · ROAD TO TSER POOL v3.77 · BASIC</h2><p id="place">Leaving the Village of Barovia</p><p id="description">The road winds into the dark Svalich Woods. Somewhere beyond the mist lies Castle Ravenloft.</p><label>Time <select id="day"><option value="day">Day</option><option value="dawn">Dawn</option><option value="dusk">Dusk</option><option value="night">Night</option></select></label><label>Weather <select id="weather"><option value="mist">Mist</option><option value="clear">Clear</option><option value="fog">Fog</option></select></label><p><button id="reset">Restart Road</button></p><p><button id="wolfToggle">🐺 Wolves: ON</button><button id="wolfTest">▶ Test Howl</button></p><p id="wolfStatus" style="font:12px system-ui;color:#e8cda0">Wolves silent until dusk</p></div><canvas id="map" width="210" height="280"></canvas><div id="help">↑ ↓ walk · ← → turn · A / D sidestep · Shift jog</div><div id="notice"></div><div id="error"></div><script type="module">
+#fade{position:fixed;inset:0;background:#11191c;opacity:0;pointer-events:none;z-index:30;transition:opacity 2.3s ease}#fade.active{opacity:1;pointer-events:auto}</style><script id="classic-navigation-v111">(()=>{const q=new URLSearchParams(location.search);if(q.get('classic')!=='1')return;const points={"I": [12, 43], "G1": [12, 83]};const site=q.get('site')||"I";window.DNDPOV_CLASSIC_EXIT=()=>{if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()||window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK||window.DNDPOV_ENCOUNTER_PENDING)return;const p=points[site];if(p)try{sessionStorage.setItem('rpgpovClassicPosition',JSON.stringify({x:p[0],y:p[1],id:site}));}catch(e){}document.exitPointerLock?.();location.replace('village_of_barovia_mobile.html');};})();</script></head><body><div id="fade"></div><div id="hud"><h2>DNDPOV · ROAD TO TSER POOL v3.78 · BASIC</h2><p id="place">Leaving the Village of Barovia</p><p id="description">The road winds into the dark Svalich Woods. Somewhere beyond the mist lies Castle Ravenloft.</p><label>Time <select id="day"><option value="day">Day</option><option value="dawn">Dawn</option><option value="dusk">Dusk</option><option value="night">Night</option></select></label><label>Weather <select id="weather"><option value="mist">Mist</option><option value="clear">Clear</option><option value="fog">Fog</option></select></label><p><button id="reset">Restart Road</button></p><p><button id="wolfToggle">🐺 Wolves: ON</button><button id="wolfTest">▶ Test Howl</button></p><p id="wolfStatus" style="font:12px system-ui;color:#e8cda0">Wolves silent until dusk</p></div><canvas id="map" width="210" height="280"></canvas><div id="help">↑ ↓ walk · ← → turn · A / D sidestep · Shift jog</div><div id="notice"></div><div id="error"></div><script type="module">
 try{
 let THREE;for(const u of ['https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js','https://unpkg.com/three@0.170.0/build/three.module.js']){try{THREE=await import(u);break}catch(e){console.warn(e)}}if(!THREE)throw Error('Three.js could not load. Internet connection required.');
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x899394);scene.fog=new THREE.FogExp2(0x899394,.016);
@@ -2060,7 +2060,7 @@ function updateEyes(t){
   e.pair.lookAt(camera.position);
  }
 }
-let transitionStarted=false;const player={x:0,z:93,angle:Math.PI},keys={};let last=performance.now(),time='day',weather='mist';
+let transitionStarted=false;const player={x:0,z:93,angle:Math.PI},keys={};let last=performance.now(),time='dawn',weather='mist';
 // Honor time/weather passed by the village if the scenes are chained together.
 const incomingRoadSettings=new URLSearchParams(window.location.search);
 const suppliedTime=incomingRoadSettings.get('time');
@@ -2069,7 +2069,7 @@ if(['day','dawn','dusk','night'].includes(suppliedTime))time=suppliedTime;
 if(['clear','cloudy','rain','thunderstorm','mist','fog','random'].includes(suppliedWeather))weather=suppliedWeather;
 document.querySelector('#day').value=time;
 const roadWeatherSelect=document.querySelector('#weather');
-document.querySelector('#hud h2').textContent='DNDPOV · ROAD TO TSER POOL v3.77 · BASIC';
+document.querySelector('#hud h2').textContent='DNDPOV · ROAD TO TSER POOL v3.78 · BASIC';
 roadWeatherSelect.replaceChildren(
  new Option('Clear','clear'),new Option('Cloudy','cloudy'),
  new Option('Rain','rain'),new Option('Thunderstorm','thunderstorm'),
@@ -2089,7 +2089,7 @@ const roadWeatherRoutes={
 const roadWeatherDwell={clear:[22000,48000],cloudy:[20000,41000],
  rain:[24000,44000],thunderstorm:[25000,42000],
  mist:[24000,42000],fog:[26000,44000]};
-const roadWeatherFlow={current:'clear',target:null,startedAt:0,
+const roadWeatherFlow={current:'mist',target:null,startedAt:0,
  duration:0,nextAt:0,lastSky:0,lastStatus:0};
 let previousManualWeather=weather==='random'?'mist':weather;
 const roadWeatherStatus=document.createElement('small');
@@ -2460,6 +2460,7 @@ function enterEvaTent(){
  evaReading.style.display='none';
 }
 function leaveEvaTent(){
+ if(new URLSearchParams(location.search).get('classic')==='1'){if(!window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK&&!window.DNDPOV_ENCOUNTER_PENDING)window.DNDPOV_CLASSIC_EXIT();return;}
  insideEvaTent=false;evaReading.style.display='none';
  player.x=evaDoor.x+Math.sin(evaOuterTent.rotation)*1.7;
  player.z=evaDoor.z+Math.cos(evaOuterTent.rotation)*1.7;
@@ -2469,7 +2470,6 @@ function leaveEvaTent(){
  document.querySelector('#help').textContent=roadHelpText+' · R journal';
  evaHint.style.display='none';
 }
-window.TSER_MOBILE_INTERACT=()=>{if(insideEvaTent){leaveEvaTent();return {ok:true}}if(nearEvaEntrance()){enterEvaTent();return {ok:true}}return {ok:false,message:'Approach a tent entrance or carriage to interact.'}};
 function evaCloseEnoughToRead(){
  return Math.hypot(evaLocal.x,evaLocal.z+.75)<3.75;
 }
@@ -2752,7 +2752,7 @@ function updateRiverAmbience(dt){
   }
   // Actual river proximity, regardless of which direction the player walks.
   // Tight proximity: river falls away sooner after leaving the first bridge.
-  // v3.77: first crossing — hear the river a little earlier on approach,
+  // v3.78: first crossing — hear the river a little earlier on approach,
   // but lose it a little sooner after crossing. Keep the peak unchanged.
   const firstBridgeApproach=player.z>=riverZ;
   const riverReach=firstBridgeApproach?46:31;
@@ -2831,7 +2831,7 @@ function boardCarriage(){
  for(const k of Object.keys(keys))keys[k]=false;
 }
 document.getElementById('carriageYes').onclick=boardCarriage;
-document.getElementById('carriageNo').onclick=()=>{carriageOffer.style.display='none';carriageMode='declined';carriageDeclined=true};
+document.getElementById('carriageNo').onclick=()=>{if(new URLSearchParams(location.search).get('classic')==='1'){window.DNDPOV_CLASSIC_EXIT();return;}carriageOffer.style.display='none';carriageMode='declined';carriageDeclined=true};
 function carriageFrame(dt){
  // A slow scenic ride; view looks through the front window at the winding road.
  rideZ=Math.max(-613,rideZ-9.5*dt);
@@ -2842,7 +2842,7 @@ function carriageFrame(dt){
  player.x=carriageGroup.position.x;player.z=rideZ;
  document.querySelector('#place').textContent='Inside the Black Carriage';
  document.querySelector('#description').textContent='The carriage sets off without a driver. Through the front window, the dirt road winds uphill toward Castle Ravenloft.';
- if(rideZ<=-613&&!transitionStarted){stopCarriageSoundtrack();transitionStarted=true;document.querySelector('#fade').classList.add('active');setTimeout(()=>{window.location.href='ravenloft_mobile.html?arrival=carriage&floor=walls'},2400)}
+ if(rideZ<=-613&&!transitionStarted){stopCarriageSoundtrack();transitionStarted=true;document.querySelector('#fade').classList.add('active');setTimeout(()=>{window.location.href='ravenloft_mobile.html?arrival=carriage&floor=walls'+(new URLSearchParams(location.search).get('classic')==='1'?'&classic=1&build=1.15&site=CASTLE':'')},2400)}
 }
 // Village-style optional read-aloud: the landmark panel opens once on approach,
 // with manual R reading and a complete location index always available.
@@ -3103,6 +3103,25 @@ function tserUpdateMonsterSprites(now){
   sprite.visible=!insideEvaTent;
  }
 }
+
+// RPGPOV desktop three-quarter camera. Simulation camera is restored after each render.
+let rpgViewMode=0,rpgViewDistance=24;
+const rpgMarker=new THREE.Group();
+const rpgRing=new THREE.Mesh(new THREE.RingGeometry(.65,.83,40),new THREE.MeshBasicMaterial({color:0xffd071,side:THREE.DoubleSide}));rpgRing.rotation.x=-Math.PI/2;rpgRing.position.y=.07;rpgMarker.add(rpgRing);
+const rpgBody=new THREE.Mesh(new THREE.ConeGeometry(.48,1.5,8),new THREE.MeshStandardMaterial({color:0x9c733f}));rpgBody.position.y=.8;rpgMarker.add(rpgBody);rpgMarker.visible=false;scene.add(rpgMarker);
+const rpgViewButton=document.createElement('button');rpgViewButton.textContent='View: 3/4';rpgViewButton.style.cssText='position:fixed;left:50%;top:36px;transform:translateX(-50%);z-index:100;background:#403025;color:#ffe0a5;border:1px solid #b99562;padding:7px 12px;cursor:pointer';if(new URLSearchParams(location.search).get('classic')!=='1')document.body.append(rpgViewButton);else rpgViewMode=2;
+rpgViewButton.onclick=()=>{rpgViewMode=(rpgViewMode+1)%3;rpgViewButton.textContent=['View: 3/4','View: Overhead','View: First person'][rpgViewMode];};
+renderer.domElement.addEventListener('wheel',e=>{if(rpgViewMode===2||!(!insideEvaTent && carriageMode!=='riding' && carriageMode!=='opening' && carriageMode!=='offered'))return;e.preventDefault();rpgViewDistance=Math.max(12,Math.min(48,rpgViewDistance+e.deltaY*.025));},{passive:false});
+function rpgRenderView(){
+ if(rpgViewMode===2||!(!insideEvaTent && carriageMode!=='riding' && carriageMode!=='opening' && carriageMode!=='offered')){rpgMarker.visible=false;return renderer.render(scene,camera);}
+ const pos=camera.position.clone(),quat=camera.quaternion.clone();const forward=new THREE.Vector3(0,0,-1).applyQuaternion(quat);forward.y=0;forward.normalize();const ground=pos.y-2.1;
+ rpgMarker.position.set(pos.x,ground,pos.z);rpgMarker.visible=true;
+ const d=rpgViewDistance;camera.position.set(pos.x-forward.x*d*.72,ground+d,pos.z-forward.z*d*.72);
+ if(rpgViewMode===1)camera.position.set(pos.x,ground+d*1.8,pos.z+.05);
+ camera.lookAt(pos.x+forward.x*(rpgViewMode===0?3:0),ground,pos.z+forward.z*(rpgViewMode===0?3:0));
+ 
+ try{renderer.render(scene,camera);}finally{ rpgMarker.visible=false;camera.position.copy(pos);camera.quaternion.copy(quat);camera.updateMatrixWorld(true);}
+}
 function frame(now){
  // Camera must be current before an encounter is rendered or spawned.
  if(window.DNDPOV_ENCOUNTER_PENDING&&!insideEvaTent){
@@ -3113,40 +3132,29 @@ function frame(now){
  tserUpdateMonsterSprites(now);if(window.DNDPOV_ENCOUNTER_PENDING){for(const k of Object.keys(keys))keys[k]=false;}const dt=Math.min((now-last)/1000,.05);last=now;animateRiverCurrent(dt);animateCampfire(now);updateCarriageDoor(dt);updateRiverAmbience(dt);updateForestAmbience();updateOpeningRoadAmbience(dt);
 if(insideEvaTent){
  evaInteriorFrame(dt);updateMoon();updateRoadWeather(now);updateCastleApproach();
- renderer.render(scene,camera);requestAnimationFrame(frame);return;
+ rpgRenderView();requestAnimationFrame(frame);return;
 }
 updateRoadAutoDescriptions();
 if(roadDescriptionOpen()){
  updateMoon();updateRoadWeather(now);updateCastleApproach();
- renderer.render(scene,camera);requestAnimationFrame(frame);return;
+ rpgRenderView();requestAnimationFrame(frame);return;
 }
 if(carriageMode==='riding'){
- carriageFrame(dt);updateEyes(now);updateMoon();updateRoadWeather(now);updateCastleApproach();minimap();renderer.render(scene,camera);requestAnimationFrame(frame);return;
+ carriageFrame(dt);updateEyes(now);updateMoon();updateRoadWeather(now);updateCastleApproach();minimap();rpgRenderView();requestAnimationFrame(frame);return;
 }
 if(!roadReturnOverlay.hidden){
  updateEyes(now);updateMoon();updateRoadWeather(now);updateCastleApproach();minimap();
- renderer.render(scene,camera);requestAnimationFrame(frame);return;
+ rpgRenderView();requestAnimationFrame(frame);return;
 }
 const nearCarriage=Math.hypot(player.x-carriageX,player.z-carriageZ)<14;
 if(carriageMode==='walking'&&nearCarriage){carriageMode='opening';for(const k of Object.keys(keys))keys[k]=false;}
 if(carriageMode==='declined'&&!nearCarriage){carriageMode='walking';carriageDeclined=false;}
 if(carriageMode==='opening'||carriageMode==='offered'){
  if(carriageMode==='opening')watchCarriageDoor(dt);
- updateEyes(now);updateMoon();updateRoadWeather(now);updateCastleApproach();minimap();renderer.render(scene,camera);requestAnimationFrame(frame);return;
+ updateEyes(now);updateMoon();updateRoadWeather(now);updateCastleApproach();minimap();rpgRenderView();requestAnimationFrame(frame);return;
 }
-if(window.DNDPOV_ENCOUNTER_PENDING){camera.updateMatrixWorld(true);updateEyes(now);updateMoon();updateRoadWeather(now);updateCastleApproach();minimap();renderer.render(scene,camera);requestAnimationFrame(frame);return;}
-const speed=(keys.shift?17:8)*dt;
-// Mobile road assist: follow the centreline while walking forward on the main road.
-// A manual turn always wins, and the Vistani / western forks remain player-controlled.
-if(window.matchMedia('(max-width:800px)').matches && keys.arrowup && !keys.arrowleft && !keys.arrowright && !keys.a && !keys.d && !keys.arrowdown &&
-   Math.abs(player.x-pathX(player.z))<4.8 && !onFork(player.x,player.z,5.4) && !nearWesternGateRoad(player.x,player.z,7)){
- const za=Math.max(-624,Math.min(104,player.z+2));
- const zb=Math.max(-624,Math.min(104,player.z-2));
- const target=Math.atan2(pathX(zb)-pathX(za),zb-za);
- const delta=Math.atan2(Math.sin(target-player.angle),Math.cos(target-player.angle));
- player.angle+=Math.max(-2.4*dt,Math.min(2.4*dt,delta));
-}
-if(keys.arrowleft)player.angle+=1.8*dt;if(keys.arrowright)player.angle-=1.8*dt;let f=(keys.arrowup?1:0)-(keys.arrowdown?1:0),side=(keys.d?1:0)-(keys.a?1:0);const nx=player.x+Math.sin(player.angle)*f*speed+Math.cos(player.angle)*side*speed,nz=player.z+Math.cos(player.angle)*f*speed-Math.sin(player.angle)*side*speed;
+if(window.DNDPOV_ENCOUNTER_PENDING){camera.updateMatrixWorld(true);updateEyes(now);updateMoon();updateRoadWeather(now);updateCastleApproach();minimap();rpgRenderView();requestAnimationFrame(frame);return;}
+const speed=(keys.shift?17:8)*dt;if(keys.arrowleft)player.angle+=1.8*dt;if(keys.arrowright)player.angle-=1.8*dt;let f=(keys.arrowup?1:0)-(keys.arrowdown?1:0),side=(keys.d?1:0)-(keys.a?1:0);const nx=player.x+Math.sin(player.angle)*f*speed+Math.cos(player.angle)*side*speed,nz=player.z+Math.cos(player.angle)*f*speed-Math.sin(player.angle)*side*speed;
 if(!blockedByWesternGate(player.x,player.z,nx,nz)&&(Math.abs(nx-pathX(nz))<5.1||Math.abs(nz-riverZ)<12&&Math.abs(nx-bridgeX)<5.2||onFork(nx,nz,4.2)||Math.abs(nz-campZ)<19&&Math.abs(nx-campX)<22)){player.x=nx;player.z=nz}
 camera.position.set(player.x,2.1+westernBranchGroundHeight(player.x,player.z),player.z);camera.rotation.set(0,0,0);camera.rotation.y=player.angle+Math.PI;const desc=document.querySelector('#description'),place=document.querySelector('#place');if(Math.hypot(player.x-westernGate.position.x,player.z-westernGate.position.z)<17){place.textContent='B · Western Gates of Barovia';desc.textContent='The road ends at towering, rusted iron gates flanked by headless stone guardians. From within Barovia the gates remain sealed.'}else if(nearWesternGateRoad(player.x,player.z,5.6)){place.textContent='Western Road · Gates of Barovia';desc.textContent='A northwest branch leaves the carriage crossroads, vanishing among the spruces toward the second Gates of Barovia.'}else if(player.z>-18){place.textContent='The Old Svalich Road';desc.textContent='Ancient spruce trees close around the winding road.'}else if(player.z>-62){place.textContent='Bridge over the Tser River';desc.textContent='Cold dark water passes beneath the wooden bridge.'}else if(player.z>-245){place.textContent=onFork(player.x,player.z,6)||Math.hypot(player.x-campX,player.z-campZ)<26?'Vistani Encampment':'The Road to the Vistani Camp';desc.textContent='After the River Ivlis bridge, continue to F. Straight follows the forest road; right follows the river past the Vistani camp. Both routes meet before Tser Falls Bridge.'}else{place.textContent='The Road to Castle Ravenloft';desc.textContent='The road winds through the fog. Castle Ravenloft stands faintly ahead.'}
 // Keep the boundary at the actual last road waypoint (z=105). Declining the
@@ -3155,11 +3163,11 @@ camera.position.set(player.x,2.1+westernBranchGroundHeight(player.x,player.z),pl
 if(player.z<95)roadReturnPromptLatched=false;
 if(player.z>105){
  player.z=105;
- if(!roadReturnPromptLatched&&!transitionStarted)openRoadReturnPrompt();
+ if(new URLSearchParams(location.search).get('classic')!=='1'&&!roadReturnPromptLatched&&!transitionStarted)openRoadReturnPrompt();
 }
-if(player.z<-616&&!transitionStarted){transitionStarted=true;document.querySelector('#fade').classList.add('active');setTimeout(()=>{window.location.href='ravenloft_mobile.html?arrival=carriage&floor=walls'},2400)}
+if(new URLSearchParams(location.search).get('classic')!=='1'&&player.z<-616&&!transitionStarted){transitionStarted=true;document.querySelector('#fade').classList.add('active');setTimeout(()=>{window.location.href='ravenloft_mobile.html?arrival=carriage&floor=walls'},2400)}
 updateEvaOutsidePrompt();
-updateEyes(now);updateMoon();updateRoadWeather(now);updateCastleApproach();minimap();renderer.render(scene,camera);requestAnimationFrame(frame)}requestAnimationFrame(frame);
+updateEyes(now);updateMoon();updateRoadWeather(now);updateCastleApproach();minimap();rpgRenderView();requestAnimationFrame(frame)}requestAnimationFrame(frame);
 window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);resizePrecipitationCanvas()});
 
 // v3.30 — live road landmark context, shared by Adventure Journal and map party.
@@ -3197,7 +3205,7 @@ window.DNDPOV_ZONE_BRIDGE={getPosition:()=>({x:player.x,y:player.z,
 // D/F/G/G1/H/I, which are physical locations on this second adventure page.
 // Use the actual scene coordinates rather than showing text for a faraway spot.
 try{
- const directId=sessionStorage.getItem('rpgpov_direct_road_landmark_v1');
+ const directId=new URLSearchParams(location.search).get('site')||sessionStorage.getItem('rpgpov_direct_road_landmark_v1');
  if(directId){
   sessionStorage.removeItem('rpgpov_direct_road_landmark_v1');
   if(directId==='G1'){
@@ -3209,6 +3217,7 @@ try{
     player.x=directId==='G'?campX-4:directId==='I'?carriageX-6:landmark.x;
     player.z=directId==='G'?campZ+12:directId==='I'?carriageZ+7:landmark.z;
     player.angle=0;
+    if(directId==='I'&&new URLSearchParams(location.search).get('classic')==='1'){carriageMode='opening';player.angle=Math.atan2(carriageX-player.x,carriageZ-player.z);camera.position.set(player.x,2.1+westernBranchGroundHeight(player.x,player.z),player.z);camera.rotation.set(0,player.angle+Math.PI,0);document.querySelector('#place').textContent=landmark.name;document.querySelector('#description').textContent=landmark.text;document.getElementById('carriageNo').textContent='No — Return to Map';}
    }
   }
   minimap();
@@ -3562,18 +3571,18 @@ function addCard(kind,heading,message,label='ORIGINAL MODULE · READ-ALOUD'){
 }
 let aiServerOnline=false, aiUserChoice=true;
 function syncControls(){
- const enabled=(aiServerOnline||window.RPGPOV_AI_KEY_READY?.())&&toggle.checked;
+ const enabled=aiServerOnline&&toggle.checked;
  input.disabled=!enabled||busy;
  panel.querySelector('#aiDmSend').disabled=!enabled||busy;
  panel.querySelector('#aiDmConference').disabled=!enabled||busy;
- status.textContent=!(aiServerOnline||window.RPGPOV_AI_KEY_READY?.())?'Connect your personal API key to enable AI DM':enabled?(busy?'DM responding…':'AI ready'):'AI off · descriptions active';
+ status.textContent=!aiServerOnline?'AI offline · descriptions available':enabled?(busy?'DM responding…':'AI ready'):'AI off · descriptions active';
 }
 toggle.addEventListener('change',()=>{aiUserChoice=toggle.checked;syncControls()});
 async function checkAiConnection(){
  let online=false;
  try{const r=await fetch('/api/module?location=ARRIVAL&position=outside',{cache:'no-store',signal:AbortSignal.timeout(2500)});
   online=r.ok&&(r.headers.get('content-type')||'').includes('json');}catch{}
- aiServerOnline=online;const ready=online||window.RPGPOV_AI_KEY_READY?.();toggle.disabled=false;toggle.checked=!!ready&&aiUserChoice;syncControls();
+ aiServerOnline=online;toggle.disabled=!online;toggle.checked=online&&aiUserChoice;syncControls();
 }
 syncControls();checkAiConnection();setInterval(checkAiConnection,12000);
 
@@ -4318,8 +4327,7 @@ function syncControls(){
  const openPanel=()=>{
   const panel=document.getElementById('aiDmPanel');
   if(panel?.hidden)document.getElementById('aiDmButton')?.click();
-  if(panel)panel.hidden=false;
-  return panel;
+  return panel&&!panel.hidden?panel:null;
  };
  returnToAi.onclick=()=>{openPanel();document.getElementById('aiDmInput')?.focus();};
  finish.onclick=()=>{
@@ -4331,11 +4339,16 @@ function syncControls(){
   starting=true;ai.disabled=true;
   try{
    document.exitPointerLock?.();
-   if(!window.RPGPOV_AI_KEY_READY?.()){window.RPGPOV_AI_KEY_PROMPT?.();return;}
+   const response=await fetch('/api/desktop/status',{cache:'no-store',signal:AbortSignal.timeout(3000)}).catch(()=>null);
+   if(response?.ok&&!(await response.json()).key_configured){
+    const keyButton=document.getElementById('rpgpovKey');
+    if(keyButton)keyButton.click();else alert('Set up your OpenAI API key to use AI DM.');
+    return;
+   }
    const panel=openPanel();
    const input=panel?.querySelector('#aiDmInput'),send=panel?.querySelector('#aiDmSend');
    if(!panel||!input||!send||send.disabled||!panel.querySelector('#aiDmToggle')?.checked){
-    window.RPGPOV_AI_KEY_PROMPT?.();alert('Connect your personal OpenAI API key, then enable AI DM in the Journal.');
+    alert('AI DM is not connected. Use the manual encounter option, or open Set Up AI in the Windows app.');
     return;
    }
    const title=head.textContent,description=details.textContent;
@@ -4369,7 +4382,9 @@ function syncControls(){
 <script id="arcQuickSharedScript">
 (()=>{
 "use strict";
-const portraits={"Alaric": "alaric.jpg", "Malachar": "malachar.jpg", "Seraphina": "seraphina.jpg", "Kael": "kael.jpg", "Mira": "mira.jpg", "Brenna": "brenna.jpg", "Elowen": "elowen.jpg", "Thrain Ironbeard": "thrain_ironbeard.jpg", "Lirael Moonwhisper": "lirael_moonwhisper.jpg", "Cassian Ashborne": "cassian_ashborne.jpg", "Sylvara Greenleaf": "sylvara_greenleaf.jpg", "Brother Joram": "brother_joram.jpg", "Elandor Swiftblade": "elandor_swiftblade.jpg", "Arathor Moonshadow": "arathor_moonshadow.jpg", "Elara Nightwind": "elara_nightwind.jpg", "Virelya Red Veil": "virelya_red_veil.jpg", "Thorn Underleaf": "thorn_underleaf.jpg", "Maelis Vorn": "maelis_vorn.jpg", "Alaric Duskfall": "alaric_duskfall.jpg", "Fenwick Thistlegear": "fenwick_thistlegear.jpg"};
+const RPGPOV_OFFLINE_ARCS=[{"id":"a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1","name":"Alaric","race":"Human","className":"Paladin","level":7,"hp":43,"weapons":"Long sword (1d8), dagger (1d4); plate mail and shield.","spells":"Paladin abilities: Detect Evil, Lay on Hands, Protection from Evil. No memorized priest spells at this level.","abilities":"Honourable, protective, steadfast. BATTLE: defend the vulnerable. BANTER: earnest and occasionally dry. BEHAVIOUR: will not casually endorse cruelty or dishonour."},{"id":"b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2","name":"Malachar","race":"Human","className":"Wizard","level":5,"hp":19,"weapons":"Quarterstaff (1d6), dagger (1d4); no armour.","spells":"Spellbook: Detect Magic, Magic Missile, Protection from Evil, Shield, Mirror Image, Web, Hold Undead, Dispel Magic. Prepared spells must be confirmed before casting; track slots and expenditure.","abilities":"Scholarly, sceptical, curious about the undead. BATTLE: preserve spells and control threats. BANTER: sharp observations. BEHAVIOUR: examines clues before taking risks."},{"id":"c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3","name":"Seraphina","race":"Human","className":"Cleric","level":6,"hp":34,"weapons":"Mace (1d6+1), sling; chain mail and shield.","spells":"Cleric abilities: Turn Undead. Prayer repertoire: Bless, Cure Light Wounds, Detect Evil, Protection from Evil, Hold Person, Spiritual Hammer, Dispel Magic, Remove Curse. Prepared spells and remaining slots must be tracked.","abilities":"Compassionate but unflinching. BATTLE: turn undead, protect and heal. BANTER: thoughtful moral counsel. BEHAVIOUR: refuses to abandon the injured."},{"id":"d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4","name":"Kael","race":"Half-Elf","className":"Ranger","level":6,"hp":41,"weapons":"Longbow (1d8), long sword (1d8), dagger (1d4); studded leather.","spells":"Ranger skills: tracking, wilderness lore, stealth in natural terrain. No memorized priest spells at this level.","abilities":"Observant, quiet, fiercely loyal. BATTLE: ranged cover and flanking. BANTER: short, wry remarks. BEHAVIOUR: scouts, watches tracks and avoids unnecessary noise."},{"id":"e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5","name":"Mira","race":"Halfling","className":"Thief","level":5,"hp":28,"weapons":"Short sword (1d6), dagger (1d4), sling; leather armour.","spells":"Thief skills: Open Locks, Find/Remove Traps, Move Silently, Hide in Shadows, Climb Walls, Hear Noise, Backstab. Percentages to be confirmed on character sheet.","abilities":"Mischievous, quick-witted, loyal beneath the jokes. BATTLE: avoid direct clashes, exploit openings. BANTER: irreverent humour. BEHAVIOUR: checks doors, traps and valuables, but values the party."}];
+const RPGPOV_ANIMATED_FILES={"Alaric":"alaric.jpg","Malachar":"malachar.jpg","Seraphina":"seraphina.jpg","Kael":"kael.jpg","Mira":"mira.jpg"};
+const portraits={Alaric:'knight',Malachar:'wizard',Seraphina:'cleric',Kael:'elf_ranger',Mira:'rogue',Brenna:'fighter',Elowen:'bard','Thrain Ironbeard':'dwarf','Lirael Moonwhisper':'elf_archer','Cassian Ashborne':'sorcerer','Sylvara Greenleaf':'druid','Brother Joram':'brother_joram','Elandor Swiftblade':'elandor_swiftblade','Arathor Moonshadow':'arathor_moonshadow','Elara Nightwind':'elara_nightwind','Virelya Red Veil':'virelya_red_veil','Thorn Underleaf':'thorn_underleaf','Maelis Vorn':'maelis_vorn','Alaric Duskfall':'alaric_duskfall','Fenwick Thistlegear':'fenwick_thistlegear'};
 const toggle=document.createElement('button');
 toggle.id='arcQuickToggle';toggle.type='button';toggle.textContent='⚔ PARTY';
 toggle.setAttribute('aria-label','Open party battle quick reference');
@@ -4388,71 +4403,17 @@ function section(sheet,heading){
  return lines.slice(start+1,end).filter(Boolean).join(' · ').slice(0,350);
 }
 function stat(sheet,label){
- const key=String(label).toLowerCase();
- for(const line of esc(sheet).split(/\r?\n/)){
-  const trimmed=line.trim();
-  const lower=trimmed.toLowerCase();
-  if(lower.startsWith(key+':'))return trimmed.slice(label.length+1).trim();
-  if(key==='level'){
-   const match=trimmed.match(/^level\s+(\d+)\b/i);
-   if(match)return match[1];
-  }
- }
- return '';
+ const line=esc(sheet).split(/\r?\n/).find(x=>x.trim().toLowerCase().startsWith(label.toLowerCase()+':'));
+ return line?line.slice(line.indexOf(':')+1).trim():'';
 }
 function activeIds(){
  try{
   const session=sessionStorage.getItem('dndpov_ai_session');
-  if(!session)return null;
+  if(!session)return RPGPOV_OFFLINE_ARCS.slice(0,4).map(c=>c.id);
   const stored=localStorage.getItem('dndpov_svalich_active_arcs_v1_'+session);
   const ids=stored?JSON.parse(stored):null;
-  return Array.isArray(ids)?ids:null;
- }catch{return null;}
-}
-
-// Browser BASIC: use the working Old Svalich Road roster when the local API is absent.
-const partyDefaults=[
- {id:'a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1',name:'Alaric',loadout:{primary:'Long sword',backup:'None',sidearm:'Dagger',armor:'Plate mail',shield:true,potions:2,ammoType:'None',ammo:0,rations:5,rope:true,backpack:true,lantern:true,spellbook:false,components:false,holySymbol:true,thievesTools:false,other:5},race:'Human',className:'Paladin',alignment:'Lawful Good',level:7,
-  stats:[16,12,15,10,14,17],hp:43,ac:2,thac0:15,move:'12',
-  weapons:'Long sword (1d8), dagger (1d4); plate mail and shield.',
-  equipment:'Holy symbol, backpack, rations, lantern, rope, holy water, wooden stakes.',
-  spells:'Paladin abilities: Detect Evil, Lay on Hands, Protection from Evil. No memorized priest spells at this level.',
-  personality:'Honourable, protective, steadfast. BATTLE: defend the vulnerable. BANTER: earnest and occasionally dry. BEHAVIOUR: will not casually endorse cruelty or dishonour.'},
- {id:'b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2',name:'Malachar',loadout:{primary:'Quarterstaff',backup:'Dagger',sidearm:'None',armor:'None',shield:false,potions:2,ammoType:'None',ammo:0,rations:5,rope:false,backpack:true,lantern:true,spellbook:true,components:true,holySymbol:false,thievesTools:false,other:4},race:'Human',className:'Wizard',alignment:'Neutral Good',level:5,
-  stats:[9,16,12,17,13,11],hp:19,ac:8,thac0:19,move:'12',
-  weapons:'Quarterstaff (1d6), dagger (1d4); no armour.',
-  equipment:'Spellbook, ink, components pouch, candle, parchment, lantern.',
-  spells:'Spellbook: Detect Magic, Magic Missile, Protection from Evil, Shield, Mirror Image, Web, Hold Undead, Dispel Magic. Prepared spells must be confirmed before casting; track slots and expenditure.',
-  personality:'Scholarly, sceptical, curious about the undead. BATTLE: preserve spells and control threats. BANTER: sharp observations. BEHAVIOUR: examines clues before taking risks.'},
- {id:'c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3',name:'Seraphina',loadout:{primary:'Mace',backup:'Sling',sidearm:'None',armor:'Chain mail',shield:true,potions:3,ammoType:'Sling stones',ammo:20,rations:5,rope:false,backpack:true,lantern:false,spellbook:false,components:false,holySymbol:true,thievesTools:false,other:5},race:'Human',className:'Cleric',alignment:'Lawful Good',level:6,
-  stats:[13,11,15,12,17,14],hp:34,ac:4,thac0:18,move:'9',
-  weapons:'Mace (1d6+1), sling; chain mail and shield.',
-  equipment:'Holy symbol, healer supplies, bandages, holy water, rations, prayer book.',
-  spells:'Cleric abilities: Turn Undead. Prayer repertoire: Bless, Cure Light Wounds, Detect Evil, Protection from Evil, Hold Person, Spiritual Hammer, Dispel Magic, Remove Curse. Prepared spells and remaining slots must be tracked.',
-  personality:'Compassionate but unflinching. BATTLE: turn undead, protect and heal. BANTER: thoughtful moral counsel. BEHAVIOUR: refuses to abandon the injured.'},
- {id:'d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4',name:'Kael',loadout:{primary:'Longbow',backup:'Long sword',sidearm:'Dagger',armor:'Studded leather',shield:false,potions:2,ammoType:'Arrows',ammo:40,rations:5,rope:true,backpack:true,lantern:false,spellbook:false,components:false,holySymbol:false,thievesTools:false,other:6},race:'Half-Elf',className:'Ranger',alignment:'Neutral Good',level:6,
-  stats:[15,17,14,12,15,10],hp:41,ac:4,thac0:15,move:'12',
-  weapons:'Longbow (1d8), long sword (1d8), dagger (1d4); studded leather.',
-  equipment:'Quiver, trail rations, rope, tinderbox, hunting knife, cloak, herbs.',
-  spells:'Ranger skills: tracking, wilderness lore, stealth in natural terrain. No memorized priest spells at this level.',
-  personality:'Observant, quiet, fiercely loyal. BATTLE: ranged cover and flanking. BANTER: short, wry remarks. BEHAVIOUR: scouts, watches tracks and avoids unnecessary noise.'},
- {id:'e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5',name:'Mira',loadout:{primary:'Short sword',backup:'Sling',sidearm:'Dagger',armor:'Leather',shield:false,potions:2,ammoType:'Sling stones',ammo:20,rations:5,rope:true,backpack:true,lantern:false,spellbook:false,components:false,holySymbol:false,thievesTools:true,other:3},race:'Halfling',className:'Thief',alignment:'Chaotic Good',level:5,
-  stats:[10,18,13,13,12,15],hp:28,ac:4,thac0:18,move:'6',
-  weapons:'Short sword (1d6), dagger (1d4), sling; leather armour.',
-  equipment:'Thieves tools, small mirror, chalk, rope, lock picks, spare cloak.',
-  spells:'Thief skills: Open Locks, Find/Remove Traps, Move Silently, Hide in Shadows, Climb Walls, Hear Noise, Backstab. Percentages to be confirmed on character sheet.',
-  personality:'Mischievous, quick-witted, loyal beneath the jokes. BATTLE: avoid direct clashes, exploit openings. BANTER: irreverent humour. BEHAVIOUR: checks doors, traps and valuables, but values the party.'}
-];
-const ARC_ANIMATED_FILES = {"Alaric": "alaric.jpg", "Malachar": "malachar.jpg", "Seraphina": "seraphina.jpg", "Kael": "kael.jpg", "Mira": "mira.jpg", "Brenna": "brenna.jpg", "Elowen": "elowen.jpg", "Thrain Ironbeard": "thrain_ironbeard.jpg", "Lirael Moonwhisper": "lirael_moonwhisper.jpg", "Cassian Ashborne": "cassian_ashborne.jpg", "Sylvara Greenleaf": "sylvara_greenleaf.jpg", "Brother Joram": "brother_joram.jpg", "Elandor Swiftblade": "elandor_swiftblade.jpg", "Arathor Moonshadow": "arathor_moonshadow.jpg", "Elara Nightwind": "elara_nightwind.jpg", "Virelya Red Veil": "virelya_red_veil.jpg", "Thorn Underleaf": "thorn_underleaf.jpg", "Maelis Vorn": "maelis_vorn.jpg", "Alaric Duskfall": "alaric_duskfall.jpg", "Fenwick Thistlegear": "fenwick_thistlegear.jpg"};
-function fallbackCharacters(){
- const active=activeIds();
- const candidates=active?.length ? active.map(id=>partyDefaults.find(c=>String(c.id)===String(id))).filter(Boolean) : partyDefaults.slice(0,3);
- return candidates.map(c=>({id:c.id,name:c.name,sheet:[
- 'Name: '+c.name,'Race: '+c.race,'Class: '+c.className,'Level: '+c.level,
- 'HIT POINTS: '+c.hp,'ARMOR CLASS: '+c.ac,'THAC0: '+c.thac0,
- 'Weapons & Attacks',c.weapons,'Spells',c.spells,
- 'Special Abilities',c.personality
- ].join('\n')}));
+  return Array.isArray(ids)?ids:RPGPOV_OFFLINE_ARCS.slice(0,4).map(c=>c.id);
+ }catch{return RPGPOV_OFFLINE_ARCS.slice(0,4).map(c=>c.id);}
 }
 async function loadCharacters(){
  const session=sessionStorage.getItem('dndpov_ai_session');
@@ -4460,9 +4421,14 @@ async function loadCharacters(){
   try{
    const r=await fetch('/api/character/list',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session})});
    if(r.ok){const data=await r.json();if(Array.isArray(data.characters)&&data.characters.length)return data.characters;}
-  }catch(e){console.info('Party reference: using built-in browser roster',e)}
+  }catch(e){console.info('RPGPOV: using built-in browser ARC reference',e);}
  }
- return fallbackCharacters();
+ // Read-only offline roster: the browser demo does not require a local API server.
+ return RPGPOV_OFFLINE_ARCS.map(c=>({id:c.id,name:c.name,sheet:[
+  'Name: '+c.name,'Race: '+c.race,'Class: '+c.className,'Level: '+c.level,
+  'HIT POINTS: '+c.hp,'Weapons & Attacks',c.weapons,
+  'Spells',c.spells,'Special Abilities',c.abilities
+ ].join('\n')}));
 }
 function addDetail(card,label,value){
  if(!value||value==='None')return;
@@ -4480,7 +4446,7 @@ function render(rows){
   const top=document.createElement('div');top.className='arcQuickTop';
   const imageName=portraits[name]||portraits[stat(sheet,'Name')];
   if(imageName){
-   const img=document.createElement('img');img.src='arc_characters/animated/'+imageName;
+   const img=document.createElement('img');img.src='arc_characters/animated/'+(RPGPOV_ANIMATED_FILES[name]||RPGPOV_ANIMATED_FILES[stat(sheet,'Name')]||'alaric.jpg');
    img.alt=name+' portrait';img.loading='lazy';
    img.onerror=()=>{img.replaceWith(fallback())};top.append(img);
   }else top.append(fallback());
@@ -4498,7 +4464,7 @@ function render(rows){
  }
  if(!selected.length)host.textContent='No selected ARC sheets found for this session. Choose your party at the Last Chance Inn.';
  const hint=document.createElement('div');hint.className='arcQuickHint';
- hint.textContent='Read-only quick reference · session sheets when available; otherwise Old Svalich Road browser presets';
+ hint.textContent='Read-only quick reference · character sheets from your current session';
  host.append(hint);
 }
 toggle.onclick=async()=>{
@@ -4601,8 +4567,7 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
 #dndpovContextDock:not(.kobo-maximized) .contextEdition{max-width:none}
 </style>
 <style id="tser-ai-description-display-only">#aiDmPanel #aiDmPlace,#aiDmPanel #aiDmReadAgain,#aiDmPanel .aiDmScroll{display:none!important}</style>
-
-<style id="tser-mobile-v1-styles">
+<script>if(new URLSearchParams(location.search).get('classic')==='1'){document.addEventListener('DOMContentLoaded',()=>{const b=document.createElement('button');b.textContent='← Exit to Adventure Map';b.style.cssText='position:fixed;top:42px;left:50%;transform:translateX(-50%);z-index:2147483646;padding:12px 20px;background:#30251c;color:#f5dfb7;border:1px solid #d2aa70;border-radius:6px;font:bold 15px Georgia;cursor:pointer';b.onclick=()=>{if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()||window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK||window.DNDPOV_ENCOUNTER_PENDING)return;window.DNDPOV_CLASSIC_EXIT();};document.body.append(b);});}</script><script>if(new URLSearchParams(location.search).get('classic')==='1')document.documentElement.classList.add('classic-location');</script><style>.classic-location #reset,.classic-location #help{display:none!important}</style><style id="tser-mobile-v1-styles">
 @media (max-width:800px), (orientation:landscape) and (pointer:coarse){
  #tserMobile{display:block!important;position:fixed;inset:0;pointer-events:none;z-index:9800;font:14px system-ui;color:#f7dfb4}
  #tserMobile button,#tserMobile nav,#tserMobile section{pointer-events:auto}
@@ -4788,4 +4753,4 @@ html,body{min-height:100%;overscroll-behavior:none}
  const onTurn=()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;document.documentElement.style.setProperty('--rpgpov-vh',window.innerHeight+'px');});setTimeout(update,180);setTimeout(update,650);};
  window.addEventListener('orientationchange',onTurn,{passive:true});
  window.visualViewport?.addEventListener('resize',onTurn,{passive:true});
-})();</script></body></html>
+})();</script><style id="classic-mobile-adaptation">#classicToggle,#classicReturn{z-index:9500!important;top:8px!important;left:8px!important;right:auto!important;transform:none!important;max-width:65vw;font-size:13px!important;padding:10px!important}body.classic-outside #classicBoard{padding:60px 8px 20px!important;z-index:15!important}#classicMap{min-height:0!important;aspect-ratio:1.35!important}#classicMap button{font-size:18px!important;padding:4px!important;min-width:30px!important;min-height:30px!important}#classicList{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:5px!important}#classicList button{font-size:12px!important;min-height:42px!important}body.classic-outside .vm-pad{display:none!important}body.classic-outside #classicBoard h1{font-size:20px!important}body.classic-outside #classicBoard p{font-size:12px!important} </style><style>body:not(:has(#insideLabel:not([hidden]))) #tserMobile .tm-pad{display:none!important} </style></body></html>

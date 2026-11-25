@@ -31,7 +31,7 @@
     }
   },true);
 })();
-</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>DNDPOV — Old Svalich Road v2.35 · Multiplayer + AI DM</title><style>
+</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DNDPOV — Old Svalich Road v2.45 · Multiplayer + AI DM</title><style>
 html,body{margin:0;height:100%;overflow:hidden;background:#10171a;color:#f5e6c8;font:14px Georgia,serif}canvas{display:block}#hud{position:absolute;top:14px;left:14px;background:#171914e6;border:1px solid #a38656;border-radius:8px;padding:13px;max-width:310px}#hud b{font-size:19px;color:#e5c48e}button{background:#40382b;color:#f6e4bd;border:1px solid #a38a61;padding:7px;border-radius:4px;cursor:pointer}#minimap{position:absolute;right:14px;top:14px;background:#181b17e8;border:1px solid #a38a61;padding:8px;border-radius:7px;width:160px}#minimap canvas{width:300px;height:160px}#help{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:#171914e0;padding:10px;border:1px solid #a38a61;border-radius:5px;white-space:nowrap}#notice{position:absolute;top:23%;left:50%;transform:translateX(-50%);background:#171914e6;color:#ead4ac;border:1px solid #9d8053;padding:13px 24px;border-radius:5px;display:none;font-size:19px;text-align:center}#loading{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#171914;color:#f8dba8;border:2px solid #a38a61;border-radius:8px;padding:24px;max-width:80vw;z-index:5}
 .arcStyleTabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 6px}.arcStyleTabs button{border:1px solid #756a55;border-radius:8px;padding:9px 18px;background:#201d19;color:#eee4d0;cursor:pointer;font-weight:700}.arcStyleTabs button.active{background:#bda474;color:#16130e;border-color:#dfc58d}</style><style id="arc-v224-pending">.arcPortraitPending{display:flex!important;align-items:center;justify-content:center;font:bold 42px Georgia,serif;color:#d5b78b;background:linear-gradient(135deg,#30283b,#17141b)!important}</style><style id="dndpov-gameplay-style">
 #gamePanel{position:fixed;left:12px;top:155px;z-index:18;width:min(335px,calc(100vw - 24px));max-height:calc(100vh - 245px);overflow:auto;background:rgba(34,38,43,.95);border:1px solid #9b8057;border-radius:6px;padding:12px;color:#f1e7d7;box-shadow:0 6px 24px #0009;font:13px/1.5 Georgia,serif}
@@ -88,7 +88,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#10171a;color:#f5e6c8;
 #aiDmPartyBox #partyLegacyControls{display:none!important}
 @media(max-width:580px){#aiDmPartyBox .arcChoiceGrid{grid-template-columns:1fr}}
 </style>
-</head><body><div id="hud"><b>DNDPOV · OLD SVALICH ROAD v2.42</b><p>Eastern Gates of Barovia · Svalich Woods</p><label for="day">Time</label> <select id="day" aria-label="Time of day"><option value="dawn">Dawn</option><option value="day">Day</option><option value="dusk">Dusk</option><option value="night">Night</option></select> <label for="weather">Weather</label> <select id="weather" aria-label="Atmosphere"><option value="clear">Clear</option><option value="mist">Mist</option><option value="fog">Fog</option></select> <button id="reset">Restart at inn</button> <p id="pos"></p></div><div id="minimap"><canvas id="map" width="300" height="160"></canvas><small>Old Svalich Road · east → west · gold = you</small></div><div id="notice"></div><div id="help">↑ ↓ walk &nbsp; ← → turn &nbsp; A / D sidestep &nbsp; Shift jog</div><div id="travelFade">The mists part... Barovia awaits.</div><div id="loading">Loading Old Svalich Road…</div><aside id="gamePanel"><h2 id="gamePlace">Adventure</h2><div class="smallCaption">MODULE · READ ALOUD</div><p class="readaloud" id="gameRead"></p><div class="dmnote" id="gameNotes" hidden></div><p id="gameHint" style="font-size:11px;color:#cdb99d">Walk near a keyed location and press E to explore.</p><div id="gameSideSummary" hidden></div></aside><div id="gameModal"><article><div class="top"><h2 id="gameModalTitle"></h2><button id="gameClose">Close ×</button></div><div id="gameModalBody"></div></article></div><div id="controlDeck"><div class="toolRow"><span class="toolLabel">AUDIO</span><button id="wolfToggle" title="Toggle ambient wolf howls">🐺 Wolves: ON</button> <button id="wolfTest" title="Play a wolf howl now">▶ Test Howl</button> <span id="wolfStatus" role="status" style="font-size:11px;color:#e8cda0"></span></div><div class="toolRow"><span class="toolLabel">MOVE</span><button id="turnLeft">◀ Turn</button><button id="turnRight">Turn ▶</button><button id="exploreBtn">Explore (E)</button></div><div class="toolRow"><span class="toolLabel">VIEW</span><button id="torchBtn">🔥 Torch: ON</button><button id="descBtn">Hide Descriptions</button><button id="keysBtn">Hide Key Locations</button><button id="mapBtn">Hide Map</button></div><div class="toolRow"><span class="toolLabel">DM</span><button id="dmBtn" class="on">DM: ON</button><button id="encBtn">Encounters</button></div><div class="toolRow"><span class="toolLabel">TRAVEL</span><select id="jumpSelect"><option value="">Jump to landmark…</option></select><button id="villageBtn">Go to Village</button><button id="castleBtn">Go to Castle</button></div></div><script type="module">
+<script id="classic-navigation-v111">(()=>{const q=new URLSearchParams(location.search);if(q.get('classic')!=='1')return;const points={"B": [88, 48], "A": [92, 22], "CART": [91, 64], "C": [82, 34], "INN": [92, 77]};const site=q.get('site')||"B";window.DNDPOV_CLASSIC_EXIT=()=>{if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()||window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK||window.DNDPOV_ENCOUNTER_PENDING)return;if(site==='B'&&!window.DNDPOV_CLASSIC_GATE_COMPLETE)return;const p=site==='B'?[74,53]:points[site];if(p)try{sessionStorage.setItem('rpgpovClassicPosition',JSON.stringify({x:p[0],y:p[1],id:site==='B'?'VILLAGE':site}));}catch(e){}document.exitPointerLock?.();location.replace('village_of_barovia_mobile.html');};})();</script></head><body><div id="hud"><b>DNDPOV · OLD SVALICH ROAD v2.45</b><p>Eastern Gates of Barovia · Svalich Woods</p><label for="day">Time</label> <select id="day" aria-label="Time of day"><option value="dawn">Dawn</option><option value="day">Day</option><option value="dusk">Dusk</option><option value="night">Night</option></select> <label for="weather">Weather</label> <select id="weather" aria-label="Atmosphere"><option value="clear">Clear</option><option value="mist">Mist</option><option value="fog">Fog</option></select> <button id="reset">Restart at inn</button> <p id="pos"></p></div><div id="minimap"><canvas id="map" width="300" height="160"></canvas><small>Old Svalich Road · east → west · gold = you</small></div><div id="notice"></div><div id="help">↑ ↓ walk &nbsp; ← → turn &nbsp; A / D sidestep &nbsp; Shift jog</div><div id="travelFade">The mists part... Barovia awaits.</div><div id="loading">Loading Old Svalich Road…</div><aside id="gamePanel"><h2 id="gamePlace">Adventure</h2><div class="smallCaption">MODULE · READ ALOUD</div><p class="readaloud" id="gameRead"></p><div class="dmnote" id="gameNotes" hidden></div><p id="gameHint" style="font-size:11px;color:#cdb99d">Walk near a keyed location and press E to explore.</p><div id="gameSideSummary" hidden></div></aside><div id="gameModal"><article><div class="top"><h2 id="gameModalTitle"></h2><button id="gameClose">Close ×</button></div><div id="gameModalBody"></div></article></div><div id="controlDeck"><div class="toolRow"><span class="toolLabel">AUDIO</span><button id="wolfToggle" title="Toggle ambient wolf howls">🐺 Wolves: ON</button> <button id="wolfTest" title="Play a wolf howl now">▶ Test Howl</button> <span id="wolfStatus" role="status" style="font-size:11px;color:#e8cda0"></span></div><div class="toolRow"><span class="toolLabel">MOVE</span><button id="turnLeft">◀ Turn</button><button id="turnRight">Turn ▶</button><button id="exploreBtn">Explore (E)</button></div><div class="toolRow"><span class="toolLabel">VIEW</span><button id="torchBtn">🔥 Torch: ON</button><button id="descBtn">Hide Descriptions</button><button id="keysBtn">Hide Key Locations</button><button id="mapBtn">Hide Map</button></div><div class="toolRow"><span class="toolLabel">DM</span><button id="dmBtn" class="on">DM: ON</button><button id="encBtn">Encounters</button></div><div class="toolRow"><span class="toolLabel">TRAVEL</span><select id="jumpSelect"><option value="">Jump to landmark…</option></select><button id="villageBtn">Go to Village</button><button id="castleBtn">Go to Castle</button></div></div><script type="module">
 try {
 let THREE;
 for(const u of ['https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js','https://unpkg.com/three@0.170.0/build/three.module.js']){try{THREE=await import(u);break}catch(e){console.warn(e)}}
@@ -848,9 +848,9 @@ const i6GateStructures=new Set([i6GateLandmark]);
 function blocksGateWall(x,z){
  return Math.abs(x)>4.35&&Math.abs(x)<121.5&&Math.abs(z-gateZ)<1.25;
 }
-const player={x:0,z:183,angle:0},keys={};window.RPGPOV_MOBILE_SET_KEY=(key,down)=>{keys[String(key).toLowerCase()]=!!down;};let triggered=false,progress=0,night=false,noticeUntil=0,gateApproach=false,gateOpenProgress=0;
+const player={x:0,z:183,angle:0},keys={};let classicGateWalk=false;let triggered=false,progress=0,night=false,noticeUntil=0,gateApproach=false,gateOpenProgress=0;
 window.addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();if(document.getElementById('gameModal')?.style.display!=='flex')keys[e.key.toLowerCase()]=true});window.addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
-function reset(){player.x=0;player.z=183;player.angle=0;triggered=false;progress=0;gateApproach=false;gateOpenProgress=0;gateL.rotation.y=0;gateR.rotation.y=0;document.querySelector('#notice').style.display='none';window.DNDPOV_RESET_SVALICH_CROSSINGS?.();window.DNDPOV_RESET_I6_JOURNEY?.()}document.querySelector('#reset').onclick=reset;
+function reset(){if(new URLSearchParams(location.search).get("classic")==="1")return;player.x=0;player.z=183;player.angle=0;triggered=false;progress=0;gateApproach=false;gateOpenProgress=0;gateL.rotation.y=0;gateR.rotation.y=0;document.querySelector('#notice').style.display='none';window.DNDPOV_RESET_SVALICH_CROSSINGS?.();window.DNDPOV_RESET_I6_JOURNEY?.()}document.querySelector('#reset').onclick=reset;
 // v1.22: Tser Pool's softer, layered distance mist and dusk/night palette.
 const atmospherePresets={
  day:{sky:0x899394,fog:0x899394,ambient:1.4,sun:1.6,exposure:1},
@@ -858,9 +858,9 @@ const atmospherePresets={
  dusk:{sky:0x4a505d,fog:0x4a505d,ambient:.55,sun:.45,exposure:1},
  night:{sky:0x101b28,fog:0x101b28,ambient:.22,sun:.15,exposure:1}
 };
-let timeOfDay='dusk',weatherMode='clear';
+let timeOfDay='dawn',weatherMode='mist';
 document.querySelector('#day').value=timeOfDay;
-document.querySelector('#hud b').textContent='DNDPOV · OLD SVALICH ROAD v2.42 · BASIC';
+document.querySelector('#hud b').textContent='DNDPOV · OLD SVALICH ROAD v2.45 · BASIC';
 const roadWeatherSelect=document.querySelector('#weather');
 roadWeatherSelect.replaceChildren(
  new Option('Clear','clear'),new Option('Cloudy','cloudy'),
@@ -881,9 +881,9 @@ const roadWeatherRoutes={
 const roadWeatherDwell={clear:[22000,48000],cloudy:[20000,41000],
  rain:[24000,44000],thunderstorm:[25000,42000],
  mist:[24000,42000],fog:[26000,44000]};
-const roadWeatherFlow={current:'clear',target:null,startedAt:0,
+const roadWeatherFlow={current:'mist',target:null,startedAt:0,
  duration:0,nextAt:0,lastSky:0,lastStatus:0};
-let previousManualWeather='clear';
+let previousManualWeather='mist';roadWeatherSelect.value='mist';
 const roadWeatherStatus=document.createElement('small');
 roadWeatherStatus.id='roadWeatherStatus';roadWeatherStatus.hidden=true;
 roadWeatherStatus.style.cssText='display:none;color:#e2c391;font-size:11px;margin:3px 0 5px';
@@ -1340,7 +1340,7 @@ function drawMap(){
   }
  }
  // Track the real player: never alter the 3D walking speed to animate a dot.
- // v2.35: the extended journey uses stretched world-Z coordinates.
+ // v2.45: the extended journey uses stretched world-Z coordinates.
  // Convert back to original road coordinates before plotting the player.
  const mapPlayerZ=player.z; // Player coordinates are already in original map space.
  // Keep the marker on the drawn road centreline; show only deliberate
@@ -1361,6 +1361,7 @@ function drawMap(){
 // Walk-through transition: triggered well beyond the Eastern Gates; no gate or player coordinates changed.
 let villageTransitionStarted=false;
 function travelToVillage(){
+ if(new URLSearchParams(location.search).get('classic')==='1')return;
  if(villageTransitionStarted)return;
  villageTransitionStarted=true;
  const fade=document.querySelector('#travelFade');fade.classList.add('active');
@@ -1405,7 +1406,7 @@ function rpgpovSpawnEncounterSprites(title){
  const nMatch=String(title).match(/(?:ENCOUNTER\s*[·:—-]\s*|ATTACK\s*[·:—-]?\s*)(\d+)\s/i);
  const count=Math.min(3,Math.max(1,Number(nMatch?.[1]||1)));
  for(let i=0;i<count;i++){
-  const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,transparent:true,depthWrite:false,depthTest:false,alphaTest:0.035}));
+  const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,transparent:true,depthWrite:false,alphaTest:0.035}));
   const offset=(i-(count-1)/2)*2.65;
   sprite.position.copy(camera.position).addScaledVector(forward,9+Math.abs(offset)*.6).addScaledVector(side,offset);
   const h=/bat|ghost|wraith/.test(asset)?3.7:/wolf|worg/.test(asset)?2.65:3.4;
@@ -1433,19 +1434,25 @@ function rpgpovUpdateEncounterVisual(now){
  }
 }
 
-function loop(now){requestAnimationFrame(loop);const dt=Math.min((now-prev)/1000,.05);prev=now;const t=2.2*dt;const journeyLocked=window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK||window.DNDPOV_INTRO_LOCK;if(journeyLocked){for(const k of Object.keys(keys))keys[k]=false;}if(!journeyLocked&&keys.arrowleft)player.angle-=t;if(!journeyLocked&&keys.arrowright)player.angle+=t;
-// Mobile-only road guidance: while walking forward near the road centre,
-// gently steer toward the road ahead. Manual turns, sidestepping and leaving
-// the road always take precedence. Desktop movement remains unchanged.
-if(!journeyLocked&&!innInside&&keys.arrowup&&!keys.arrowdown&&!keys.arrowleft&&!keys.arrowright&&!keys.a&&!keys.d&&
-   window.matchMedia('(pointer:coarse) and (max-width:950px)').matches&&
-   player.z<190&&player.z>-195&&Math.abs(player.x-pathX(player.z))<7.5){
- const aheadZ=Math.max(-205,player.z-9);
- const desired=Math.atan2(pathX(aheadZ)-player.x,player.z-aheadZ);
- let difference=Math.atan2(Math.sin(desired-player.angle),Math.cos(desired-player.angle));
- player.angle+=Math.max(-1.8*dt,Math.min(1.8*dt,difference));
+// RPGPOV desktop three-quarter camera. Simulation camera is restored after each render.
+let rpgViewMode=0,rpgViewDistance=24;
+const rpgMarker=new THREE.Group();
+const rpgRing=new THREE.Mesh(new THREE.RingGeometry(.65,.83,40),new THREE.MeshBasicMaterial({color:0xffd071,side:THREE.DoubleSide}));rpgRing.rotation.x=-Math.PI/2;rpgRing.position.y=.07;rpgMarker.add(rpgRing);
+const rpgBody=new THREE.Mesh(new THREE.ConeGeometry(.48,1.5,8),new THREE.MeshStandardMaterial({color:0x9c733f}));rpgBody.position.y=.8;rpgMarker.add(rpgBody);rpgMarker.visible=false;scene.add(rpgMarker);
+const rpgViewButton=document.createElement('button');rpgViewButton.textContent='View: 3/4';rpgViewButton.style.cssText='position:fixed;left:50%;top:36px;transform:translateX(-50%);z-index:100;background:#403025;color:#ffe0a5;border:1px solid #b99562;padding:7px 12px;cursor:pointer';if(new URLSearchParams(location.search).get('classic')!=='1')document.body.append(rpgViewButton);else rpgViewMode=2;
+rpgViewButton.onclick=()=>{rpgViewMode=(rpgViewMode+1)%3;rpgViewButton.textContent=['View: 3/4','View: Overhead','View: First person'][rpgViewMode];};
+renderer.domElement.addEventListener('wheel',e=>{if(rpgViewMode===2||!(!innInside))return;e.preventDefault();rpgViewDistance=Math.max(12,Math.min(48,rpgViewDistance+e.deltaY*.025));},{passive:false});
+function rpgRenderView(){
+ if(rpgViewMode===2||!(!innInside)){rpgMarker.visible=false;return renderer.render(innInside?innScene:scene,camera);}
+ const pos=camera.position.clone(),quat=camera.quaternion.clone();const forward=new THREE.Vector3(0,0,-1).applyQuaternion(quat);forward.y=0;forward.normalize();const ground=pos.y-1.75;
+ rpgMarker.position.set(pos.x,ground,pos.z);rpgMarker.visible=true;
+ const d=rpgViewDistance;camera.position.set(pos.x-forward.x*d*.72,ground+d,pos.z-forward.z*d*.72);
+ if(rpgViewMode===1)camera.position.set(pos.x,ground+d*1.8,pos.z+.05);
+ camera.lookAt(pos.x+forward.x*(rpgViewMode===0?3:0),ground,pos.z+forward.z*(rpgViewMode===0?3:0));
+ 
+ try{renderer.render(innInside?innScene:scene,camera);}finally{ rpgMarker.visible=false;camera.position.copy(pos);camera.quaternion.copy(quat);camera.updateMatrixWorld(true);}
 }
-const f=journeyLocked?0:(keys.arrowup?1:0)-(keys.arrowdown?1:0),side=journeyLocked?0:(keys.d?1:0)-(keys.a?1:0),normalSpeed=(keys.shift?10:5)*dt,trailSpeed=(window.DNDPOV_I6_JOURNEY_PACE?.()??(keys.shift?10:5))*dt;const nextX=player.x+(Math.sin(player.angle)*f+Math.cos(player.angle)*side)*normalSpeed;const nextZ=player.z+(-Math.cos(player.angle)*f+Math.sin(player.angle)*side)*trailSpeed;if(innInside){player.x=Math.max(-7.7,Math.min(7.7,nextX));player.z=Math.max(-5.4,Math.min(5.4,nextZ));}else if(!blocksGateWall(nextX,nextZ)){player.x=nextX;player.z=nextZ;}if(!innInside){player.z=Math.max(-205,Math.min(i6DepartureSelected&&i6JourneyMode==='short_journey'?96:194,player.z));player.x=Math.max(-100,Math.min(100,player.x));if(triggered&&player.z>-2){player.z=-2;/* Closed Barovian gates: no retreat, even around the flanking pillars or through the woods. */}if(triggered&&player.z<-175&&Math.abs(player.x-pathX(player.z))<8)travelToVillage();
+function loop(now){requestAnimationFrame(loop);const dt=Math.min((now-prev)/1000,.05);prev=now;const t=2.2*dt;const journeyLocked=window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK||window.DNDPOV_INTRO_LOCK||(new URLSearchParams(location.search).get('classic')==='1'&&!innInside);if(journeyLocked){for(const k of Object.keys(keys))keys[k]=false;}if(!journeyLocked&&keys.arrowleft)player.angle-=t;if(!journeyLocked&&keys.arrowright)player.angle+=t;const f=journeyLocked?0:(keys.arrowup?1:0)-(keys.arrowdown?1:0),side=journeyLocked?0:(keys.d?1:0)-(keys.a?1:0),normalSpeed=(keys.shift?10:5)*dt,trailSpeed=(window.DNDPOV_I6_JOURNEY_PACE?.()??(keys.shift?10:5))*dt;const nextX=player.x+(Math.sin(player.angle)*f+Math.cos(player.angle)*side)*normalSpeed;const nextZ=player.z+(-Math.cos(player.angle)*f+Math.sin(player.angle)*side)*trailSpeed;if(innInside){player.x=Math.max(-7.7,Math.min(7.7,nextX));player.z=Math.max(-5.4,Math.min(5.4,nextZ));}else if(!blocksGateWall(nextX,nextZ)){player.x=nextX;player.z=nextZ;}if(classicGateWalk&&!window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK&&!window.DNDPOV_ENCOUNTER_PENDING){player.angle=0;player.x=0;player.z=Math.max(-9,player.z-5*dt);if(player.z<=-9&&progress>=1){classicGateWalk=false;window.DNDPOV_CLASSIC_GATE_COMPLETE=true;gameRender();window.DNDPOV_AI_SHOW_LOCATION?.();}}if(!innInside){player.z=Math.max(-205,Math.min(i6DepartureSelected&&i6JourneyMode==='short_journey'?96:194,player.z));player.x=Math.max(-100,Math.min(100,player.x));if(triggered&&player.z>-2){player.z=-2;/* Closed Barovian gates: no retreat, even around the flanking pillars or through the woods. */}if(triggered&&player.z<-175&&Math.abs(player.x-pathX(player.z))<8)travelToVillage();
 // Gate-opening sound extracted from the supplied recording; embedded for offline BASIC/EXE use.
 const i6GateOpeningSound=new Audio('data:audio/mpeg;base64,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');
 i6GateOpeningSound.preload='auto';
@@ -1468,7 +1475,7 @@ if(gateApproach&&!triggered&&gateOpenProgress<1){
 // Wait for the iron leaves to swing clear rather than walking through them.
 if(!triggered&&gateApproach&&gateOpenProgress<.88&&player.z<1.5&&Math.abs(player.x)<4.2)player.z=1.5;
 if(!triggered&&player.z<-2&&Math.abs(player.x)<6){triggered=true;window.dispatchEvent(new CustomEvent('dndpov:gate-closed',{detail:{location:'B',event:'Eastern Gates closed behind the party'}}));noticeUntil=now+3600;const n=document.querySelector('#notice');n.textContent='The iron gates slam shut behind you!';n.style.display='block'}if(triggered&&progress<1){const old=progress;progress=Math.min(1,progress+dt*.8);const v=progress*progress*(3-2*progress);gateL.rotation.y=leftOpen*gateOpenProgress*(1-v);gateR.rotation.y=rightOpen*gateOpenProgress*(1-v);if(old<1&&progress===1)clang()}if(triggered&&now>noticeUntil)document.querySelector('#notice').style.display='none';}
-camera.position.set(window.DNDPOV_I6_SCENE_X?.(player.x,player.z)??player.x,1.75+(window.DNDPOV_I6_SCENE_Y?.(player.z)??0),window.DNDPOV_I6_SCENE_Z?.(player.z)??player.z);camera.rotation.set(window.DNDPOV_I6_SCENE_PITCH?.(player.z)??0,-player.angle-(window.DNDPOV_I6_SCENE_HEADING?.(player.z)??0),0,'YXZ');if(!innInside)updateRoadWeather(now);document.querySelector('#pos').textContent=`Position ${Math.round(player.x)}, ${Math.round(player.z)}`;if(!innInside)drawMap();window.DNDPOV_I6_JOURNEY_TICK?.();rpgpovUpdateEncounterVisual(now);renderer.render(innInside?innScene:scene,camera)}requestAnimationFrame(loop);window.onresize=()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);resizePrecipitationCanvas()};document.querySelector('#loading').remove();
+camera.position.set(window.DNDPOV_I6_SCENE_X?.(player.x,player.z)??player.x,1.75+(window.DNDPOV_I6_SCENE_Y?.(player.z)??0),window.DNDPOV_I6_SCENE_Z?.(player.z)??player.z);camera.rotation.set(window.DNDPOV_I6_SCENE_PITCH?.(player.z)??0,-player.angle-(window.DNDPOV_I6_SCENE_HEADING?.(player.z)??0),0,'YXZ');sceneTorch.position.copy(camera.position);if(!innInside)updateRoadWeather(now);document.querySelector('#pos').textContent=`Position ${Math.round(player.x)}, ${Math.round(player.z)}`;if(!innInside)drawMap();window.DNDPOV_I6_JOURNEY_TICK?.();rpgpovUpdateEncounterVisual(now);rpgRenderView()}requestAnimationFrame(loop);window.onresize=()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);resizePrecipitationCanvas()};document.querySelector('#loading').remove();
 
 // The Last Chance Inn, its grounds and the road immediately outside remain
 // EXACTLY as built. Only the forest beyond the inn's first road approach is
@@ -1909,7 +1916,10 @@ function i6StartInnAmbience(){
 document.addEventListener('pointerdown',i6StartInnAmbience);
 document.addEventListener('keydown',i6StartInnAmbience);
 function i6StopInnAmbience(){i6InnAmbience.pause();i6InnAmbience.currentTime=0;}
-let innInside=true;window.DNDPOV_SVALICH_CAN_RECRUIT=()=>innInside;player.x=0;player.z=-4.55;player.angle=Math.PI;window.DNDPOV_INTRO_LOCK=true;
+const classicRoute=new URLSearchParams(location.search);const classicSite=classicRoute.get('classic')==='1'?classicRoute.get('site')||'INN':null;
+let innInside=!classicSite||classicSite==='INN';window.DNDPOV_SVALICH_CAN_RECRUIT=()=>innInside;
+if(innInside){player.x=0;player.z=-4.55;player.angle=Math.PI;}else{const dest=gameLocations.find(l=>l.id===classicSite);player.x=classicSite==='CART'?pathX(121):classicSite==='B'?0:(dest?.x||0);player.z=classicSite==='B'?20:classicSite==='CART'?121:classicSite==='A'?86:(dest?.z||53);player.angle=classicSite==='CART'?Math.atan2(10-player.x,player.z-112):0;rpgViewMode=2;}
+window.DNDPOV_INTRO_LOCK=!classicSite;
 const innDoorX=-39,innDoorZ=162.5;
 const innDoorPrompt=document.createElement('div');
 innDoorPrompt.id='innDoorPrompt';innDoorPrompt.textContent='The Last Chance Inn — press E or Enter to enter';
@@ -1923,20 +1933,12 @@ window.DNDPOV_SVALICH_EXIT_TAVERN=()=>leaveInn();
 // Door interaction cannot silently select a route.
 let i6DepartureSelected=false;
 function leaveInn(route=null){
+ if(new URLSearchParams(location.search).get('classic')==='1'){if(!window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK&&!window.DNDPOV_ENCOUNTER_PENDING)window.DNDPOV_CLASSIC_EXIT();return;}
  if(!['full','overnight'].includes(route)){
   window.DNDPOV_KOBO_DEPARTURE?.();return;
  }
  if(i6DepartureSelected||!innInside)return;
  i6DepartureSelected=true;
- // Mobile v11: leaving the inn must dismiss the mobile READ drawer as well as
- // the original Kobo reader. Otherwise its full-screen pane masks the road.
- const mobileRead=document.getElementById('dndpovContextDock');
- mobileRead?.classList.remove('rpgpovMobileOpen');
- document.getElementById('rpgpovMobileShade')?.classList.remove('open');
- document.getElementById('rpgpovMobileClose')?.classList.remove('open');
- document.getElementById('rpgpovMobileMenu')?.classList.remove('open');
- document.getElementById('rpgpovMobile')?.classList.remove('rpgpovWindowActive');
- document.getElementById('svalichKoboChoices')?.setAttribute('hidden','');
  i6StopInnAmbience();
  gameClose();i6JourneyHide();innInside=false;
  wolfFirst=true;wolfSchedule();
@@ -1958,7 +1960,7 @@ window.DNDPOV_SVALICH_DEPARTED=()=>i6DepartureSelected||!innInside;
 
 setInterval(()=>{const near=atInnDoor()&&!innInside&&gameEl('gameModal').style.display!=='flex';innDoorPrompt.style.display=near?'block':'none';},100);
 function enterInn(){
- if(i6DepartureSelected)return;
+ if((classicSite&&classicSite!=='INN')||i6DepartureSelected)return;
  randomizeInnPatrons();
  innInside=true;player.x=0;player.z=-4.55;player.angle=Math.PI;gameRender();
  window.DNDPOV_AI_SHOW_LOCATION?.();
@@ -1970,6 +1972,7 @@ setInterval(()=>{
  innInteriorPrompt.style.display=gameEl('gameModal').style.display==='flex'?'none':'block';
  innInteriorPrompt.textContent=nearExit?'Exit tavern — E or Enter':nearLetter?'Examine sealed letter — E or Enter':'Walk around the tavern · approach the door to leave';
 },120);
+window.addEventListener('classic-examine-cart',()=>{gameIndex=gameLocations.findIndex(l=>l.id==='CART');gameOpen();});
 function gameOpen(){if(window.DNDPOV_I6_CAMP_NEAR?.()){window.DNDPOV_I6_CAMP_REST?.();return;}if(atInnDoor()){enterInn();return;}const l=gameLocations[gameIndex];
  if(l.id!=='CART'&&window.DNDPOV_AI_READ_NEARBY){window.DNDPOV_AI_READ_NEARBY();return;}if(l.id==='INN'){gameShowModal('The Last Chance Inn','<div class="readaloud">A warm glow spills from the inn windows. Approach the front door to enter.</div>');return;}let body='<div class="readaloud">'+gameEscape(l.player)+'</div>';if(l.inside)body+='<h3>Inside / Exploration</h3><div class="readaloud">'+gameEscape(l.inside)+'</div>';if(l.id==='CART')window.DNDPOV_SVALICH_DISCOVER?.('CART','The Messenger’s Cart · Warning Found',l.inside,'PLAYER DISCOVERY · LETTER REFERENCE');if(gameDM)body+='<h3>DM ONLY</h3><div class="dmnote">'+gameEscape(l.dm||'')+'</div>';gameShowModal(l.name,body)}
 let svalichLastDisplayKey='';
@@ -2047,7 +2050,7 @@ window.addEventListener('keydown',e=>{
 });
 const keyOverlay=document.createElement('canvas');keyOverlay.id='keyOverlay';keyOverlay.width=160;keyOverlay.height=240;GAME_MAP.style.position='absolute';GAME_MAP.append(keyOverlay);
 function drawKeys(){const c=keyOverlay.getContext('2d');c.clearRect(0,0,160,240);c.font='bold 9px Georgia';c.textAlign='center';for(const l of gameLocations){if(!l.r)continue;const x=MAP_X(l),y=MAP_Y(l);if(x<10||x>150||y<10||y>230)continue;c.fillStyle='#f4cf8a';c.fillRect(x-11,y-11,22,14);c.fillStyle='#3c2b1d';c.fillText(l.id,x,y-1)}}drawKeys();
-function gameNav(path){window.location.href=path}
+function gameNav(path){if(new URLSearchParams(location.search).get("classic")==="1")return;window.location.href=path}
 gameEl('castleBtn').onclick=async()=>{if(innInside&&!await window.DNDPOV_SVALICH_REQUIRE_PARTY?.())return;gameNav('ravenloft_mobile.html');};
 gameEl('encBtn').onclick=gameEncounter;
 gameRender();setInterval(()=>gameUpdateLocation(player.x,player.z),250);
@@ -2255,17 +2258,12 @@ window.DNDPOV_I6_START_WALK_FROM_INN=(route)=>{
   // The road and gate mechanism are unchanged. Only the opening inn is removed.
   const fade=document.getElementById('travelFade');
   window.DNDPOV_INTRO_LOCK=true;i6JourneyClearKeys();
-  fade.innerHTML='<div style="max-width:690px;padding:28px 36px;text-align:center;line-height:1.7"><p style="margin:0 0 24px">Morning breaks over Barovia.</p><p style="margin:0 0 24px">Your journey along Old Svalich Road passes without incident.</p><p style="margin:0">Hours later, you find yourselves nearing the imposing Gates of Barovia.</p></div>';
-  fade.classList.add('active');
+  // v2.45 diagnostic: bypass the overnight narration overlay only.
+  fade.classList.remove('active');
   i6JourneyTime('dawn');
-  // Remove the entire inn, sign, driveway, cobbles and forecourt, not just the inn building.
   i6InnExteriorObjects.forEach(object=>{object.visible=false;});
-  // The original forest and road remain; the player cannot return past the cart.
-  setTimeout(()=>{
-   fade.classList.remove('active');
-   window.DNDPOV_INTRO_LOCK=false;i6JourneyClearKeys();
-   gameLast=-1;gameUpdateLocation(player.x,player.z);gameRender();
-  },6500);
+  window.DNDPOV_INTRO_LOCK=false;i6JourneyClearKeys();
+  gameLast=-1;gameUpdateLocation(player.x,player.z);gameRender();
  }
  roadWeatherSelect.disabled=route==='full';document.getElementById('day').disabled=route==='full';
  i6JourneyUpdateBadge();
@@ -2381,7 +2379,7 @@ window.DNDPOV_I6_JOURNEY_TICK=()=>{
 window.addEventListener('keydown',e=>{
  if(window.DNDPOV_INTRO_LOCK){e.preventDefault();e.stopImmediatePropagation()}
 },true);
-i6JourneyOpening();
+if(!classicSite)i6JourneyOpening();else {i6JourneyHide();if(classicSite==='B')classicGateWalk=true;}
 
 
 gameEl('villageBtn').onclick=async()=>{if(innInside&&!await window.DNDPOV_SVALICH_REQUIRE_PARTY?.())return;travelToVillage();};
@@ -2395,6 +2393,7 @@ jump.onchange=async()=>{
  // D, F-I live on the Tser road, E in the village, and J at the castle.
  // The former selector changed only read-aloud text, which the location
  // tracker immediately replaced because the player had not actually moved.
+ if(new URLSearchParams(location.search).get('classic')==='1')return;
  if(!destination.r){
   if(destination.id==='E'){window.location.href='village_of_barovia_mobile.html';return;}
   if(destination.id==='J'){window.location.href='ravenloft_mobile.html?arrival=carriage&floor=walls';return;}
@@ -2427,10 +2426,12 @@ jump.onchange=async()=>{
 function gameRoll(){const die=1+Math.floor(Math.random()*6);const hit=night?die<=2:die===1;gameShowModal('Outdoor Encounter Check','<p>1d6: <b>'+die+'</b> · '+(night?'Night':'Day')+' · '+(hit?'Encounter triggered':'No encounter')+'</p><p>Resolve the encounter using the original module tables.</p>')}
 function gameEncounter(){let body='<p>DM reference · Lands of Barovia</p><button id="rollNow">Roll Encounter (1d6)</button>';for(const a of gameEncounterTable){body+='<p><b>'+gameEscape(a[0])+'</b></p><div class="dmnote">'+(gameDM?gameEscape(a[1]):'Enable DM mode for encounter details.')+'</div>'}gameShowModal('Lands of Barovia · Encounter Summary',body);gameEl('rollNow').onclick=gameRoll}
 
-const sceneTorch=torchLight;
+const sceneTorch=new THREE.PointLight(0xffcc88,3.2,18,2);scene.add(sceneTorch);
 gameEl('torchBtn').onclick=()=>{torchOn=!torchOn;sceneTorch.intensity=torchOn?3.2:0;gameEl('torchBtn').textContent='🔥 Torch: '+(torchOn?'ON':'OFF');gameEl('torchBtn').classList.toggle('on',torchOn)};
 // v1.47: player-visible location only; module DM secrets never sent to AI.
 function svalichCurrentLocation(){
+ const q=new URLSearchParams(location.search);if(q.get('classic')==='1'&&!innInside){const site=gameLocations.find(l=>l.id===(q.get('site')==='B'&&triggered&&progress>=1?'E':q.get('site')));if(site&&site.id!=='INN')return {location:site.id,position:'outside',roomName:site.id+' · '+site.name};}
+
  if(innInside)return {location:'INN',position:'inside',roomName:'The Last Chance Inn · Inside'};
  if(atInnDoor())return {location:'INN',position:'outside',roomName:'The Last Chance Inn · Entrance'};
  const travelling=window.DNDPOV_I6_TRAVEL_SCENE;
@@ -2476,6 +2477,7 @@ window.DNDPOV_ZONE_BRIDGE={getPosition:()=>({x:innInside?innDoorX:player.x,y:inn
  getSave:()=>({x:player.x,z:player.z,angle:player.angle,innInside,
   journeyMode:i6JourneyMode,journeyHours:i6JourneyHours,journeyLegStartZ:i6JourneyLegStartZ}),
  restoreSave:s=>{
+  if(classicSite)return;
   if(![s.x,s.z,s.angle].every(Number.isFinite))throw Error('Invalid Svalich save');
   player.x=s.x;player.z=s.z;player.angle=s.angle;
   innInside=!!s.innInside;i6JourneyMode=s.journeyMode||'';
@@ -2489,7 +2491,7 @@ window.DNDPOV_ZONE_BRIDGE={getPosition:()=>({x:innInside?innDoorX:player.x,y:inn
   }
   i6JourneyHide();i6JourneyUpdateBadge();
   gameEl('gameModal').style.display='none';
-  gameLast=-1;gameUpdateLocation(player.x,player.z);gameRender();drawMap();
+  gameLast=-1;svalichMarkLocation(id);gameRender();drawMap();
  },redrawMap:()=>drawMap()};
 const svalichDrawBeforeMp=drawMap;
 drawMap=function(){svalichDrawBeforeMp();
@@ -2515,7 +2517,14 @@ drawMap=function(){svalichDrawBeforeMp();
 };
 
 
-}catch(e){console.error(e);document.querySelector('#loading').textContent='Unable to start: '+(e.stack||e.message||e)}
+if(new URLSearchParams(location.search).get('classic')==='1'){
+ const id=new URLSearchParams(location.search).get('site')||'INN';
+ i6JourneyHide();window.DNDPOV_INTRO_LOCK=false;
+ if(id==='INN'){enterInn();}else{const dest=gameLocations.find(l=>l.id===id);if(dest){innInside=false;player.x=id==='CART'?pathX(121):id==='B'?0:dest.x;player.z=id==='B'?20:id==='CART'?121:id==='A'?86:dest.z;player.angle=id==='CART'?Math.atan2(10-player.x,player.z-112):0;rpgViewMode=2;if(id==='A'){i6SetTrailLength(true);player.x=pathX(player.z);}if(id==='B'){classicGateWalk=true;rpgViewMode=2;}gameIndex=gameLocations.indexOf(dest);gameLast=-1;gameUpdateLocation(player.x,player.z);gameRender();drawMap();}}
+ setTimeout(()=>window.DNDPOV_AI_SHOW_LOCATION?.(),500);
+}
+
+}catch(e){console.error(e);const errorBox=document.querySelector('#loading')||document.body.appendChild(document.createElement('div'));errorBox.style.cssText='position:fixed;top:110px;left:20px;z-index:9999;background:#511;color:white;padding:12px';errorBox.textContent='Unable to start: '+(e.stack||e.message||e)}
 
 </script>
 <!-- DNDPOV random daytime music: original time controls and all other sounds retained. -->
@@ -3838,11 +3847,11 @@ function addCard(kind,heading,message,label='ORIGINAL MODULE · READ-ALOUD'){
 }
 let aiServerOnline=false, aiUserChoice=true;
 function syncControls(){
- const enabled=(aiServerOnline||window.RPGPOV_AI_KEY_READY?.())&&toggle.checked;
+ const enabled=aiServerOnline&&toggle.checked;
  input.disabled=!enabled||busy;
  panel.querySelector('#aiDmSend').disabled=!enabled||busy;
  panel.querySelector('#aiDmConference').disabled=!enabled||busy;
- status.textContent=!(aiServerOnline||window.RPGPOV_AI_KEY_READY?.())?'Connect your API key to activate AI DM':enabled?(busy?'DM responding…':'AI ready'):'AI off · descriptions active';
+ status.textContent=!aiServerOnline?'AI offline · descriptions available':enabled?(busy?'DM responding…':'AI ready'):'AI off · descriptions active';
 }
 toggle.addEventListener('change',()=>{aiUserChoice=toggle.checked;syncControls()});
 async function checkAiConnection(){
@@ -3851,7 +3860,7 @@ async function checkAiConnection(){
  try{const r=await fetch('/api/module?location=ARRIVAL&position=outside',{cache:'no-store',signal:AbortSignal.timeout(2500)});
   online=r.ok&&(r.headers.get('content-type')||'').includes('json');}catch{}
  if(busy)return; // A late health-check response must not interrupt a battle.
- aiServerOnline=online;const ready=online||window.RPGPOV_AI_KEY_READY?.();toggle.disabled=false;toggle.checked=!!ready&&aiUserChoice;syncControls();
+ aiServerOnline=online;toggle.disabled=!online;toggle.checked=online&&aiUserChoice;syncControls();
 }
 syncControls();checkAiConnection();setInterval(checkAiConnection,12000);
 
@@ -3984,8 +3993,6 @@ function inactiveArcQuestion(message){
 // character sheets saved for this session, not the optional arcParty field.
 // Register only selected ARCs; never alter AIDM, Village, or Multiplayer files.
 async function ensureRoadCombatSheets(){
- // Personal-key mode sends sheets in the combat payload; no local AIDM server exists.
- if(window.RPGPOV_AI_KEY_READY?.())return (window.DNDPOV_ARC_ROSTER?.()||[]).filter(c=>c.sheet);
  const selected=(window.DNDPOV_ARC_ROSTER?.()||[]).filter(c=>c.sheet);
  if(selected.length<3)throw Error('Select at least three ARCs before combat.');
  const response=await fetch('/api/character/list',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session})});
@@ -4014,7 +4021,7 @@ window.DNDPOV_AI_SEND_COMBAT=async(packet)=>{
   await ensureRoadCombatSheets();
   const response=await fetch('/api/dm',{method:'POST',headers:{'Content-Type':'application/json'},signal:AbortSignal.timeout(74000),body:JSON.stringify({session,...c,message:buildRoadDmMessage(message+' MONSTER STATS: '+String(packet.stats||'').slice(0,400),c),verbosity:dmSettings().verbosity,arcParty:party,combat:{action:'start',room:packet.room,monsterId:packet.monsterId,count:packet.count,rule:packet.rule,stats:packet.stats}})});
   const data=await response.json();if(!response.ok)throw Error(data.error||'Combat start failed');
-  if(!data.reply)throw Error('OpenAI returned no combat response.');
+  if(!data.reply)throw Error('AI DM returned no combat response. Check the AI DM server window.');
   addCard('dm','AI DUNGEON MASTER',data.reply);return data;
  }catch(e){addCard('error','COMBAT START FAILED',e.message);throw e}
  finally{busy=false;syncControls()}
@@ -4026,7 +4033,7 @@ window.DNDPOV_AI_END_COMBAT=async()=>{
  addCard('dm','AI DUNGEON MASTER',data.reply);
 };
 async function send(message){if(busy||!toggle.checked||!message.trim())return;const inactiveReply=inactiveArcQuestion(message);if(inactiveReply){addCard('user','YOU',message);input.value='';addCard('dm','AI DUNGEON MASTER',inactiveReply);return;}await checkLocation();busy=true;syncControls();addCard('user','YOU',message);input.value='';
- try{const response=await fetch('/api/dm',{method:'POST',headers:{'Content-Type':'application/json'},signal:AbortSignal.timeout(74000),body:JSON.stringify({session,...context(),message:buildRoadDmMessage(message,context()),verbosity:dmSettings().verbosity,arcParty:(window.DNDPOV_ARC_ROSTER?.()||[]).filter(c=>c.sheet).map(c=>({id:c.id,name:c.name,sheet:c.sheet}))})});const data=await response.json();if(!response.ok)throw Error(data.error||'AI DM request failed (HTTP '+response.status+')');if(!data.reply)throw Error('AI DM returned an empty response.');addCard('dm','AI DUNGEON MASTER',data.reply)}catch(e){addCard('error','AI DM REQUEST FAILED',e.name==='TimeoutError'?'AI DM did not respond within 74 seconds. Check your OpenAI connection.':e.message)}finally{busy=false;syncControls()}}
+ try{const response=await fetch('/api/dm',{method:'POST',headers:{'Content-Type':'application/json'},signal:AbortSignal.timeout(74000),body:JSON.stringify({session,...context(),message:buildRoadDmMessage(message,context()),verbosity:dmSettings().verbosity,arcParty:(window.DNDPOV_ARC_ROSTER?.()||[]).filter(c=>c.sheet).map(c=>({id:c.id,name:c.name,sheet:c.sheet}))})});const data=await response.json();if(!response.ok)throw Error(data.error||'AI DM request failed (HTTP '+response.status+')');if(!data.reply)throw Error('AI DM returned an empty response.');addCard('dm','AI DUNGEON MASTER',data.reply)}catch(e){addCard('error','AI DM REQUEST FAILED',e.name==='TimeoutError'?'AI DM did not respond within 74 seconds. Check the AIDM server window and its OpenAI connection.':e.message)}finally{busy=false;syncControls()}}
 window.DNDPOV_AI_DM_SEND=send;
 panel.querySelector('#aiDmSend').onclick=()=>send(input.value);panel.querySelector('#aiDmConference').onclick=()=>send('We have a conference. Have the party members discuss our present situation and possible next steps, without deciding for me.');
 input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send(input.value)}});
@@ -4194,7 +4201,7 @@ setInterval(checkLocation,300);setTimeout(checkLocation,1000);
  function record(kind,detail,result=''){
   history.unshift({at:new Date().toLocaleTimeString(),kind,detail,result});history=history.slice(0,100);persist();renderOracle();
  }
- function notice(title,description){if(!state.enabled)return;window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK=true;bannerHead.textContent=title;bannerText.textContent=description;banner.style.display='flex';document.exitPointerLock?.();window.dispatchEvent(new Event('rpgpov:outdoor-encounter'));}
+ function notice(title,description){if(!state.enabled)return;window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK=true;bannerHead.textContent=title;bannerText.textContent=description;banner.style.display='none';document.exitPointerLock?.();window.dispatchEvent(new Event('rpgpov:outdoor-encounter'));}
  function renderOracle(){oracleBody.replaceChildren();
   const heartbeat=document.createElement('div');heartbeat.className='entry';
   const head=document.createElement('strong');head.textContent='AUTO DM · ORACLE HEARTBEAT';
@@ -4741,21 +4748,14 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
  }
  const isCombat=(title,description)=>/^(RANDOM ENCOUNTER|ENCOUNTER|WORG WOLVES ATTACK)/i.test(title)&&
   !/Role-play or acknowledge this encounter|non-hostile unless/i.test(description);
- const sync=()=>{if(battleActive)return;ai.hidden=!isCombat(head.textContent,details.textContent);};
+ const sync=()=>{if(battleActive)return;ai.hidden=banner.style.display==='none'||
+  getComputedStyle(banner).display==='none'||!isCombat(head.textContent,details.textContent);};
  new MutationObserver(sync).observe(banner,{attributes:true,attributeFilter:['style']});sync();
  const openPanel=()=>{
   const panel=document.getElementById('aiDmPanel');
-  if(!panel)return null;
-  // Use the MOBILE window manager, not the legacy desktop journal button.
-  if(window.matchMedia('(pointer:coarse) and (max-width:950px)').matches){
-   if(!panel.classList.contains('rpgpovMobileOpen')){
-    const menu=document.getElementById('rpgpovMobileMenu');
-    document.getElementById('rpgpovMobileMenuButton')?.click();
-    menu?.querySelector('[data-mobile-view="ai"]')?.click();
-   }
-  }else if(panel.hidden)document.getElementById('aiDmButton')?.click();
-  panel.hidden=false;
-  return panel;
+  if(panel?.hidden)document.getElementById('aiDmButton')?.click();
+  if(panel){panel.hidden=false;panel.style.zIndex='9202';}
+  return panel&&!panel.hidden?panel:null;
  };
  returnToAi.onclick=()=>{openPanel();document.getElementById('aiDmInput')?.focus();};
  finish.onclick=async()=>{
@@ -4774,22 +4774,20 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
    // The AI journal must remain visible even when the AI service is offline.
    banner.style.display='none';
    if(!panel||!panel.querySelector('#aiDmToggle')?.checked){
-    throw Error(window.RPGPOV_AI_KEY_READY?.()?'Enable AI DM in the Journal before starting combat.':'Enter your personal OpenAI API key using MENU → AI DM.');
+    throw Error('AI DM is offline. Check that AIDM is running on port 8766; Svalich now connects directly and does not require API proxy forwarding.');
    }
    if(typeof window.DNDPOV_AI_SEND_COMBAT!=='function')throw Error('Structured AI combat handler unavailable.');
    const packet=encounterPacket(title,description);
    window.DNDPOV_ACTIVE_AI_ENCOUNTER_PACKET=packet;
    // The encounter overlay must never cover the AI journal while the model responds.
    banner.style.display='none';
-   dock.hidden=true;
+   dock.hidden=false;
    combatTitle.textContent='⚔ Starting AI combat · '+title;
    help.textContent='Contacting the AI Dungeon Master… The encounter remains active; movement is paused.';
    finish.disabled=true;
    handedOff=true;
    window.DNDPOV_ACTIVE_AI_BATTLE={active:true,title,description};window.dispatchEvent(new Event('rpgpov:combat-state'));
    await window.DNDPOV_AI_SEND_COMBAT(packet);
-   openPanel();
-   document.getElementById('aiDmLog')?.scrollTo({top:document.getElementById('aiDmLog').scrollHeight,behavior:'smooth'});
    battleActive=true;
    combatTitle.textContent='⚔ AI COMBAT · '+title;
    help.textContent='Movement stays paused. Take turns in the AI Journal. Finish only when combat is resolved.';
@@ -4803,9 +4801,9 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
    const error=document.createElement('p');error.className='encounter-status';error.textContent=errorText;
    bannerCardError(error);
    const journal=document.getElementById('aiDmLog');
-   if(journal){journal.scrollTop=journal.scrollHeight;}
+   if(journal){const note=document.createElement('article');note.className='aiDmChat error';note.textContent=errorText;journal.append(note);journal.scrollTop=journal.scrollHeight;}
    // The encounter card remains available through this retry button, without covering the journal.
-   dock.hidden=true;combatTitle.textContent='⚠ Encounter waiting · '+title;
+   dock.hidden=false;combatTitle.textContent='⚠ Encounter waiting · '+title;
    help.textContent=errorText;finish.disabled=true;
    returnToAi.textContent='✦ Open AI Journal';
    console.error(errorText,err);
@@ -4830,27 +4828,36 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
 #rpgpovOutdoorEncounterDock button:last-child{background:#59452c;border-color:#d0aa73;color:#ffebc6}
 </style>
 <script id="rpgpovOutdoorEncounterDockScript">
-/* Mobile v17: the old 250ms refresh forcibly hid the encounter banner.
-   Keep the original single centered encounter dialog; no duplicate bottom dock. */
 (()=>{
  const banner=document.getElementById('dndpovEncounterBanner');
- if(!banner)return;
- const head=banner.querySelector('#dndpovEncounterTitle');
- function sync(){
-  const locked=!!window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK;
-  const combat=!!window.DNDPOV_ACTIVE_AI_BATTLE?.active;
-  if(locked&&!combat&&head?.textContent){
-   banner.style.display='flex';
-   banner.style.pointerEvents='none';
-   const card=banner.querySelector('.encounter-card');
-   if(card)card.style.pointerEvents='auto';
-  }else if(!locked||combat){banner.style.display='none';}
+ const title=banner?.querySelector('#dndpovEncounterTitle');
+ const details=banner?.querySelector('#dndpovEncounterDetails');
+ const card=banner?.querySelector('.encounter-card');
+ const resolve=card?.querySelector('button:not(.encounter-ai-action)');
+ const ai=card?.querySelector('.encounter-ai-action');
+ if(!banner||!title||!details||!resolve)return;
+ const dock=document.createElement('aside');dock.id='rpgpovOutdoorEncounterDock';dock.hidden=true;
+ const heading=document.createElement('strong'),desc=document.createElement('div');
+ const actions=document.createElement('div');actions.className='encounter-buttons';
+ const fight=document.createElement('button');fight.type='button';fight.textContent='⚔ Let AI DM Run Encounter';
+ const done=document.createElement('button');done.type='button';done.textContent='✓ Encounter Resolved';
+ fight.onclick=()=>{if(ai)ai.click();else document.getElementById('aiDmButton')?.click()};
+ done.onclick=()=>resolve.click();actions.append(fight,done);dock.append(heading,desc,actions);document.body.append(dock);
+ const isCombat=t=>/^(?:RANDOM ENCOUNTER|ENCOUNTER|WORG WOLVES ATTACK)/i.test(t);
+ function refresh(){
+  const active=!!window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK;
+  const battle=!!window.DNDPOV_ACTIVE_AI_BATTLE?.active;
+  const t=title.textContent||'';
+  // The AI battle dock takes over once the handoff begins.
+  dock.hidden=!active||battle||!t;
+  if(!dock.hidden){heading.textContent=t;desc.textContent=details.textContent;
+   fight.hidden=!isCombat(t);}
+  // Never let the old centered overlay obstruct the 3D encounter.
+  if(banner.style.display!=='none')banner.style.display='none';
  }
- window.addEventListener('rpgpov:outdoor-encounter',sync);
- window.addEventListener('rpgpov:combat-state',sync);
- new MutationObserver(()=>{if(window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK&&!window.DNDPOV_ACTIVE_AI_BATTLE?.active&&banner.style.display==='none')sync()})
-   .observe(banner,{attributes:true,attributeFilter:['style']});
- sync();
+ window.addEventListener('rpgpov:outdoor-encounter',refresh);
+ window.addEventListener('rpgpov:combat-state',refresh);
+ setInterval(refresh,250);refresh();
 })();
 </script>
 <style id="kobo-reader-only-v2">
@@ -4920,22 +4927,14 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
    // Do not scroll the reader: the player controls their reading position.
  };
  const close=()=>{card.hidden=true;};
- // The mobile panel must close as part of the departure, not only by tapping
- // the empty backdrop. This also restores the on-screen movement arrows.
- const closeMobileRead=()=>{
-   dock.classList.remove('rpgpovMobileOpen');
-   document.getElementById('rpgpovMobileShade')?.classList.remove('open');
-   document.getElementById('rpgpovMobileClose')?.classList.remove('open');
-   document.getElementById('rpgpovMobile')?.classList.remove('rpgpovWindowActive');
- };
-
  window.DNDPOV_KOBO_CHOICE=()=>{close();};
  window.DNDPOV_KOBO_DEPARTURE=()=>{
+  if(new URLSearchParams(location.search).get("classic")==="1"){close();return;}
   if(window.DNDPOV_SVALICH_DEPARTED?.())return;
   show('When will you depart?',
    'Your party is assembled. Will you leave now for the full five-hour journey, or stay at the inn and depart at dawn?',[
-   {label:'Leave Now · Full Journey',primary:true,action:()=>{close();window.DNDPOV_KOBO_LEAVE?.();if(window.DNDPOV_SVALICH_DEPARTED?.())closeMobileRead();}},
-   {label:'Stay the Night · Leave at Dawn',action:()=>{close();window.DNDPOV_KOBO_STAY?.();if(window.DNDPOV_SVALICH_DEPARTED?.())closeMobileRead();}},
+   {label:'Leave Now · Full Journey',primary:true,action:()=>{close();window.DNDPOV_KOBO_LEAVE?.();}},
+   {label:'Stay the Night · Leave at Dawn',action:()=>{close();window.DNDPOV_KOBO_STAY?.();}},
    {label:'Select your party',action:()=>{window.DNDPOV_OPEN_PARTY_MANAGER?.();}}
   ]);
  };
@@ -5000,8 +4999,45 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
 #dndpovContextDock:not(.kobo-maximized) .contextEdition{max-width:none}
 </style>
 
-<!-- RPGPOV full edition: touch controls only. AI, multiplayer and server code unchanged. -->
-<style id="rpgpov-mobile-full-v1">
+<!-- Browser demo: retain the complete character/sheet journal, but lock online-only controls. -->
+<style id="rpgpov-browser-feature-lock-style">
+#mpButton, #dndpovPrivateMpLaunch,
+#aiDmToggleLabel, #aiDmCompose, #aiDmConference,
+#aiDmPartyBox .arcAiToggle {
+  opacity:.42!important;
+  filter:grayscale(1)!important;
+  cursor:not-allowed!important;
+}
+#aiDmCompose { pointer-events:none!important; }
+#mpPanel { display:none!important; }
+</style>
+<script id="rpgpov-browser-feature-lock-script">
+(function(){
+  'use strict';
+  const ids=['mpButton','dndpovPrivateMpLaunch','aiDmToggle','aiDmInput','aiDmSend','aiDmConference'];
+  function lock(){
+    for(const id of ids){
+      const el=document.getElementById(id);
+      if(!el)continue;
+      if(id==='aiDmToggle')el.checked=false;
+      el.disabled=true;
+      el.setAttribute('aria-disabled','true');
+      el.title='Available in the downloadable edition';
+    }
+    document.querySelectorAll('#aiDmPartyBox .arcAiToggle input').forEach(el=>{
+      el.checked=true; // Human-controlled characters in browser edition.
+      el.disabled=true;
+      el.setAttribute('aria-disabled','true');
+      el.title='AI character control requires the downloadable edition';
+    });
+  }
+  document.addEventListener('DOMContentLoaded',lock);
+  const observer=new MutationObserver(lock);
+  observer.observe(document.documentElement,{childList:true,subtree:true});
+  lock();
+})();
+</script>
+<script>if(new URLSearchParams(location.search).get('classic')==='1'){document.addEventListener('DOMContentLoaded',()=>{const b=document.createElement('button');b.textContent='← Exit to Adventure Map';b.style.cssText='position:fixed;top:42px;left:50%;transform:translateX(-50%);z-index:2147483646;padding:12px 20px;background:#30251c;color:#f5dfb7;border:1px solid #d2aa70;border-radius:6px;font:bold 15px Georgia;cursor:pointer';b.onclick=()=>{if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()||window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK||window.DNDPOV_ENCOUNTER_PENDING)return;window.DNDPOV_CLASSIC_EXIT();};document.body.append(b);});}</script><script>if(new URLSearchParams(location.search).get('classic')==='1'){document.documentElement.classList.add('classic-inn');}</script><style>.classic-inn #controlDeck .toolRow:has(#turnLeft),.classic-inn #help,.classic-inn #svalichKoboChoices,.classic-inn #svalichJourneyOverlay,.classic-inn #svalichJourneyBadge,.classic-inn #svalichJourneyToast,.classic-inn #jumpSelect,.classic-inn #villageBtn,.classic-inn #castleBtn,.classic-inn #reset,.classic-inn #controlDeck .toolRow:has(#jumpSelect){display:none!important}</style><script>if(new URLSearchParams(location.search).get('classic')==='1'&&new URLSearchParams(location.search).get('site')==='CART'){document.addEventListener('DOMContentLoaded',()=>{const b=document.createElement('button');b.textContent='Examine cart / letter';b.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);z-index:100;padding:10px';b.onclick=()=>window.dispatchEvent(new Event('classic-examine-cart'));document.body.append(b);});}</script><style id="rpgpov-mobile-full-v1">
 #rpgpovMobile{display:none;position:fixed;inset:auto 0 0;z-index:3200;pointer-events:none;font-family:system-ui,sans-serif;user-select:none;-webkit-user-select:none;touch-action:none}
 #rpgpovMobile button{pointer-events:auto;touch-action:none;min-width:49px;min-height:47px;border:1px solid #d2a96c;background:#201a1bcb;color:#ffe6b7;border-radius:11px;font-size:22px;font-weight:700;box-shadow:0 2px 12px #0009}
 #rpgpovMobile .pad{position:absolute;left:max(10px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(3,49px);grid-template-rows:repeat(2,47px);gap:5px}
@@ -5646,4 +5682,4 @@ html,body{min-height:100%;overscroll-behavior:none}
  const onTurn=()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;document.documentElement.style.setProperty('--rpgpov-vh',window.innerHeight+'px');});setTimeout(update,180);setTimeout(update,650);};
  window.addEventListener('orientationchange',onTurn,{passive:true});
  window.visualViewport?.addEventListener('resize',onTurn,{passive:true});
-})();</script></body></html>
+})();</script><style id="classic-mobile-adaptation">#classicToggle,#classicReturn{z-index:9500!important;top:8px!important;left:8px!important;right:auto!important;transform:none!important;max-width:65vw;font-size:13px!important;padding:10px!important}body.classic-outside #classicBoard{padding:60px 8px 20px!important;z-index:15!important}#classicMap{min-height:0!important;aspect-ratio:1.35!important}#classicMap button{font-size:18px!important;padding:4px!important;min-width:30px!important;min-height:30px!important}#classicList{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:5px!important}#classicList button{font-size:12px!important;min-height:42px!important}body.classic-outside .vm-pad{display:none!important}body.classic-outside #classicBoard h1{font-size:20px!important}body.classic-outside #classicBoard p{font-size:12px!important} </style></body></html>
