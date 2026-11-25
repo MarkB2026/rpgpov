@@ -2460,7 +2460,7 @@ function enterEvaTent(){
  evaReading.style.display='none';
 }
 function leaveEvaTent(){
- if(new URLSearchParams(location.search).get('classic')==='1'){if(!window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK&&!window.DNDPOV_ENCOUNTER_PENDING)location.href='village_of_barovia_classic_v1.8.html';return;}
+ if(new URLSearchParams(location.search).get('classic')==='1'){if(!window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK&&!window.DNDPOV_ENCOUNTER_PENDING)location.href='village_of_barovia_classic_v1.9.html';return;}
  insideEvaTent=false;evaReading.style.display='none';
  player.x=evaDoor.x+Math.sin(evaOuterTent.rotation)*1.7;
  player.z=evaDoor.z+Math.cos(evaOuterTent.rotation)*1.7;
@@ -4567,4 +4567,4 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
 #dndpovContextDock:not(.kobo-maximized) .contextEdition{max-width:none}
 </style>
 <style id="tser-ai-description-display-only">#aiDmPanel #aiDmPlace,#aiDmPanel #aiDmReadAgain,#aiDmPanel .aiDmScroll{display:none!important}</style>
-<script>if(new URLSearchParams(location.search).get('classic')==='1'){document.addEventListener('DOMContentLoaded',()=>{const b=document.createElement('button');b.textContent='← Exit to Adventure Map';b.style.cssText='position:fixed;top:42px;left:50%;transform:translateX(-50%);z-index:2147483646;padding:12px 20px;background:#30251c;color:#f5dfb7;border:1px solid #d2aa70;border-radius:6px;font:bold 15px Georgia;cursor:pointer';b.onclick=()=>{if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()||window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK||window.DNDPOV_ENCOUNTER_PENDING)return;document.exitPointerLock?.();location.href='village_of_barovia_classic_v1.8.html';};document.body.append(b);});}</script></body></html>
+<script>if(new URLSearchParams(location.search).get('classic')==='1'){document.addEventListener('DOMContentLoaded',()=>{const b=document.createElement('button');b.textContent='← Exit to Adventure Map';b.style.cssText='position:fixed;top:42px;left:50%;transform:translateX(-50%);z-index:2147483646;padding:12px 20px;background:#30251c;color:#f5dfb7;border:1px solid #d2aa70;border-radius:6px;font:bold 15px Georgia;cursor:pointer';b.onclick=()=>{if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()||window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK||window.DNDPOV_ENCOUNTER_PENDING)return;document.exitPointerLock?.();location.href='village_of_barovia_classic_v1.9.html';};document.body.append(b);});}</script></body></html>
