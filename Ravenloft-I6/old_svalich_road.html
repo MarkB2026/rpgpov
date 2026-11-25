@@ -858,7 +858,7 @@ const atmospherePresets={
  dusk:{sky:0x4a505d,fog:0x4a505d,ambient:.55,sun:.45,exposure:1},
  night:{sky:0x101b28,fog:0x101b28,ambient:.22,sun:.15,exposure:1}
 };
-let timeOfDay='dusk',weatherMode='clear';
+let timeOfDay='dawn',weatherMode='mist';
 document.querySelector('#day').value=timeOfDay;
 document.querySelector('#hud b').textContent='DNDPOV · OLD SVALICH ROAD v2.45 · BASIC';
 const roadWeatherSelect=document.querySelector('#weather');
@@ -881,9 +881,9 @@ const roadWeatherRoutes={
 const roadWeatherDwell={clear:[22000,48000],cloudy:[20000,41000],
  rain:[24000,44000],thunderstorm:[25000,42000],
  mist:[24000,42000],fog:[26000,44000]};
-const roadWeatherFlow={current:'clear',target:null,startedAt:0,
+const roadWeatherFlow={current:'mist',target:null,startedAt:0,
  duration:0,nextAt:0,lastSky:0,lastStatus:0};
-let previousManualWeather='clear';
+let previousManualWeather='mist';roadWeatherSelect.value='mist';
 const roadWeatherStatus=document.createElement('small');
 roadWeatherStatus.id='roadWeatherStatus';roadWeatherStatus.hidden=true;
 roadWeatherStatus.style.cssText='display:none;color:#e2c391;font-size:11px;margin:3px 0 5px';
@@ -1918,7 +1918,7 @@ document.addEventListener('keydown',i6StartInnAmbience);
 function i6StopInnAmbience(){i6InnAmbience.pause();i6InnAmbience.currentTime=0;}
 const classicRoute=new URLSearchParams(location.search);const classicSite=classicRoute.get('classic')==='1'?classicRoute.get('site')||'INN':null;
 let innInside=!classicSite||classicSite==='INN';window.DNDPOV_SVALICH_CAN_RECRUIT=()=>innInside;
-if(innInside){player.x=0;player.z=-4.55;player.angle=Math.PI;}else{const dest=gameLocations.find(l=>l.id===classicSite);player.x=classicSite==='CART'?pathX(121):classicSite==='B'?0:(dest?.x||0);player.z=classicSite==='B'?20:classicSite==='CART'?121:(dest?.z||53);player.angle=classicSite==='CART'?Math.atan2(10-player.x,player.z-112):0;rpgViewMode=2;}
+if(innInside){player.x=0;player.z=-4.55;player.angle=Math.PI;}else{const dest=gameLocations.find(l=>l.id===classicSite);player.x=classicSite==='CART'?pathX(121):classicSite==='B'?0:(dest?.x||0);player.z=classicSite==='B'?20:classicSite==='CART'?121:classicSite==='A'?86:(dest?.z||53);player.angle=classicSite==='CART'?Math.atan2(10-player.x,player.z-112):0;rpgViewMode=2;}
 window.DNDPOV_INTRO_LOCK=!classicSite;
 const innDoorX=-39,innDoorZ=162.5;
 const innDoorPrompt=document.createElement('div');
@@ -2520,7 +2520,7 @@ drawMap=function(){svalichDrawBeforeMp();
 if(new URLSearchParams(location.search).get('classic')==='1'){
  const id=new URLSearchParams(location.search).get('site')||'INN';
  i6JourneyHide();window.DNDPOV_INTRO_LOCK=false;
- if(id==='INN'){enterInn();}else{const dest=gameLocations.find(l=>l.id===id);if(dest){innInside=false;player.x=id==='CART'?pathX(121):id==='B'?0:dest.x;player.z=id==='B'?20:id==='CART'?121:dest.z;player.angle=id==='CART'?Math.atan2(10-player.x,player.z-112):0;rpgViewMode=2;if(id==='B'){classicGateWalk=true;rpgViewMode=2;}gameIndex=gameLocations.indexOf(dest);gameLast=-1;gameUpdateLocation(player.x,player.z);gameRender();drawMap();}}
+ if(id==='INN'){enterInn();}else{const dest=gameLocations.find(l=>l.id===id);if(dest){innInside=false;player.x=id==='CART'?pathX(121):id==='B'?0:dest.x;player.z=id==='B'?20:id==='CART'?121:id==='A'?86:dest.z;player.angle=id==='CART'?Math.atan2(10-player.x,player.z-112):0;rpgViewMode=2;if(id==='A'){i6SetTrailLength(true);player.x=pathX(player.z);}if(id==='B'){classicGateWalk=true;rpgViewMode=2;}gameIndex=gameLocations.indexOf(dest);gameLast=-1;gameUpdateLocation(player.x,player.z);gameRender();drawMap();}}
  setTimeout(()=>window.DNDPOV_AI_SHOW_LOCATION?.(),500);
 }
 

@@ -2060,7 +2060,7 @@ function updateEyes(t){
   e.pair.lookAt(camera.position);
  }
 }
-let transitionStarted=false;const player={x:0,z:93,angle:Math.PI},keys={};let last=performance.now(),time='day',weather='mist';
+let transitionStarted=false;const player={x:0,z:93,angle:Math.PI},keys={};let last=performance.now(),time='dawn',weather='mist';
 // Honor time/weather passed by the village if the scenes are chained together.
 const incomingRoadSettings=new URLSearchParams(window.location.search);
 const suppliedTime=incomingRoadSettings.get('time');
@@ -2089,7 +2089,7 @@ const roadWeatherRoutes={
 const roadWeatherDwell={clear:[22000,48000],cloudy:[20000,41000],
  rain:[24000,44000],thunderstorm:[25000,42000],
  mist:[24000,42000],fog:[26000,44000]};
-const roadWeatherFlow={current:'clear',target:null,startedAt:0,
+const roadWeatherFlow={current:'mist',target:null,startedAt:0,
  duration:0,nextAt:0,lastSky:0,lastStatus:0};
 let previousManualWeather=weather==='random'?'mist':weather;
 const roadWeatherStatus=document.createElement('small');
