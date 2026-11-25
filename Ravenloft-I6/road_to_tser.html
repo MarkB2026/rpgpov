@@ -21,26 +21,7 @@
 })();
 </script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DNDPOV — Road to Tser Pool v3.78 · Multiplayer + AI DM</title><style>
 html,body{margin:0;height:100%;overflow:hidden;background:#10171a;color:#f4e4c6;font:14px Georgia,serif}canvas{display:block}#hud{position:fixed;left:12px;top:12px;background:#202327ee;border:1px solid #b08b57;padding:13px;z-index:5;width:290px}#hud h2{margin:0 0 8px;color:#ebc28b;font-size:19px}#hud p{line-height:1.5}select,button{background:#342b25;border:1px solid #a8895a;color:#f5e5c7;padding:7px;margin:3px;cursor:pointer}#map{position:fixed;right:15px;top:15px;background:#1c2526e8;border:1px solid #ac8c62;z-index:5;width:210px;height:280px}#help{position:fixed;bottom:12px;left:12px;background:#171c1ddd;padding:9px;z-index:5}#notice{position:fixed;top:40%;left:50%;transform:translate(-50%,-50%);background:#171b1ef0;border:1px solid #c5a16a;padding:20px;text-align:center;display:none;z-index:8;max-width:380px}#notice a{color:#ebc28b}#error{position:fixed;left:20%;top:40%;background:#511;color:white;padding:15px;display:none;z-index:20}
-#fade{position:fixed;inset:0;background:#11191c;opacity:0;pointer-events:none;z-index:30;transition:opacity 2.3s ease}#fade.active{opacity:1;pointer-events:auto}</style><script id="rpgpov-browser-preview-guard">
-(function(){
- window.RPGPOV_BROWSER_PREVIEW=true;
- const blocked=/^(?:aiDm(?:Toggle|Send|Input|PartyOpen|Companion|Conference)|mp(?:Button|Host|Join|DM)|dndpovPrivate(?:Ai|Mp)Launch)$/i;
- document.addEventListener('click',function(e){const el=e.target.closest?.('[id]');if(el&&blocked.test(el.id)){e.preventDefault();e.stopImmediatePropagation();}},true);
- document.addEventListener('submit',function(e){if(e.target.closest?.('#aiDmControls,#dndpovMpController')){e.preventDefault();e.stopImmediatePropagation();}},true);
- function hide(){
-  for(const id of ['mpButton','dndpovMpController','dndpovPrivateAiLaunch','dndpovPrivateMpLaunch','aiDmToggle','aiDmControls','aiDmPartyOpen','aiDmCompanion','aiDmConference']){
-   const el=document.getElementById(id);if(el){el.style.setProperty('display','none','important');el.setAttribute('aria-hidden','true');}
-  }
-  if(!document.getElementById('rpgpovBrowserLabel')){
-   const label=document.createElement('div');label.id='rpgpovBrowserLabel';label.textContent='RPGPOV · BROWSER DEMO';
-   label.style.cssText='position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:99;pointer-events:none;background:#211a1bea;color:#e9c58d;border:1px solid #9e7a4d;padding:5px 10px;font:11px Georgia,serif;letter-spacing:.5px';
-   document.body.append(label);
-  }
- }
- document.addEventListener('DOMContentLoaded',hide);
- new MutationObserver(hide).observe(document.documentElement,{childList:true,subtree:true});
-})();
-</script></head><body><div id="fade"></div><div id="hud"><h2>DNDPOV · ROAD TO TSER POOL v3.78 · BASIC</h2><p id="place">Leaving the Village of Barovia</p><p id="description">The road winds into the dark Svalich Woods. Somewhere beyond the mist lies Castle Ravenloft.</p><label>Time <select id="day"><option value="day">Day</option><option value="dawn">Dawn</option><option value="dusk">Dusk</option><option value="night">Night</option></select></label><label>Weather <select id="weather"><option value="mist">Mist</option><option value="clear">Clear</option><option value="fog">Fog</option></select></label><p><button id="reset">Restart Road</button></p><p><button id="wolfToggle">🐺 Wolves: ON</button><button id="wolfTest">▶ Test Howl</button></p><p id="wolfStatus" style="font:12px system-ui;color:#e8cda0">Wolves silent until dusk</p></div><canvas id="map" width="210" height="280"></canvas><div id="help">↑ ↓ walk · ← → turn · A / D sidestep · Shift jog</div><div id="notice"></div><div id="error"></div><script type="module">
+#fade{position:fixed;inset:0;background:#11191c;opacity:0;pointer-events:none;z-index:30;transition:opacity 2.3s ease}#fade.active{opacity:1;pointer-events:auto}</style></head><body><div id="fade"></div><div id="hud"><h2>DNDPOV · ROAD TO TSER POOL v3.78 · BASIC</h2><p id="place">Leaving the Village of Barovia</p><p id="description">The road winds into the dark Svalich Woods. Somewhere beyond the mist lies Castle Ravenloft.</p><label>Time <select id="day"><option value="day">Day</option><option value="dawn">Dawn</option><option value="dusk">Dusk</option><option value="night">Night</option></select></label><label>Weather <select id="weather"><option value="mist">Mist</option><option value="clear">Clear</option><option value="fog">Fog</option></select></label><p><button id="reset">Restart Road</button></p><p><button id="wolfToggle">🐺 Wolves: ON</button><button id="wolfTest">▶ Test Howl</button></p><p id="wolfStatus" style="font:12px system-ui;color:#e8cda0">Wolves silent until dusk</p></div><canvas id="map" width="210" height="280"></canvas><div id="help">↑ ↓ walk · ← → turn · A / D sidestep · Shift jog</div><div id="notice"></div><div id="error"></div><script type="module">
 try{
 let THREE;for(const u of ['https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js','https://unpkg.com/three@0.170.0/build/three.module.js']){try{THREE=await import(u);break}catch(e){console.warn(e)}}if(!THREE)throw Error('Three.js could not load. Internet connection required.');
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x899394);scene.fog=new THREE.FogExp2(0x899394,.016);
@@ -2479,6 +2460,7 @@ function enterEvaTent(){
  evaReading.style.display='none';
 }
 function leaveEvaTent(){
+ if(new URLSearchParams(location.search).get('classic')==='1'){if(!window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK&&!window.DNDPOV_ENCOUNTER_PENDING)location.href='village_of_barovia_classic_v1.7.html';return;}
  insideEvaTent=false;evaReading.style.display='none';
  player.x=evaDoor.x+Math.sin(evaOuterTent.rotation)*1.7;
  player.z=evaDoor.z+Math.cos(evaOuterTent.rotation)*1.7;
@@ -2852,7 +2834,7 @@ document.getElementById('carriageYes').onclick=boardCarriage;
 document.getElementById('carriageNo').onclick=()=>{carriageOffer.style.display='none';carriageMode='declined';carriageDeclined=true};
 function carriageFrame(dt){
  // A slow scenic ride; view looks through the front window at the winding road.
- rideZ=Math.max(-613,rideZ-9.5*dt);
+ if(new URLSearchParams(location.search).get('classic')!=='1')rideZ=Math.max(-613,rideZ-9.5*dt);
  carriageAt(rideZ);
  carriageGroup.localToWorld(rideView.set(0,3.18,-1.05));
  camera.position.copy(rideView);
@@ -3223,7 +3205,7 @@ window.DNDPOV_ZONE_BRIDGE={getPosition:()=>({x:player.x,y:player.z,
 // D/F/G/G1/H/I, which are physical locations on this second adventure page.
 // Use the actual scene coordinates rather than showing text for a faraway spot.
 try{
- const directId=sessionStorage.getItem('rpgpov_direct_road_landmark_v1');
+ const directId=new URLSearchParams(location.search).get('site')||sessionStorage.getItem('rpgpov_direct_road_landmark_v1');
  if(directId){
   sessionStorage.removeItem('rpgpov_direct_road_landmark_v1');
   if(directId==='G1'){
@@ -3235,6 +3217,7 @@ try{
     player.x=directId==='G'?campX-4:directId==='I'?carriageX-6:landmark.x;
     player.z=directId==='G'?campZ+12:directId==='I'?carriageZ+7:landmark.z;
     player.angle=0;
+    if(directId==='I'&&new URLSearchParams(location.search).get('classic')==='1')boardCarriage();
    }
   }
   minimap();
@@ -4584,4 +4567,4 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
 #dndpovContextDock:not(.kobo-maximized) .contextEdition{max-width:none}
 </style>
 <style id="tser-ai-description-display-only">#aiDmPanel #aiDmPlace,#aiDmPanel #aiDmReadAgain,#aiDmPanel .aiDmScroll{display:none!important}</style>
-</body></html>
+<script>if(new URLSearchParams(location.search).get('classic')==='1'){document.addEventListener('DOMContentLoaded',()=>{const b=document.createElement('button');b.textContent='← Exit to Adventure Map';b.style.cssText='position:fixed;top:42px;left:50%;transform:translateX(-50%);z-index:2147483646;padding:12px 20px;background:#30251c;color:#f5dfb7;border:1px solid #d2aa70;border-radius:6px;font:bold 15px Georgia;cursor:pointer';b.onclick=()=>{if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()||window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK||window.DNDPOV_ENCOUNTER_PENDING)return;document.exitPointerLock?.();location.href='village_of_barovia_classic_v1.7.html';};document.body.append(b);});}</script></body></html>

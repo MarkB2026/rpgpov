@@ -1929,6 +1929,7 @@ window.DNDPOV_SVALICH_EXIT_TAVERN=()=>leaveInn();
 // Door interaction cannot silently select a route.
 let i6DepartureSelected=false;
 function leaveInn(route=null){
+ if(new URLSearchParams(location.search).get('classic')==='1'){if(!window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK&&!window.DNDPOV_ENCOUNTER_PENDING)location.href='village_of_barovia_classic_v1.7.html';return;}
  if(!['full','overnight'].includes(route)){
   window.DNDPOV_KOBO_DEPARTURE?.();return;
  }
@@ -2373,7 +2374,7 @@ window.DNDPOV_I6_JOURNEY_TICK=()=>{
 window.addEventListener('keydown',e=>{
  if(window.DNDPOV_INTRO_LOCK){e.preventDefault();e.stopImmediatePropagation()}
 },true);
-i6JourneyOpening();
+if(new URLSearchParams(location.search).get('classic')!=='1')i6JourneyOpening();else i6JourneyHide();
 
 
 gameEl('villageBtn').onclick=async()=>{if(innInside&&!await window.DNDPOV_SVALICH_REQUIRE_PARTY?.())return;travelToVillage();};
@@ -2506,6 +2507,13 @@ drawMap=function(){svalichDrawBeforeMp();
  
 };
 
+
+if(new URLSearchParams(location.search).get('classic')==='1'){
+ const id=new URLSearchParams(location.search).get('site')||'INN';
+ i6JourneyHide();window.DNDPOV_INTRO_LOCK=false;
+ if(id==='INN'){enterInn();}else{const dest=gameLocations.find(l=>l.id===id);if(dest){innInside=false;player.x=dest.x;player.z=id==='B'?12:dest.z;player.angle=0;gameIndex=gameLocations.indexOf(dest);gameLast=-1;gameUpdateLocation(player.x,player.z);gameRender();drawMap();}}
+ setTimeout(()=>window.DNDPOV_AI_SHOW_LOCATION?.(),500);
+}
 
 }catch(e){console.error(e);document.querySelector('#loading').textContent='Unable to start: '+(e.stack||e.message||e)}
 
@@ -5019,4 +5027,4 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
   lock();
 })();
 </script>
-</body></html>
+<script>if(new URLSearchParams(location.search).get('classic')==='1'){document.addEventListener('DOMContentLoaded',()=>{const b=document.createElement('button');b.textContent='← Exit to Adventure Map';b.style.cssText='position:fixed;top:42px;left:50%;transform:translateX(-50%);z-index:2147483646;padding:12px 20px;background:#30251c;color:#f5dfb7;border:1px solid #d2aa70;border-radius:6px;font:bold 15px Georgia;cursor:pointer';b.onclick=()=>{if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()||window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK||window.DNDPOV_ENCOUNTER_PENDING)return;document.exitPointerLock?.();location.href='village_of_barovia_classic_v1.7.html';};document.body.append(b);});}</script></body></html>
