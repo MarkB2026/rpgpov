@@ -1475,7 +1475,7 @@ if(gateApproach&&!triggered&&gateOpenProgress<1){
 // Wait for the iron leaves to swing clear rather than walking through them.
 if(!triggered&&gateApproach&&gateOpenProgress<.88&&player.z<1.5&&Math.abs(player.x)<4.2)player.z=1.5;
 if(!triggered&&player.z<-2&&Math.abs(player.x)<6){triggered=true;window.dispatchEvent(new CustomEvent('dndpov:gate-closed',{detail:{location:'B',event:'Eastern Gates closed behind the party'}}));noticeUntil=now+3600;const n=document.querySelector('#notice');n.textContent='The iron gates slam shut behind you!';n.style.display='block'}if(triggered&&progress<1){const old=progress;progress=Math.min(1,progress+dt*.8);const v=progress*progress*(3-2*progress);gateL.rotation.y=leftOpen*gateOpenProgress*(1-v);gateR.rotation.y=rightOpen*gateOpenProgress*(1-v);if(old<1&&progress===1)clang()}if(triggered&&now>noticeUntil)document.querySelector('#notice').style.display='none';}
-camera.position.set(window.DNDPOV_I6_SCENE_X?.(player.x,player.z)??player.x,1.75+(window.DNDPOV_I6_SCENE_Y?.(player.z)??0),window.DNDPOV_I6_SCENE_Z?.(player.z)??player.z);camera.rotation.set(window.DNDPOV_I6_SCENE_PITCH?.(player.z)??0,-player.angle-(window.DNDPOV_I6_SCENE_HEADING?.(player.z)??0),0,'YXZ');if(!innInside)updateRoadWeather(now);document.querySelector('#pos').textContent=`Position ${Math.round(player.x)}, ${Math.round(player.z)}`;if(!innInside)drawMap();window.DNDPOV_I6_JOURNEY_TICK?.();rpgpovUpdateEncounterVisual(now);rpgRenderView()}requestAnimationFrame(loop);window.onresize=()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);resizePrecipitationCanvas()};document.querySelector('#loading').remove();
+camera.position.set(window.DNDPOV_I6_SCENE_X?.(player.x,player.z)??player.x,1.75+(window.DNDPOV_I6_SCENE_Y?.(player.z)??0),window.DNDPOV_I6_SCENE_Z?.(player.z)??player.z);camera.rotation.set(window.DNDPOV_I6_SCENE_PITCH?.(player.z)??0,-player.angle-(window.DNDPOV_I6_SCENE_HEADING?.(player.z)??0),0,'YXZ');sceneTorch.position.copy(camera.position);if(!innInside)updateRoadWeather(now);document.querySelector('#pos').textContent=`Position ${Math.round(player.x)}, ${Math.round(player.z)}`;if(!innInside)drawMap();window.DNDPOV_I6_JOURNEY_TICK?.();rpgpovUpdateEncounterVisual(now);rpgRenderView()}requestAnimationFrame(loop);window.onresize=()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);resizePrecipitationCanvas()};document.querySelector('#loading').remove();
 
 // The Last Chance Inn, its grounds and the road immediately outside remain
 // EXACTLY as built. Only the forest beyond the inn's first road approach is
@@ -1918,7 +1918,7 @@ document.addEventListener('keydown',i6StartInnAmbience);
 function i6StopInnAmbience(){i6InnAmbience.pause();i6InnAmbience.currentTime=0;}
 const classicRoute=new URLSearchParams(location.search);const classicSite=classicRoute.get('classic')==='1'?classicRoute.get('site')||'INN':null;
 let innInside=!classicSite||classicSite==='INN';window.DNDPOV_SVALICH_CAN_RECRUIT=()=>innInside;
-if(innInside){player.x=0;player.z=-4.55;player.angle=Math.PI;}else{const dest=gameLocations.find(l=>l.id===classicSite);player.x=classicSite==='B'?0:(dest?.x||0);player.z=classicSite==='B'?20:(dest?.z||53);player.angle=0;rpgViewMode=2;}
+if(innInside){player.x=0;player.z=-4.55;player.angle=Math.PI;}else{const dest=gameLocations.find(l=>l.id===classicSite);player.x=classicSite==='CART'?pathX(121):classicSite==='B'?0:(dest?.x||0);player.z=classicSite==='B'?20:classicSite==='CART'?121:(dest?.z||53);player.angle=classicSite==='CART'?Math.atan2(10-player.x,player.z-112):0;rpgViewMode=2;}
 window.DNDPOV_INTRO_LOCK=!classicSite;
 const innDoorX=-39,innDoorZ=162.5;
 const innDoorPrompt=document.createElement('div');
@@ -2426,7 +2426,7 @@ jump.onchange=async()=>{
 function gameRoll(){const die=1+Math.floor(Math.random()*6);const hit=night?die<=2:die===1;gameShowModal('Outdoor Encounter Check','<p>1d6: <b>'+die+'</b> · '+(night?'Night':'Day')+' · '+(hit?'Encounter triggered':'No encounter')+'</p><p>Resolve the encounter using the original module tables.</p>')}
 function gameEncounter(){let body='<p>DM reference · Lands of Barovia</p><button id="rollNow">Roll Encounter (1d6)</button>';for(const a of gameEncounterTable){body+='<p><b>'+gameEscape(a[0])+'</b></p><div class="dmnote">'+(gameDM?gameEscape(a[1]):'Enable DM mode for encounter details.')+'</div>'}gameShowModal('Lands of Barovia · Encounter Summary',body);gameEl('rollNow').onclick=gameRoll}
 
-const sceneTorch=torchLight;
+const sceneTorch=new THREE.PointLight(0xffcc88,3.2,18,2);scene.add(sceneTorch);
 gameEl('torchBtn').onclick=()=>{torchOn=!torchOn;sceneTorch.intensity=torchOn?3.2:0;gameEl('torchBtn').textContent='🔥 Torch: '+(torchOn?'ON':'OFF');gameEl('torchBtn').classList.toggle('on',torchOn)};
 // v1.47: player-visible location only; module DM secrets never sent to AI.
 function svalichCurrentLocation(){
@@ -2520,7 +2520,7 @@ drawMap=function(){svalichDrawBeforeMp();
 if(new URLSearchParams(location.search).get('classic')==='1'){
  const id=new URLSearchParams(location.search).get('site')||'INN';
  i6JourneyHide();window.DNDPOV_INTRO_LOCK=false;
- if(id==='CART'){renderer.domElement.style.visibility='hidden';const art=document.createElement('div');art.style.cssText='position:fixed;inset:0;background:#191b19;display:grid;place-items:center;z-index:6;pointer-events:none';art.innerHTML=`<svg viewBox='0 0 640 380' width='65%' style='max-width:760px'><ellipse cx='320' cy='310' rx='240' ry='25' fill='#101210'/><g stroke='#38281d' stroke-width='8' stroke-linejoin='round'><path d='M125 130L450 130 420 245 155 245Z' fill='#806044'/><path d='M135 165H440M145 200H430M450 230L590 275' fill='none'/><path d='M180 125Q230 70 310 105L390 135Z' fill='#53565a'/><path d='M300 118l35 -8 12 23 -35 8z' fill='#e4cda0'/><g fill='#342a22' stroke='#9a7952'><circle cx='195' cy='265' r='58'/><circle cx='395' cy='265' r='58'/><path d='M137 265h116M195 207v116M337 265h116M395 207v116'/></g></g></svg>`;document.body.append(art);}if(id==='INN'){enterInn();}else{const dest=gameLocations.find(l=>l.id===id);if(dest){innInside=false;player.x=id==='CART'?10:dest.x;player.z=id==='B'?20:id==='CART'?120:dest.z;player.angle=0;if(id==='B'){classicGateWalk=true;rpgViewMode=2;}gameIndex=gameLocations.indexOf(dest);gameLast=-1;gameUpdateLocation(player.x,player.z);gameRender();drawMap();}}
+ if(id==='INN'){enterInn();}else{const dest=gameLocations.find(l=>l.id===id);if(dest){innInside=false;player.x=id==='CART'?pathX(121):id==='B'?0:dest.x;player.z=id==='B'?20:id==='CART'?121:dest.z;player.angle=id==='CART'?Math.atan2(10-player.x,player.z-112):0;rpgViewMode=2;if(id==='B'){classicGateWalk=true;rpgViewMode=2;}gameIndex=gameLocations.indexOf(dest);gameLast=-1;gameUpdateLocation(player.x,player.z);gameRender();drawMap();}}
  setTimeout(()=>window.DNDPOV_AI_SHOW_LOCATION?.(),500);
 }
 
