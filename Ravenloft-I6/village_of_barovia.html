@@ -273,7 +273,7 @@ function drawMap(){
 function distToSegment(px,pz,a,b){const [ax,az]=toWorld(a),[bx,bz]=toWorld(b),dx=bx-ax,dz=bz-az,t=Math.max(0,Math.min(1,((px-ax)*dx+(pz-az)*dz)/(dx*dx+dz*dz||1)));return Math.hypot(px-ax-t*dx,pz-az-t*dz)}
 function hitsVillagePerimeter(x,z){
  // An actual solid wall; the open ends alongside both arches are walkable.
- return villagePerimeter.some(chain=>chain.some((point,i)=>
+ return distToSegment(x,z,westGateNorth,westGateSouth)<1.15 || distToSegment(x,z,eastGateNorth,eastGateSouth)<1.15 || villagePerimeter.some(chain=>chain.some((point,i)=>
   i>0&&distToSegment(x,z,chain[i-1],point)<.83));
 }
 function onRoad(x,z){return paths.some(path=>path.some((p,i)=>i&&distToSegment(x,z,path[i-1],p)<width*1.3))||cemeteryWalkPath.some((p,i)=>i&&distToSegment(x,z,cemeteryWalkPath[i-1],p)<1.8)||manorWalkPath.some((p,i)=>i&&distToSegment(x,z,manorWalkPath[i-1],p)<1.55)||Math.hypot(x-toWorld([548,548])[0],z-toWorld([548,548])[1])<7.2}
@@ -4253,13 +4253,10 @@ townExitOverlay.innerHTML=`
       aria-labelledby="townExitTitle">
   <h2 id="townExitTitle">Leaving the Village of Barovia</h2>
   <p>The last houses fall behind you. Beyond this weathered stone arch,
-     the Old Svalich Road leads into the mist toward the Tser Pool
-     encampment and, farther on, Castle Ravenloft.</p>
+     the Old Svalich Road leads beyond the village. Return to the adventure map to travel onward.</p>
   <div id="townExitChoices">
    <button type="button" id="townExitStay">Stay in the village</button>
-   <a id="townExitContinue"
-      href="road_to_tser.html">
-      Continue the journey →</a>
+   <button type="button" id="townExitContinue">Return to adventure map</button>
   </div>
  </div>`;
 document.body.append(townExitOverlay);
@@ -4271,6 +4268,7 @@ function closeTownExitPrompt(){
  for(const key of Object.keys(keys))keys[key]=false;
 }
 townExitStay.addEventListener('click',closeTownExitPrompt);
+document.getElementById('townExitContinue').addEventListener('click',()=>{closeTownExitPrompt();if(classicFirstPerson)classicToggle.click();});
 window.addEventListener('keydown',event=>{
  if(townExitOverlay.hidden)return;
  if(event.code==='Escape'){
@@ -4598,12 +4596,12 @@ classicToggle.onclick=()=>{if(activeInterior||window.DNDPOV_AUTO_DM_MOVEMENT_LOC
 function classicSync(){const boardVisible=!activeInterior&&!classicFirstPerson;classicMarker();classicBoard.hidden=!boardVisible;classicReturn.hidden=!activeInterior;classicToggle.hidden=!!activeInterior;classicToggle.textContent=classicFirstPerson?'Return to adventure map':'Switch to first person';document.body.classList.toggle('classic-outside',boardVisible);if(boardVisible)classicCanvas.getContext('2d').drawImage(map,0,0);}
 function classicTravel(){const status=document.getElementById("classicStatus");if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()){status.textContent="Resolve the active encounter before continuing.";return false;}window.DNDPOV_AUTO_DM_TOOLS?.advanceTurn?.();if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()){status.textContent="Encounter on the way — resolve it, then select your destination again.";return false;}status.textContent="";return true;}
 function classicVisit(id){if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()){document.getElementById('classicStatus').textContent='Resolve the active encounter before continuing.';return;}const site=adventureSites.find(a=>a.id===id);if(!site)return;closeLocation();if(!classicTravel())return;player.x=site.x;player.z=site.z;nearbyLocationId=id;const k=keyedPlaces.find(k=>k.id===id);if(k)classicSetPosition(34+45*k.p[0]/WIDTH,15+75*k.p[1]/HEIGHT,id);drawMap();if(id==='E7'){showLocation(id);}else{enterBuilding(id);}classicSync();}
-function classicLink(file,x,y,site){if(!classicTravel())return;classicSetPosition(x,y,site||'CASTLE');location.href=file+"?classic=1&build=1.15"+(site?"&site="+site:"");}
+function classicLink(file,x,y,site){if(!classicTravel())return;classicSetPosition(x,y,site||'CASTLE');location.href=file+"?classic=1&build=1.16"+(site?"&site="+site:"");}
 function classicPin(label,x,y,action){for(const parent of [classicMap,classicList]){const b=document.createElement('button');b.textContent=parent===classicMap?label.split(" ")[0]:label;b.title=label;b.setAttribute("aria-label",label);b.onclick=action;if(parent===classicMap){b.style.left=x+'%';b.style.top=y+'%';}parent.append(b);}}
 const classicIcons={E1:'🛒',E2:'🍺',E3:'🏠',E4:'🏰',E5:'🛏',E6:'⛪',E7:'🪦'};
 for(const k of keyedPlaces){classicPin(classicIcons[k.id]+' '+k.name,34+45*k.p[0]/WIDTH,15+75*k.p[1]/HEIGHT,()=>classicVisit(k.id));}
 classicPin('🏰 Castle Ravenloft',24,12,()=>classicLink('ravenloft.html',24,12));classicPin('🐎 Black carriage',12,43,()=>classicLink('road_to_tser.html',12,43,'I'));classicPin('⛺ Tser Pool / Madame Eva',12,83,()=>classicLink('road_to_tser.html',12,83,'G1'));classicPin('🚪 Gates of Barovia',88,48,()=>classicLink('old_svalich_road.html',88,48,'B'));classicPin('🌲 Old Svalich Road',92,22,()=>classicLink('old_svalich_road.html',92,22,'A'));classicPin('🛒 Burgomaster’s Messenger Cart',91,64,()=>classicLink('old_svalich_road.html',91,64,'CART'));classicPin('🌲 Woods of Svalich',82,34,()=>classicLink('old_svalich_road.html',82,34,'C'));classicPin('🍺 Last Chance Tavern',92,77,()=>classicLink('old_svalich_road.html',92,77,'INN'));
-classicReturn.onclick=()=>{if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.())return;document.exitPointerLock?.();closeLocation();classicFirstPerson=false;leaveBuilding();classicSync();};document.querySelector('#hud b').textContent='RPGPOV · BAROVIA CLASSIC v1.11';document.querySelector('#hud p:not(.build-notes p)').textContent='Choose a landmark on the adventure map.';classicSync();setInterval(classicSync,350);
+classicReturn.onclick=()=>{if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.())return;document.exitPointerLock?.();closeLocation();classicFirstPerson=false;leaveBuilding();classicSync();};document.querySelector('#hud b').textContent='RPGPOV · BAROVIA CLASSIC v1.16';document.querySelector('#hud p:not(.build-notes p)').textContent='Choose a landmark on the adventure map.';classicSync();setInterval(classicSync,350);
 </script>
 <!-- DNDPOV local multiplayer: matching Castle Ravenloft Host/Join protocol -->
 <style id="dndpovMpStyle">
