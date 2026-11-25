@@ -2831,10 +2831,10 @@ function boardCarriage(){
  for(const k of Object.keys(keys))keys[k]=false;
 }
 document.getElementById('carriageYes').onclick=boardCarriage;
-document.getElementById('carriageNo').onclick=()=>{carriageOffer.style.display='none';carriageMode='declined';carriageDeclined=true};
+document.getElementById('carriageNo').onclick=()=>{if(new URLSearchParams(location.search).get('classic')==='1'){window.DNDPOV_CLASSIC_EXIT();return;}carriageOffer.style.display='none';carriageMode='declined';carriageDeclined=true};
 function carriageFrame(dt){
  // A slow scenic ride; view looks through the front window at the winding road.
- if(new URLSearchParams(location.search).get('classic')!=='1')rideZ=Math.max(-613,rideZ-9.5*dt);
+ rideZ=Math.max(-613,rideZ-9.5*dt);
  carriageAt(rideZ);
  carriageGroup.localToWorld(rideView.set(0,3.18,-1.05));
  camera.position.copy(rideView);
@@ -2842,7 +2842,7 @@ function carriageFrame(dt){
  player.x=carriageGroup.position.x;player.z=rideZ;
  document.querySelector('#place').textContent='Inside the Black Carriage';
  document.querySelector('#description').textContent='The carriage sets off without a driver. Through the front window, the dirt road winds uphill toward Castle Ravenloft.';
- if(new URLSearchParams(location.search).get('classic')!=='1'&&rideZ<=-613&&!transitionStarted){stopCarriageSoundtrack();transitionStarted=true;document.querySelector('#fade').classList.add('active');setTimeout(()=>{window.location.href='ravenloft.html?arrival=carriage&floor=walls'},2400)}
+ if(rideZ<=-613&&!transitionStarted){stopCarriageSoundtrack();transitionStarted=true;document.querySelector('#fade').classList.add('active');setTimeout(()=>{window.location.href='ravenloft.html?arrival=carriage&floor=walls'+(new URLSearchParams(location.search).get('classic')==='1'?'&classic=1&build=1.15&site=CASTLE':'')},2400)}
 }
 // Village-style optional read-aloud: the landmark panel opens once on approach,
 // with manual R reading and a complete location index always available.
@@ -3217,7 +3217,7 @@ try{
     player.x=directId==='G'?campX-4:directId==='I'?carriageX-6:landmark.x;
     player.z=directId==='G'?campZ+12:directId==='I'?carriageZ+7:landmark.z;
     player.angle=0;
-    if(directId==='I'&&new URLSearchParams(location.search).get('classic')==='1')boardCarriage();
+    if(directId==='I'&&new URLSearchParams(location.search).get('classic')==='1'){carriageMode='opening';player.angle=Math.atan2(carriageX-player.x,carriageZ-player.z);camera.position.set(player.x,2.1+westernBranchGroundHeight(player.x,player.z),player.z);camera.rotation.set(0,player.angle+Math.PI,0);document.querySelector('#place').textContent=landmark.name;document.querySelector('#description').textContent=landmark.text;document.getElementById('carriageNo').textContent='No — Return to Map';}
    }
   }
   minimap();
@@ -4567,4 +4567,4 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
 #dndpovContextDock:not(.kobo-maximized) .contextEdition{max-width:none}
 </style>
 <style id="tser-ai-description-display-only">#aiDmPanel #aiDmPlace,#aiDmPanel #aiDmReadAgain,#aiDmPanel .aiDmScroll{display:none!important}</style>
-<script>if(new URLSearchParams(location.search).get('classic')==='1'){document.addEventListener('DOMContentLoaded',()=>{const b=document.createElement('button');b.textContent='← Exit to Adventure Map';b.style.cssText='position:fixed;top:42px;left:50%;transform:translateX(-50%);z-index:2147483646;padding:12px 20px;background:#30251c;color:#f5dfb7;border:1px solid #d2aa70;border-radius:6px;font:bold 15px Georgia;cursor:pointer';b.onclick=()=>{if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()||window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK||window.DNDPOV_ENCOUNTER_PENDING)return;window.DNDPOV_CLASSIC_EXIT();};document.body.append(b);});}</script><script>if(new URLSearchParams(location.search).get('classic')==='1')document.documentElement.classList.add('classic-location');</script><style>.classic-location #reset,.classic-location #help,.classic-location #carriageYes,.classic-location #carriageNo{display:none!important}</style></body></html>
+<script>if(new URLSearchParams(location.search).get('classic')==='1'){document.addEventListener('DOMContentLoaded',()=>{const b=document.createElement('button');b.textContent='← Exit to Adventure Map';b.style.cssText='position:fixed;top:42px;left:50%;transform:translateX(-50%);z-index:2147483646;padding:12px 20px;background:#30251c;color:#f5dfb7;border:1px solid #d2aa70;border-radius:6px;font:bold 15px Georgia;cursor:pointer';b.onclick=()=>{if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()||window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK||window.DNDPOV_ENCOUNTER_PENDING)return;window.DNDPOV_CLASSIC_EXIT();};document.body.append(b);});}</script><script>if(new URLSearchParams(location.search).get('classic')==='1')document.documentElement.classList.add('classic-location');</script><style>.classic-location #reset,.classic-location #help{display:none!important}</style></body></html>
