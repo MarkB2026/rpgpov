@@ -19,7 +19,7 @@
   window.addEventListener('keydown',isolate,true);
   window.addEventListener('keyup',isolate,true);
 })();
-</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DNDPOV — Village of Barovia v5.98 BASIC · All Barovia</title><style>html,body{margin:0;height:100%;overflow:hidden;background:#171b17;color:#f0dfbb;font:14px Georgia,serif}canvas{display:block}#hud{position:fixed;left:12px;top:12px;background:#20231fea;border:1px solid #b18a56;padding:13px;z-index:4;max-width:340px}#hud b{font-size:19px;color:#efc98b}#hud p{margin:7px 0}button{background:#463526;border:1px solid #aa8757;color:#f3d8a8;padding:7px 10px;cursor:pointer}button:hover{background:#74512f}select{background:#463526;color:#f3d8a8;border:1px solid #aa8757;padding:5px;font:13px Georgia,serif}#mapbox{position:fixed;right:12px;top:12px;width:min(38vw,410px);background:#171a17ef;border:1px solid #b18a56;padding:8px;z-index:4}#map{width:100%;height:auto;aspect-ratio:1332/1500}#mapbox small{display:block;text-align:center}#help{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);background:#1a1e1be8;padding:10px;border:1px solid #a38455;z-index:4}#error{position:fixed;top:48%;left:20%;right:20%;background:#531e1e;color:white;padding:20px;z-index:10;display:none}#mapToggle{display:none}@media(max-width:720px){#mapbox{width:180px}#hud{max-width:200px}#help{font-size:11px;white-space:nowrap}}
+</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RPGPOV — Barovia Classic v1.6</title><style>html,body{margin:0;height:100%;overflow:hidden;background:#171b17;color:#f0dfbb;font:14px Georgia,serif}canvas{display:block}#hud{position:fixed;left:12px;top:12px;background:#20231fea;border:1px solid #b18a56;padding:13px;z-index:4;max-width:340px}#hud b{font-size:19px;color:#efc98b}#hud p{margin:7px 0}button{background:#463526;border:1px solid #aa8757;color:#f3d8a8;padding:7px 10px;cursor:pointer}button:hover{background:#74512f}select{background:#463526;color:#f3d8a8;border:1px solid #aa8757;padding:5px;font:13px Georgia,serif}#mapbox{position:fixed;right:12px;top:12px;width:min(38vw,410px);background:#171a17ef;border:1px solid #b18a56;padding:8px;z-index:4}#map{width:100%;height:auto;aspect-ratio:1332/1500}#mapbox small{display:block;text-align:center}#help{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);background:#1a1e1be8;padding:10px;border:1px solid #a38455;z-index:4}#error{position:fixed;top:48%;left:20%;right:20%;background:#531e1e;color:white;padding:20px;z-index:10;display:none}#mapToggle{display:none}@media(max-width:720px){#mapbox{width:180px}#hud{max-width:200px}#help{font-size:11px;white-space:nowrap}}
 /* v5.14 — adventure descriptions, isolated from the 3D scene */
 #hud .build-notes{margin:6px 0;color:#d0b990}
 #hud .build-notes summary{cursor:pointer;font-size:12px}
@@ -121,8 +121,25 @@
 #dndpovEncounterBanner button{display:inline-block!important;width:auto!important;max-width:100%!important;padding:6px 9px!important;margin:5px 3px 0!important;font-size:11px!important}
 #dndpovEncounterBanner button[hidden]{display:none!important}
 </style>
-</head><body>
-<div id="hud"><b>DNDPOV · VILLAGE OF BAROVIA v5.98 · BASIC</b><details class="build-notes"><summary>Scene details</summary><p>Layer 5 — ominous layered storm clouds, overcast lighting and distant rain haze; large dense irregular bushes across open village lawns, closed residential roof gables, benches and barrels; residential expansion with the church sightline cleared, more handcarts, wheelbarrows, barrels and crates, a few low irregular shrubs and natural textured meadow grass (no trees or spikes), preserving the subtle weathered cobblestone road surface, colorful stucco, brick and varied timber trims across seven residential architectural styles distributed around the village; E6 church faces the approach road; E7 cemetery angles toward the approach road with a front-facing stone arch entrance and gravestones only; extended southern approach and mansion gate, cobblestone streets, original E6 church, E2 tavern, E1 mercantile redesigned E3 townhouse, an unkeyed residence between E3 and E5, and E5 guest house (all on the west side of the southern lane). All E# spots marked on the map.</p></details><p>Enter from the <strong>east</strong>; follow the village streets and leave via the <strong>southwest bridge</strong>.</p><p id="pos"></p><button id="reset">Restart at east entrance</button> <button id="overview">Overhead view</button><p style="margin-top:9px"><label for="timeofday">Time</label> <select id="timeofday"><option value="day">Day</option><option value="dawn">Dawn</option><option value="dusk">Dusk</option><option value="night">Night</option></select> <label for="visibility">Air</label> <select id="visibility"><option value="clear">Clear</option><option value="mist">Mist</option><option value="fog">Fog</option></select></p><div id="adventureControls"><button id="dmMode" aria-pressed="false" title="Show Dungeon Master notes">DM: OFF</button><button id="indexOpen" title="Browse E1–E7 descriptions">Locations E1–E7</button><label class="auto-option" title="Automatically show exterior descriptions once on approach"><input id="autoDescriptions" type="checkbox">Auto descriptions</label></div></div><div id="mapbox"><canvas id="map" width="1332" height="1500"></canvas><small>North ↑ · Gold arrow = player · gray = cobblestone streets</small></div><div id="help">↑ / ↓ walk · ← / → turn · A / D sidestep · Shift run · M map · R read · E / Enter enter/exit</div><div id="locationHint" role="status" aria-live="polite" hidden></div><section id="locationPanel" role="dialog" aria-modal="true" aria-labelledby="locationTitle" hidden><div id="locationPanelHeader"><span id="locationCode"></span><span id="locationTitle"></span><button id="locationClose" aria-label="Close description">×</button></div><div id="locationBody"><p id="locationSource"></p><blockquote id="locationRead"><div id="locationQuoteHeading"></div><div id="locationReadText"></div></blockquote><section id="locationInterior" hidden><h3>Interior read-aloud · DM preview</h3><div id="locationInteriorText"></div></section><section id="locationDM" hidden><h3>Dungeon Master notes</h3><div id="locationDMText"></div></section><div id="locationIndex" hidden></div></div><div id="locationPanelFooter"><button id="locationBack" hidden>All locations</button><span>R: read/close · Esc: close</span></div></section><div id="error"></div><script type="module">
+<style>#classicBoard{position:fixed;inset:0;z-index:2;background:radial-gradient(ellipse at center,#48543b,#151c17);overflow:auto;padding:18px 18px 24px 365px;box-sizing:border-box}#classicBoard h1{font-size:25px;margin:0;color:#efc98b}#classicBoard p{margin:5px 0 12px;color:#d5c5a4}#classicMap{position:relative;aspect-ratio:1.55;min-height:460px;max-width:1050px;border:1px solid #ad9365;background:#34432f;overflow:hidden;border-radius:8px}#classicMap svg{position:absolute;inset:0;width:100%;height:100%}#classicVillage{position:absolute;left:34%;top:15%;width:45%;height:75%;object-fit:fill;border:2px solid #aa9366;border-radius:5px}#classicMap button{position:absolute;transform:translate(-50%,-50%);font-size:12px;line-height:1.2;max-width:120px;background:#211e18ed;box-shadow:0 2px 7px #000;padding:5px 7px;white-space:normal}#classicList{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}#classicList button{font-size:12px}#classicReturn{position:fixed;top:12px;left:365px;z-index:8}#classicBoard[hidden],#classicReturn[hidden]{display:none!important}#hud .build-notes,#reset,#overview,#help{display:none!important}body.classic-outside #mapbox,body.classic-outside #locationHint,body.classic-outside #doorHint{display:none!important}@media(max-width:800px){#classicBoard{padding:220px 10px 15px}#classicMap{min-height:420px}#classicReturn{left:auto;right:10px}#hud{max-width:calc(100vw - 45px)!important}}#classicMap button{font-size:25px;width:44px;height:44px;padding:0;border-radius:50%;display:grid;place-items:center}#classicMap button:hover,#classicMap button:focus-visible{outline:2px solid #ffd77a}#classicParty{position:absolute;z-index:4;transform:translate(-50%,-115%);pointer-events:none;background:#ffcf65;color:#241b10;border:2px solid #fff0b0;border-radius:20px;padding:4px 8px;font:bold 12px Georgia;box-shadow:0 0 12px #ffc95b;white-space:nowrap}</style><style>#classicReturn{background:#29231a;color:#ffe1a0;border:1px solid #b89b65;padding:12px 18px;border-radius:8px;box-shadow:0 3px 15px #0008;font-size:15px;cursor:pointer}#classicReturn:hover{background:#51412b}#classicBoard:not([hidden]){animation:classicReveal .18s ease-out}@keyframes classicReveal{from{opacity:.5}to{opacity:1}}@media(prefers-reduced-motion:reduce){#classicBoard{animation:none!important}}</style><style>#classicToggle{position:fixed;top:12px;right:18px;z-index:9;background:#29231a;color:#ffe1a0;border:1px solid #b89b65;padding:10px 16px;border-radius:8px;cursor:pointer;font-size:14px}#classicToggle:hover{background:#51412b}#classicToggle[hidden]{display:none!important}#classicBoard h1{padding-right:190px}@media(max-width:800px){#classicToggle{top:65px;right:10px}#classicBoard h1{padding-right:0}}</style><style>
+#aiDmPartyBox .arcChoiceGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:12px 0 20px}
+#aiDmPartyBox .arcChoiceCard{border:1px solid #635470;border-radius:10px;padding:13px;background:#262230;min-width:0}
+#aiDmPartyBox .arcPortrait{display:block;width:100%;height:150px;object-fit:cover;object-position:center 28%;border:1px solid #79648c;border-radius:7px;margin-bottom:10px;background:#1b1921}#aiDmPartyBox .arcChoiceCard.selected{border-color:#b58ae0;background:#342942}
+#aiDmPartyBox .arcChoiceHeading label{display:flex;gap:9px;align-items:center;cursor:pointer;font-size:15px;color:#f6e9ff}
+#aiDmPartyBox .arcChoiceHeading input{width:18px;height:18px;accent-color:#a875dc}
+#aiDmPartyBox .arcChoiceHeading{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+#aiDmPartyBox .arcChoiceHeading .arcAiToggle{font-size:12px;color:#d9c8f1;gap:5px;white-space:nowrap}
+#aiDmPartyBox .arcChoiceHeading .arcAiToggle input{width:16px;height:16px}
+#aiDmPartyBox .arcChoiceMeta{font:12px/1.5 system-ui,sans-serif;color:#cbbad6;margin:7px 0 10px}
+#aiDmPartyBox .arcChoiceCard button{padding:8px 12px;background:#67488e;border-radius:7px;color:white;border:1px solid #906cb9;cursor:pointer}
+#aiDmPartyBox .arcCardBio{margin-top:10px;border-top:1px solid #685778;padding-top:8px;font:12px/1.55 system-ui,sans-serif;color:#e4d9ee}
+#aiDmPartyBox .arcCardBio p{margin:7px 0}
+#aiDmPartyBox #partyPreview{display:none}
+#aiDmPartyBox #partyPreview.visible{display:block}
+#aiDmPartyBox #partyLegacyControls{display:none!important}
+@media(max-width:580px){#aiDmPartyBox .arcChoiceGrid{grid-template-columns:1fr}}
+</style></head><body>
+<div id="hud"><b>DNDPOV · VILLAGE OF BAROVIA v5.77 · BASIC</b><details class="build-notes"><summary>Scene details</summary><p>Layer 5 — ominous layered storm clouds, overcast lighting and distant rain haze; large dense irregular bushes across open village lawns, closed residential roof gables, benches and barrels; residential expansion with the church sightline cleared, more handcarts, wheelbarrows, barrels and crates, a few low irregular shrubs and natural textured meadow grass (no trees or spikes), preserving the subtle weathered cobblestone road surface, colorful stucco, brick and varied timber trims across seven residential architectural styles distributed around the village; E6 church faces the approach road; E7 cemetery angles toward the approach road with a front-facing stone arch entrance and gravestones only; extended southern approach and mansion gate, cobblestone streets, original E6 church, E2 tavern, E1 mercantile redesigned E3 townhouse, an unkeyed residence between E3 and E5, and E5 guest house (all on the west side of the southern lane). All E# spots marked on the map.</p></details><p>Enter from the <strong>east</strong>; follow the village streets and leave via the <strong>southwest bridge</strong>.</p><p id="pos"></p><button id="reset">Restart at east entrance</button> <button id="overview">Overhead view</button><p style="margin-top:9px"><label for="timeofday">Time</label> <select id="timeofday"><option value="day">Day</option><option value="dawn">Dawn</option><option value="dusk">Dusk</option><option value="night">Night</option></select> <label for="visibility">Air</label> <select id="visibility"><option value="clear">Clear</option><option value="mist">Mist</option><option value="fog">Fog</option></select></p><div id="adventureControls"><button id="dmMode" aria-pressed="false" title="Show Dungeon Master notes">DM: OFF</button><button id="indexOpen" title="Browse E1–E7 descriptions">Locations E1–E7</button><label class="auto-option" title="Automatically show exterior descriptions once on approach"><input id="autoDescriptions" type="checkbox">Auto descriptions</label></div></div><div id="mapbox"><canvas id="map" width="1332" height="1500"></canvas><small>North ↑ · Gold arrow = player · gray = cobblestone streets</small></div><div id="help">↑ / ↓ walk · ← / → turn · A / D sidestep · Shift run · M map · R read · E / Enter enter/exit</div><div id="locationHint" role="status" aria-live="polite" hidden></div><section id="locationPanel" role="dialog" aria-modal="true" aria-labelledby="locationTitle" hidden><div id="locationPanelHeader"><span id="locationCode"></span><span id="locationTitle"></span><button id="locationClose" aria-label="Close description">×</button></div><div id="locationBody"><p id="locationSource"></p><blockquote id="locationRead"><div id="locationQuoteHeading"></div><div id="locationReadText"></div></blockquote><section id="locationInterior" hidden><h3>Interior read-aloud · DM preview</h3><div id="locationInteriorText"></div></section><section id="locationDM" hidden><h3>Dungeon Master notes</h3><div id="locationDMText"></div></section><div id="locationIndex" hidden></div></div><div id="locationPanelFooter"><button id="locationBack" hidden>All locations</button><span>R: read/close · Esc: close</span></div></section><div id="error"></div><script type="module">
 // Coordinate reference is the approved village redraw (1332 × 1152).
 // Minimal streets traced from the original I6 village map: one through-road,
 // southwest approach, church spur, northern loop and southern residential loop.
@@ -242,13 +259,13 @@ function drawMap(){
  ctx.fillStyle='#eadcc0';ctx.beginPath();ctx.arc(548,548,65,0,Math.PI*2);ctx.fill();
  ctx.fillStyle='#5896ad';ctx.fillRect(0,995,90,75);
  ctx.fillStyle='#f4e8cd';ctx.font='bold 27px Georgia';
- ctx.fillText('EAST ENTRANCE',1035,500);
- ctx.fillText('WEST EXIT',35,900);
- ctx.fillText('CHURCH ROAD',340,140);
+ 
+ 
+ 
  ctx.fillStyle='#bdb8ae';ctx.fillRect(CHURCH_SITE[0]-35,37,70,103);
- ctx.fillStyle='#9e302e';ctx.fillText('E6',CHURCH_SITE[0]-25,30);
+ ctx.fillStyle='#9e302e';
  const px=player.x*SCALE+WIDTH/2,pz=player.z*SCALE+HEIGHT/2;
- ctx.save();ctx.translate(px,pz);ctx.rotate(player.heading);
+ if(document.body.classList.contains("classic-outside"))return;ctx.save();ctx.translate(px,pz);ctx.rotate(player.heading);
  ctx.fillStyle='#ffcb51';ctx.strokeStyle='#422b0b';ctx.lineWidth=3;
  ctx.beginPath();ctx.moveTo(0,-21);ctx.lineTo(-13,15);ctx.lineTo(13,15);
  ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();
@@ -359,7 +376,6 @@ const stormState={nextStrike:performance.now()+4500,start:-1000,bolt:[],active:f
 // v5.2: independent time-of-day and visibility controls; no geometry is altered.
 const skyOriginal=new Uint8ClampedArray(skyImg.data);
 const landmarkLanterns=[];
-const occupiedWindowMaterials=[];
 const lampRoadGlow=Array.from({length:14},()=>new THREE.Vector3(10000,10000,0));
 const lightingState={lit:false,phase:'day'};
 const glowCanvas=document.createElement('canvas');glowCanvas.width=glowCanvas.height=96;
@@ -373,7 +389,7 @@ const lanternGlowTexture=new THREE.CanvasTexture(glowCanvas);
 // The cobblestone shader is unlit, so its brightness follows the clock explicitly.
 const roadLighting={value:1};
 document.title=document.title.replace('v5.2','v5.38');
-document.querySelector('#hud b').textContent='DNDPOV · BAROVIA BASIC · v5.98 · ALL BAROVIA';
+document.querySelector('#hud b').textContent='DNDPOV · BAROVIA BASIC · v5.87 · ALL BAROVIA';
 document.querySelector('#mapbox small').textContent='North ↑ · Gold arrow = player · cream = roads · terracotta = homes';
 document.querySelector('#locationPanelFooter span').textContent='R / F: read · Esc: close';
 // Manual R/F reading is always available; auto descriptions remain optional.
@@ -587,7 +603,6 @@ function applyAtmosphere(){
  // Landmark lanterns ignite at dusk and stay lit through night.
  const lit=phase==='dusk'||phase==='night';
  lightingState.lit=lit;lightingState.phase=phase;
- for(const m of occupiedWindowMaterials)m.emissiveIntensity=lit?1.15:0;
  for(const lantern of landmarkLanterns){
   lantern.light.intensity=lit?(phase==='night'?2.9:2.1):0;
   lantern.glass.emissiveIntensity=lit?1.9:0;
@@ -642,18 +657,7 @@ for(let y=0;y<512;y++)for(let x=0;x<512;x++){
  meadowImage.data[j]=Math.max(0,Math.min(255,84+v*.72));meadowImage.data[j+1]=Math.max(0,Math.min(255,110+v));meadowImage.data[j+2]=Math.max(0,Math.min(255,63+v*.55));meadowImage.data[j+3]=255;
 }
 mg.putImageData(meadowImage,0,0);
-// v5.98: layered illustrated grass blades, wrapped at texture edges.
-for(let i=0;i<28000;i++){
- const x=meadowRand()*512,y=meadowRand()*512;
- const len=2+meadowRand()*7, lean=(meadowRand()-.5)*7;
- mg.strokeStyle=['rgba(37,65,24,.45)','rgba(112,145,49,.52)','rgba(79,113,35,.65)','rgba(150,169,67,.32)'][Math.floor(meadowRand()*4)];
- mg.lineWidth=.65+meadowRand()*1.3;
- for(const dx of [-512,0,512])for(const dy of [-512,0,512]){
- if(x+dx < -10 || x+dx > 522 || y+dy < -10 || y+dy > 522)continue;
- mg.beginPath();mg.moveTo(x+dx,y+dy);mg.quadraticCurveTo(x+dx+lean*.3,y+dy-len*.6,x+dx+lean,y+dy-len);mg.stroke();
- }
-}
-const meadowTex=new THREE.CanvasTexture(meadowCanvas);meadowTex.wrapS=meadowTex.wrapT=THREE.RepeatWrapping;meadowTex.repeat.set(28,28);meadowTex.colorSpace=THREE.SRGBColorSpace;meadowTex.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
+const meadowTex=new THREE.CanvasTexture(meadowCanvas);meadowTex.wrapS=meadowTex.wrapT=THREE.RepeatWrapping;meadowTex.repeat.set(7,7);meadowTex.colorSpace=THREE.SRGBColorSpace;meadowTex.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
 ground.material=new THREE.MeshStandardMaterial({map:meadowTex,roughness:1});
 // v5.13 — Barovian foothills and distant mountain ridges.
 // The whole village, cobblestone road network, church, cemetery and mansion
@@ -1327,138 +1331,352 @@ for(const distant of [distantRavenloftMountain,distantRavenloft]){
   }
  });
 }
+function makeChurch(){
+const g=new THREE.Group();scene.add(g);const [x,z]=toWorld(CHURCH_SITE);g.position.set(x,0,z);g.rotation.y=Math.atan2(548-CHURCH_SITE[0],548-CHURCH_SITE[1]); // entrance faces the new straight approach
+const cw=7.2,cd=11.7,front=cd/2+.13;
+function ruinedChurchStone(){
+const canvas=document.createElement('canvas');canvas.width=canvas.height=1024;
+const ctx=canvas.getContext('2d');const rnd=seededNoise(170611);
+ctx.fillStyle='#555950';ctx.fillRect(0,0,1024,1024);
+for(let row=0;row<13;row++){const yy=row*80,offset=(row%2)*58;
+for(let xx=-130+offset;xx<1100;xx+=116){const x=xx+(rnd()-.5)*9,y=yy+(rnd()-.5)*6;const w=109+rnd()*7,h=70+rnd()*7;const shade=Math.floor(104+rnd()*58);
+ctx.fillStyle=`rgb(${shade},${shade+1},${shade-5})`;ctx.beginPath();ctx.moveTo(x+5+rnd()*7,y+1);ctx.lineTo(x+w-4,y+3+rnd()*5);ctx.lineTo(x+w-rnd()*9,y+h-5);ctx.lineTo(x+3,y+h-rnd()*7);ctx.closePath();ctx.fill();ctx.strokeStyle='rgba(24,28,24,.58)';ctx.lineWidth=3;ctx.stroke();ctx.strokeStyle='rgba(210,210,192,.23)';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x+9,y+8);ctx.lineTo(x+w-15,y+8);ctx.stroke();
+for(let k=0;k<34;k++){ctx.fillStyle=rnd()>.52?'rgba(28,34,28,.17)':'rgba(215,210,183,.15)';ctx.fillRect(x+9+rnd()*(w-20),y+9+rnd()*(h-19),2+rnd()*13,1+rnd()*7)}
+if(rnd()>.45){ctx.strokeStyle='rgba(31,32,28,.60)';ctx.lineWidth=1.8;ctx.beginPath();let cx=x+15+rnd()*(w-40),cy=y+7;ctx.moveTo(cx,cy);for(let j=0;j<4;j++){cx+=(rnd()-.5)*22;cy+=8+rnd()*10;ctx.lineTo(cx,cy)}ctx.stroke()}}}
+for(let i=0;i<370;i++){const x=rnd()*1024,y=rnd()*1024;ctx.fillStyle=rnd()>.5?'rgba(28,44,31,.13)':'rgba(28,27,24,.17)';ctx.fillRect(x,y,2+rnd()*18,7+rnd()*85)}
+const tex=new THREE.CanvasTexture(canvas);tex.colorSpace=THREE.SRGBColorSpace;tex.wrapS=tex.wrapT=THREE.RepeatWrapping;tex.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());return tex;}
+const churchStone=new THREE.MeshStandardMaterial({map:ruinedChurchStone(),roughness:1});
+const darkStone=mat(0x484b46),lead=mat(0x24272a);
+box(g,0,3.5,0,cw,7,cd,churchStone);roofPair(g,cw+.3,cd+.3,7,darkStone);
+const tz=-cd*.22;box(g,0,8.5,tz,2.8,4.2,2.8,churchStone);box(g,0,10.7,tz,3.1,.32,3.1,darkStone);box(g,0,12.55,tz,.63,3.25,.72,churchStone);box(g,0,13.06,tz,2.5,.63,.72,churchStone);
+const colors=[0x284d78,0x873f52,0xb3954a,0x347d79,0x624b88];const panes=colors.map(color=>new THREE.MeshStandardMaterial({color,emissive:color,emissiveIntensity:.24,roughness:.42}));
+function glassWindow(x,y,z,turn=false,ww=1.4,hh=3.0){const frame=new THREE.Group();frame.position.set(x,y,z);if(turn)frame.rotation.y=Math.PI/2;g.add(frame);const backing=new THREE.Mesh(new THREE.BoxGeometry(ww,hh,.16),darkStone);frame.add(backing);
+for(let r=0;r<6;r++)for(let c=0;c<3;c++){const pane=new THREE.Mesh(new THREE.BoxGeometry((ww-.22)/3-.035,(hh-.22)/6-.035,.055),panes[(r*3+c)%panes.length]);pane.position.set((c-1)*(ww-.22)/3,(r-2.5)*(hh-.22)/6,.115);frame.add(pane)}
+for(let c=-1;c<=1;c++){const bar=new THREE.Mesh(new THREE.BoxGeometry(.045,hh-.1,.07),lead);bar.position.set(c*(ww-.22)/3,0,.16);frame.add(bar)}for(let r=-2;r<=2;r++){const bar=new THREE.Mesh(new THREE.BoxGeometry(ww-.1,.045,.07),lead);bar.position.set(0,r*(hh-.22)/6,.16);frame.add(bar)}}
+for(const side of [-1,1])for(const zz of [-cd*.28,0,cd*.28])glassWindow(side*(cw/2+.12),3.8,zz,true);glassWindow(0,5.92,front+.14,false,1.55,1.65);
+const oak=mat(0x483022),iron=mat(0x252626);box(g,0,2.13,front+.18,4.3,4.26,.23,darkStone);
+for(const side of [-1,1]){box(g,side*1.0,2.12,front+.34,1.94,4.12,.16,oak);for(let i=-2;i<=2;i++)box(g,side*1.0+i*.32,2.12,front+.445,.045,4.0,.05,mat(0x65462f));for(const yy of [.85,3.35])box(g,side*1.0,yy,front+.48,1.75,.13,.075,iron);box(g,side*.22,2.0,front+.52,.12,.46,.12,iron)}box(g,0,.16,front+.95,4.7,.32,1.8,churchStone);
+for(const lx of [-2.7,2.7])landmarkLantern(g,lx,3.1,cd/2+.52);
+return {x,z,r:6.3};}
+const church=makeChurch();
 
-// v5.98: independent sculpted landmark architecture, original town untouched.
-function animatedLandmark(kind,site,angle,r){
- const g=new THREE.Group(); scene.add(g); const [x,z]=toWorld(site);g.position.set(x,0,z);g.rotation.y=angle;
- const M=c=>new THREE.MeshStandardMaterial({color:c,roughness:.86});
- const wood=M(0x60463d),stone=M(0x92918b),dark=M(0x263c48),gold=M(0xd7a65c);
- function mesh(geo,m,x,y,z){const o=new THREE.Mesh(geo,m);o.position.set(x,y,z);g.add(o);return o;}
- function block(x,y,z,w,h,d,m){return mesh(new THREE.BoxGeometry(w,h,d),m,x,y,z);}
- function mass(x,z,w,d,h,m,base=0,lean=0){const geo=new THREE.BoxGeometry(w,h,d,3,4,3),a=geo.attributes.position;for(let i=0;i<a.count;i++){let t=(a.getY(i)+h/2)/h; a.setX(i,a.getX(i)*(1+.10*t)+lean*t);a.setZ(i,a.getZ(i)*(1+.06*t));}geo.computeVertexNormals();return mesh(geo,m,x,base+h/2,z);}
- function beam(a,b,m=wood,t=.19){const A=new THREE.Vector3(...a),B=new THREE.Vector3(...b),v=B.clone().sub(A);const o=mesh(new THREE.CylinderGeometry(t,t*1.12,v.length(),7),m,...A.clone().add(B).multiplyScalar(.5).toArray());o.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),v.normalize());}
- function roof(x,z,w,d,y,h,c,shift=0,thatch=false){const n=12,verts=[],idx=[];for(let j=0;j<=n;j++){let t=j/n;for(let i=0;i<=n;i++){let u=i/n,side=2*u-1;verts.push(x+side*w/2+shift*(1-Math.abs(side)),y+h*Math.pow(1-Math.abs(side),.72)+.22*Math.pow(2*t-1,2),z+(t-.5)*d);}}for(let j=0;j<n;j++)for(let i=0;i<n;i++){let a=j*(n+1)+i;idx.push(a,a+n+1,a+1,a+1,a+n+1,a+n+2);}const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));geo.setIndex(idx);geo.computeVertexNormals();const m=M(c);m.side=THREE.DoubleSide;mesh(geo,m,0,0,0);for(let j=0;j<=n;j+=thatch?1:2){let zz=z+(j/n-.5)*d;for(let i=0;i<n;i++){let a=(j*(n+1)+i)*3,b=a+3;beam([verts[a],verts[a+1]+.035,zz],[verts[b],verts[b+1]+.035,zz],M(c),thatch?.055:.075);}}for(const zz of [z-d/2+.12,z+d/2-.12]){const sh=new THREE.Shape();sh.moveTo(-w/2,0);sh.lineTo(w/2,0);sh.lineTo(shift,h);sh.closePath();let mm=M(c);mm.side=THREE.DoubleSide;mesh(new THREE.ShapeGeometry(sh),mm,x,y,zz);}}
- function arch(x,y,z,w,h,m){const sh=new THREE.Shape();sh.moveTo(-w/2,0);sh.lineTo(w/2,0);sh.lineTo(w/2,h-w/2);sh.quadraticCurveTo(w/2,h,x*0,h);sh.quadraticCurveTo(-w/2,h,-w/2,h-w/2);sh.closePath();return mesh(new THREE.ExtrudeGeometry(sh,{depth:.12,bevelEnabled:true,bevelThickness:.06,bevelSize:.06,bevelSegments:2,steps:1}),m,x,y,z);}
- function window(x,y,z,w=1,h=1.5){arch(x,y,z,w+.24,h+.2,wood);arch(x,y+.09,z+.19,w,h,dark);block(x,y+h*.48,z+.36,.09,h*.78,.10,gold);block(x,y+h*.48,z+.36,w,.09,.10,gold);block(x,y-.04,z+.23,w+.42,.16,.42,stone);}
- function door(z,w=1.7,h=2.6){arch(0,.12,z,w+.38,h+.25,stone);arch(0,.14,z+.22,w,h,wood);for(let i=-2;i<=2;i++)block(i*w/6,h*.43,z+.42,.045,h*.72,.04,gold);block(.35,1.2,z+.48,.13,.13,.13,gold);block(0,.10,z+.4,w+.7,.2,.85,stone);}
- function sign(text,x,y,z,w){const c=document.createElement('canvas');c.width=512;c.height=128;const q=c.getContext('2d');q.fillStyle='#503c35';q.fillRect(0,0,512,128);q.strokeStyle='#e5bb76';q.lineWidth=9;q.strokeRect(8,8,496,112);q.fillStyle='#ffe2a0';q.font='bold 32px Georgia';q.textAlign='center';q.fillText(text,256,76);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;mesh(new THREE.PlaneGeometry(w,w/4),new THREE.MeshBasicMaterial({map:t,side:THREE.DoubleSide}),x,y,z);}
- function tower(x,z,rad,h,c,rc){mesh(new THREE.CylinderGeometry(rad*.86,rad,h,10),M(c),x,h/2,z);mesh(new THREE.ConeGeometry(rad*1.24,h*.43,10),M(rc),x,h+h*.215,z);for(let i=0;i<3;i++)mesh(new THREE.CylinderGeometry(rad*1.04,rad*1.04,.17,10),stone,x,h*(.25+i*.29),z);}
- function chimney(x,z,y){mass(x,z,.8,.85,2.1,stone,y,.18);block(x+.18,y+2.1,z,1.05,.24,1.1,wood);}
- if(kind==='church'){
-  mass(0,-.5,5.7,10.5,5.6,M(0xb4b0a1));roof(0,-.5,6.7,11.5,5.6,3.5,0x435a69,.45);tower(-2.35,-2.8,1.65,10.5,0x9c9c91,0x526879);tower(2.35,-3.1,1.1,6.5,0xaaa99c,0x526879);mass(0,3.4,4.2,4.6,4.5,M(0xbab4a4));roof(0,3.4,5,5.2,4.5,2.5,0x435a69);door(5.75,2.0,3.2);window(0,3.65,5.8,1.25,1.65);for(let i=0;i<3;i++){let z=-3.6+i*3;for(const side of [-1,1]){let o=arch(side*2.94,2,z,1.05,2.5,dark);o.rotation.y=side*Math.PI/2;}}block(-2.35,15.5,-2.8,.15,1.1,.15,gold);block(-2.35,15.65,-2.8,.8,.15,.15,gold);landmarkLantern(g,-1.7,2.7,6);landmarkLantern(g,1.7,2.7,6);
- }else if(kind==='tavern'){
-  mass(0,-.4,6.6,6,3.2,M(0xc58a61));mass(-.6,-.8,5.4,5.1,2.5,M(0xe0b980),3.2,-.45);roof(-.8,-.8,6.5,6.2,5.7,2.9,0x935047,-.65);mass(2.2,1.3,2.1,3.6,3.5,M(0xb97050));roof(2.2,1.3,2.9,4.3,3.5,1.65,0x9a5644);door(3.45);window(-2.1,1.1,3.0,1.35,1.5);window(-1.6,3.65,2.0);window(.25,3.65,2.0);chimney(-2.5,-1.5,5.8);sign('BLOOD OF THE VINE',0,3.15,3.8,3.8);for(const a of [-2.6,2.6])landmarkLantern(g,a,2.5,3.55);
- }else if(kind==='shop'){
-  mass(0,-.45,6.6,5.7,3.1,M(0xd9b76c));mass(.7,-.65,4.6,5.1,2.7,M(0xe5c988),3.1,.45);roof(.8,-.65,5.7,6.1,5.8,2.7,0x4d7774,.65);door(3.2);for(const a of [-2,2]){window(a,.8,2.7,1.5,1.65);block(a,.55,3.25,1.8,.2,.65,wood);}roof(0,3.1,7.1,1.6,3.05,.65,0x63877a);window(.5,3.6,2.15,1.3,1.6);sign("BILDRATH'S MERCANTILE",0,3.7,3.8,4.4);chimney(-1.4,-1.5,5.5);landmarkLantern(g,-2.9,2.7,3.1);landmarkLantern(g,2.9,2.7,3.1);
- }else if(kind==='mary'){
-  mass(0,-.5,5.5,6.4,3.3,M(0x829da8));mass(-.7,-.4,6.3,6.1,3.0,M(0x9eb2ba),3.3,-.65);roof(-1,-.4,7.2,7,6.3,3.4,0x52617c,-1.1);mass(2.65,-1,2.1,3.8,5.2,M(0x728c9c));roof(2.65,-1,2.9,4.5,5.2,2.3,0x52617c);door(3.9);window(-1.9,1.1,2.9);window(-2.3,3.8,2.95,1.1,1.7);window(.25,3.8,2.95,1.1,1.7);for(const a of [-2.3,.25]){block(a,4.6,3.28,1.3,.17,.15,wood).rotation.z=.45;}chimney(1.5,-2,6.3);landmarkLantern(g,-1.5,2.5,4.1);
- }else if(kind==='guest'){
-  mass(-1.1,-.3,6.1,7.3,3.4,M(0xe3d4ac));roof(-1.1,-.3,7.3,8.3,3.4,3.4,0xb99a56,.5,true);mass(2.5,-1.2,3.2,4.9,4.6,M(0xb4c29a));roof(2.5,-1.2,4.1,5.8,4.6,2.6,0xa98b4e,0,true);door(4.1);window(-2.5,1,3.55,1.2,1.6);window(2.5,1.2,1.45);window(2.5,3,1.45);chimney(-3,-1.7,4.8);sign('GUEST HOUSE',0,3.15,4.3,2.7);landmarkLantern(g,-1.6,2.5,4.2);landmarkLantern(g,1.6,2.5,4.2);
- }else{
-  mass(0,-.8,10.2,8.8,6.6,M(0xc2b5a1));roof(0,-.8,11.3,10,6.6,4.4,0x783e53,.6);tower(-5.5,-.8,2.15,8.5,0x9e9b99,0x783e53);tower(5.5,-1.7,1.85,7.5,0x9e9b99,0x783e53);mass(0,3.4,4.5,3.9,5.5,M(0xd0c2ad));roof(0,3.4,5.3,4.8,5.5,3.1,0x783e53);door(5.55,2.5,3.4);window(0,3.85,5.45,1.4,1.5);for(const a of [-3.6,3.6])for(const y of [1.4,4.1])window(a,y,3.85,1.25,1.9);chimney(-3,-2,8);chimney(3,-2,8);for(const a of [-3.2,3.2]){block(a,1.1,13.56,.75,2.2,.75,stone);for(let i=0;i<7;i++){let xx=a+Math.sign(a)*i*1.15;block(xx,.8,13.56,.12,1.6,.12,wood);}block(a+Math.sign(a)*3.5,.7,13.56,7,.12,.12,wood);}landmarkLantern(g,-2.6,3,5.7);landmarkLantern(g,2.6,3,5.7);
- }
- return {x,z,r};
+// E2 tavern: original custom façade and detailing transferred from Barovia v5.21.
+// E2 now occupies the former brick townhouse site northeast of the plaza, facing south.
+function makeTavern(){
+ const g=new THREE.Group();scene.add(g);
+ const [x,z]=toWorld(TAVERN_SITE);g.position.set(x,0,z);
+ // Front faces the main road to its south (local +Z).
+ const w=7.2,d=6.8;
+ const stone=mat(0x77736a),gold=mat(0xc2a36b),iron=mat(0x292725),glass=mat(0x536c68);
+  // Original E2 Blood of the Vine Tavern exterior from v5.21
+   const stucco=mat(0xd2c3a5),beam=mat(0x49301e),thatch=mat(0x927746);
+   const width=w,depth=d,wallH=5.15,front=depth/2+.16;
+   box(g,0,wallH/2,0,width,wallH,depth,stucco);
+   box(g,0,.32,0,width+.3,.64,depth+.3,stone);
+   // Authentic half-timber front: posts, horizontal rails, diagonal triangles.
+   function timber(x1,y1,x2,y2,z,thickness=.19){
+    const dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy);
+    const beamObj=box(g,(x1+x2)/2,(y1+y2)/2,z,thickness,len,.20,beam);
+    beamObj.rotation.z=-Math.atan2(dx,dy);
+   }
+   for(const x of [-width*.48,0,width*.48])timber(x,.65,x,5.1,front);
+   for(const y of [.85,2.9,5.0])timber(-width*.49,y,width*.49,y,front,.18);
+   for(const x of [-width*.48,0]){
+    const x2=x+width*.48;
+    timber(x,.95,x2,2.85,front,.18);
+    timber(x2,.95,x,2.85,front,.18);
+    timber(x,3.0,x2,4.95,front,.17);
+    timber(x2,3.0,x,4.95,front,.17);
+   }
+   // Gabled end: visible triangular stucco with a wooden triangle outline.
+   const pitch=2.25,ridge=wallH+pitch,overhang=.55;
+   const tri=new THREE.Shape();
+   tri.moveTo(-width/2,wallH);tri.lineTo(width/2,wallH);tri.lineTo(0,ridge);tri.closePath();
+   const gable=new THREE.Mesh(new THREE.ShapeGeometry(tri),stucco);
+   gable.position.z=front+.02;gable.material.side=THREE.DoubleSide;g.add(gable);
+   timber(-width/2,wallH,0,ridge,front+.09,.24);
+   timber(0,ridge,width/2,wallH,front+.09,.24);
+   timber(0,wallH,0,ridge,front+.10,.18);
+   timber(-width*.22,wallH+.12,width*.22,wallH+.12,front+.10,.18);
+   // Two genuinely pitched roof planes, with an irregular layered thatch texture.
+   const slopeLen=Math.hypot(width/2+overhang,pitch+.22);
+   const slopeAngle=Math.atan2(pitch+.22,width/2+overhang);
+   for(const side of [-1,1]){
+    const roofPanel=box(g,side*(width/4+overhang/4),wallH+pitch/2,0,slopeLen,.34,depth+1.1,thatch);
+    roofPanel.rotation.z=side===-1?slopeAngle:-slopeAngle;
+    for(let row=0;row<6;row++){
+     const t=(row+.4)/6;
+     const xx=side*(width/2+overhang)*(1-t);
+     const yy=wallH+(pitch+.22)*t+.11;
+     const straw=box(g,xx,yy,0,.13,.08,depth+1.17,row%2?thatch:gold);
+     straw.rotation.z=side===-1?slopeAngle:-slopeAngle;
+    }
+   }
+   box(g,0,ridge+.10,0,.35,.32,depth+1.1,thatch);
+   // Light oak plank door with oversized wrought-iron pull handle.
+   const oak=mat(0xa36b3d),oakEdge=mat(0x754323),handle=mat(0x1b1a18);
+   box(g,0,1.29,front+.18,1.85,2.58,.26,oakEdge);
+   box(g,0,1.28,front+.34,1.64,2.43,.10,oak);
+   for(let k=-2;k<=2;k++)box(g,k*.30,1.28,front+.405,.035,2.38,.055,oakEdge);
+   for(const y of [.46,2.12])box(g,0,y,front+.47,1.60,.095,.06,oakEdge);
+   // Large projecting vertical iron pull, two brackets and a clear grip.
+   const hz=front+.57;
+   box(g,.57,1.44,hz,.17,.95,.13,handle);
+   for(const y of [1.02,1.86])box(g,.57,y,hz-.04,.34,.18,.17,handle);
+   box(g,.57,1.44,hz+.16,.13,.70,.12,iron);
+   for(const x of [-width*.32,width*.32]){
+    box(g,x,1.82,front+.16,1.1,1.35,.15,beam);
+    box(g,x,1.82,front+.25,.83,1.05,.08,glass);
+    timber(x,1.2,x,2.45,front+.32,.09);
+    timber(x-.5,1.82,x+.5,1.82,front+.32,.09);
+   }
+   // Distinctive hanging pub sign: shield-shaped painted wood, wine goblet,
+   // carved lettering and an iron wall bracket. Higher than the door lintel.
+   const signX=width*.29, signY=4.10, signZ=front+.82;
+   box(g,signX,4.92,front+.43,.12,.14,1.12,iron);
+   box(g,signX,4.66,signZ,.08,.60,.09,iron);
+   const sc=document.createElement('canvas');sc.width=768;sc.height=768;
+   const sx=sc.getContext('2d');sx.clearRect(0,0,768,768);
+   sx.beginPath();sx.moveTo(110,70);sx.lineTo(658,70);sx.lineTo(658,525);
+   sx.quadraticCurveTo(650,615,384,708);sx.quadraticCurveTo(118,615,110,525);sx.closePath();
+   sx.fillStyle='#4b211c';sx.fill();sx.strokeStyle='#d6a65e';sx.lineWidth=24;sx.stroke();
+   sx.strokeStyle='#f4d8a0';sx.lineWidth=5;sx.strokeRect(145,106,478,12);
+   // Goblet and red wine motif: unmistakably a tavern rather than a shop.
+   sx.fillStyle='#b89a58';sx.beginPath();sx.moveTo(292,160);sx.lineTo(476,160);
+   sx.lineTo(455,280);sx.quadraticCurveTo(384,360,313,280);sx.closePath();sx.fill();
+   sx.fillStyle='#8c1823';sx.beginPath();sx.moveTo(316,183);sx.lineTo(452,183);
+   sx.lineTo(436,267);sx.quadraticCurveTo(384,318,332,267);sx.closePath();sx.fill();
+   sx.fillStyle='#b89a58';sx.fillRect(372,317,24,65);sx.fillRect(325,379,118,17);
+   sx.textAlign='center';sx.fillStyle='#f7e5b6';sx.textBaseline='middle';
+   sx.font='bold 65px Georgia';sx.fillText('BLOOD OF',384,463);
+   sx.font='bold 68px Georgia';sx.fillText('THE VINE',384,552);
+   const st=new THREE.CanvasTexture(sc);st.colorSpace=THREE.SRGBColorSpace;
+   const sign=new THREE.Mesh(new THREE.PlaneGeometry(2.75,2.75),
+      new THREE.MeshBasicMaterial({map:st,transparent:true,side:THREE.DoubleSide,depthWrite:false}));
+   sign.position.set(signX,signY,signZ);g.add(sign);
+   // Wall-mounted tavern lanterns; real light, enabled only at low daylight.
+   const lampMetal=mat(0x4b3d2a);
+   for(const side of [-1,1]){
+     const lx=side*Math.min(width*.39,2.2),lz=front+.48;
+     box(g,lx,3.0,lz-.26,.12,.12,.58,iron);
+     box(g,lx,2.65,lz,.43,.65,.42,lampMetal);
+     const glassMat=new THREE.MeshStandardMaterial({color:0xffc679,emissive:0xff9b35,emissiveIntensity:0});
+     const glass=box(g,lx,2.66,lz+.04,.30,.45,.31,glassMat);
+     box(g,lx,3.03,lz,.52,.12,.51,iron);
+     box(g,lx,2.30,lz,.50,.12,.49,iron);
+     const light=new THREE.PointLight(0xffa14a,0,9,2);
+     light.position.set(lx,2.65,lz+.3);g.add(light);landmarkLanterns.push({light,glass:glassMat});
+     /* retained lantern model; no night scheduler in streets-only prototype */
+   }
+
+
+ return {x,z,r:5.2};
 }
-function polishedLandmark(kind,site,angle,r){
- const g=new THREE.Group(); scene.add(g); const [x,z]=toWorld(site);g.position.set(x,0,z);g.rotation.y=angle;
- const M=c=>new THREE.MeshStandardMaterial({color:c,roughness:.86});
- const polished=kind!=='church';
- const plaster=document.createElement('canvas');plaster.width=plaster.height=128;const pc=plaster.getContext('2d');pc.fillStyle='#eeeeee';pc.fillRect(0,0,128,128);for(let i=0;i<1800;i++){let v=210+Math.floor(stormHash(i,7)*45);pc.fillStyle=`rgb(${v},${v},${v})`;pc.fillRect(stormHash(i,8)*128,stormHash(i,9)*128,2+stormHash(i,10)*5,2);}const pt=new THREE.CanvasTexture(plaster);pt.colorSpace=THREE.SRGBColorSpace;
+const tavern=makeTavern();
+// E1 Bildrath's Mercantile — custom original v5.21 storefront transferred intact.
+function makeMercantile(){
+ const g=new THREE.Group();scene.add(g);
+ const [x,z]=toWorld([655,650]);g.position.set(x,0,z);
+ // E1 stands southeast of the plaza; storefront faces north toward the open square.
+ g.rotation.y=Math.PI;
+ const mat=color=>new THREE.MeshStandardMaterial({color,roughness:1});
+ const box=(group,x,y,z,w,h,d,m)=>{const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);mesh.position.set(x,y,z);group.add(mesh);return mesh};
+ const stone=mat(0x77736a),roof=mat(0x665443),glass=mat(0x526d69),iron=mat(0x292725);
+ const stucco=mat(0xc9baa0),oak=mat(0x85552e),trim=mat(0x493322);
+ const awning=mat(0x75634b),canvasShade=mat(0x9e8863);
+ const W=7.8,D=6.4,front=D/2+.12;
+   box(g,0,2.5,0,W,5,D,stucco);
+   box(g,0,.38,0,W+.24,.76,D+.24,stone);
+   // Flat-topped commercial facade with a distinct broad gable roof.
+   const pitch=1.55,slope=Math.hypot(W/2+.55,pitch);
+   for(const side of [-1,1]){
+    const panel=box(g,side*(W/4+.14),5+pitch/2,0,slope,.30,D+.9,roof);
+    panel.rotation.z=side===-1?Math.atan2(pitch,W/2+.55):-Math.atan2(pitch,W/2+.55);
+   }
+   // Timber posts and cross beams emphasize the wide storefront.
+   for(const x of [-W*.47,-W*.17,W*.17,W*.47])box(g,x,2.55,front,.20,4.9,.22,trim);
+   for(const y of [1.05,3.85,4.85])box(g,0,y,front,W*.97,.19,.24,trim);
+   // Pair of wide shuttered display windows.
+   for(const x of [-W*.32,W*.32]){
+    box(g,x,2.42,front+.12,W*.26,1.72,.18,trim);
+    box(g,x,2.42,front+.23,W*.23,1.48,.07,glass);
+    box(g,x,2.42,front+.31,.10,1.65,.11,trim);
+    box(g,x,2.42,front+.32,W*.25,.10,.11,trim);
+    for(const side of [-1,1]){
+     const sx=x+side*W*.145;
+     const shutter=box(g,sx,2.42,front+.24,W*.065,1.75,.12,oak);
+     shutter.rotation.y=side*.24;
+    }
+   }
+   // Twin lighter oak doors, iron straps and large metal pull handles.
+   for(const side of [-1,1]){
+    const x=side*.48;
+    box(g,x,1.34,front+.27,.94,2.68,.20,oak);
+    for(let i=0;i<4;i++)box(g,x-.35+i*.23,1.34,front+.39,.025,2.55,.03,trim);
+    for(const y of [.65,2.05])box(g,x,y,front+.41,.85,.08,.06,iron);
+    const hx=x-side*.21;
+    box(g,hx,1.36,front+.48,.10,.70,.12,iron);
+    for(const yy of [1.03,1.69])box(g,hx,yy,front+.45,.20,.15,.12,iron);
+   }
+   // Deep wooden canopy with visible support posts.
+   box(g,0,3.72,front+.95,W*.94,.19,2.18,awning);
+   box(g,0,3.87,front+.94,W*.97,.12,2.28,canvasShade);
+   for(const x of [-W*.43,W*.43]){
+    box(g,x,2.02,front+1.76,.15,3.98,.15,trim);
+    const brace=box(g,x,3.48,front+1.26,.12,.95,.14,trim);
+    brace.rotation.x=-.65;
+   }
+   // Shopfront provisions: crates, sacks, barrels, and a wagon wheel.
+   for(let i=0;i<4;i++){
+    const x=-W*.49+(i%2)*.75;
+    const z=front+2.0+Math.floor(i/2)*.65;
+    box(g,x,.34,z,.72,.68,.72,oak);
+    box(g,x,.7,z,.75,.08,.75,trim);
+   }
+   const barrelMat=mat(0x76512e);
+   for(let i=0;i<3;i++){
+    const x=W*.49+(i%2)*.63,z=front+1.6+Math.floor(i/2)*.65;
+    const barrel=new THREE.Mesh(new THREE.CylinderGeometry(.37,.40,.92,10),barrelMat);
+    barrel.position.set(x,.46,z);barrel.castShadow=true;g.add(barrel);
+    for(const yy of [.18,.72]){
+     const hoop=new THREE.Mesh(new THREE.TorusGeometry(.39,.035,5,12),iron);
+     hoop.rotation.x=Math.PI/2;hoop.position.set(x,yy,z);g.add(hoop);
+    }
+   }
+   // Outdoor market display: canvas-covered produce stalls, sacks, rolled
+   // rope, lanterns, wooden buckets and a cart wheel, all outside the door.
+   const produce=[mat(0x718144),mat(0x9a7140),mat(0x7f382a),mat(0xb9a16a)];
+   for(const side of [-1,1]){
+     const sx=side*(W*.35),sz=front+2.25;
+     box(g,sx,.85,sz,1.85,.18,1.1,oak);
+     for(const px of [-.75,.75])for(const pz of [-.42,.42])
+       box(g,sx+px,.44,sz+pz,.12,.88,.12,trim);
+     for(let j=0;j<8;j++){
+       const px=sx+(j%4-1.5)*.36,pz=sz+(Math.floor(j/4)-.5)*.43;
+       const item=new THREE.Mesh(new THREE.SphereGeometry(.19,7,5),produce[(j+(side+1))%4]);
+       item.position.set(px,1.06,pz);g.add(item);
+     }
+     // Burlap sacks beside the stalls.
+     for(let j=0;j<3;j++){
+       const sack=new THREE.Mesh(new THREE.SphereGeometry(.33,8,6),mat(0x9b8862));
+       sack.scale.set(1,.76,1.25);
+       sack.position.set(sx+side*.88,.28,sz+(j-1)*.52);g.add(sack);
+     }
+   }
+   // A simple leaning wagon wheel by the merchandise.
+   const wheel=new THREE.Mesh(new THREE.TorusGeometry(.60,.075,7,16),trim);
+   wheel.position.set(W*.57,.65,front+2.75);wheel.rotation.y=.35;g.add(wheel);
+   for(let j=0;j<8;j++){
+     const a=j*Math.PI/4;
+     const spoke=box(g,W*.57+Math.cos(a)*.28,.65+Math.sin(a)*.28,front+2.75,.055,.62,.055,oak);
+     spoke.rotation.z=-a;
+   }
+   // Distinctive GROCER'S GOODS sign: produce artwork, not a tavern plaque.
+   const signCanvas=document.createElement('canvas');signCanvas.width=900;signCanvas.height=440;
+   const c=signCanvas.getContext('2d');
+   c.fillStyle='#3b4c2b';c.fillRect(0,0,900,440);
+   c.strokeStyle='#d7b46c';c.lineWidth=16;c.strokeRect(15,15,870,410);
+   c.fillStyle='#f6e5b6';c.textAlign='center';c.font='bold 68px Georgia';
+   c.fillText('GROCER & PROVISIONS',450,92);
+   // A woven basket filled with brightly colored produce.
+   c.fillStyle='#b78345';c.beginPath();c.moveTo(305,255);c.lineTo(595,255);
+   c.lineTo(550,374);c.lineTo(350,374);c.closePath();c.fill();
+   c.strokeStyle='#f0ce8e';c.lineWidth=8;
+   for(let i=0;i<7;i++){c.beginPath();c.moveTo(330+i*37,264);c.lineTo(350+i*32,364);c.stroke();}
+   for(const [x,y,r,color] of [[342,235,49,'#b94b32'],[420,215,57,'#79a244'],
+     [500,226,52,'#d9b653'],[560,246,44,'#b85e35']]){
+     c.fillStyle=color;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill();
+   }
+   c.fillStyle='#d9d8a3';c.font='italic 37px Georgia';c.fillText('Food • Supplies • Dry Goods',450,412);
+   const tex=new THREE.CanvasTexture(signCanvas);tex.colorSpace=THREE.SRGBColorSpace;
+   const sign=new THREE.Mesh(new THREE.PlaneGeometry(Math.min(W*.78,5.4),2.0),
+    new THREE.MeshBasicMaterial({map:tex,side:THREE.DoubleSide}));
+   sign.scale.set(.84,.72,1);
+   sign.position.set(0,4.78,front+1.12);g.add(sign);
+   // Distinct shop lettering on the front canopy fascia, visible from the street.
+   const fasciaCanvas=document.createElement('canvas');fasciaCanvas.width=1024;fasciaCanvas.height=160;
+   const fc=fasciaCanvas.getContext('2d');fc.fillStyle='#35261b';fc.fillRect(0,0,1024,160);
+   fc.strokeStyle='#dfbf85';fc.lineWidth=9;fc.strokeRect(6,6,1012,148);
+   fc.fillStyle='#f7e0ae';fc.textAlign='center';fc.textBaseline='middle';
+   fc.font='bold 66px Georgia';fc.fillText("BILDRATH'S MERCANTILE",512,85);
+   const ft=new THREE.CanvasTexture(fasciaCanvas);ft.colorSpace=THREE.SRGBColorSpace;
+   const fascia=new THREE.Mesh(new THREE.PlaneGeometry(W*.82,.67),
+      new THREE.MeshBasicMaterial({map:ft,side:THREE.DoubleSide}));
+   fascia.position.set(0,3.65,front+2.075);g.add(fascia);
+   // Warm wall lanterns beside the shopfront for dusk and night.
+   for(const side of [-1,1]){
+    const lx=side*W*.43,lz=front+.44;
+    box(g,lx,3.28,lz-.20,.12,.10,.48,iron);
+    box(g,lx,2.95,lz,.36,.58,.36,iron);
+    const lm=new THREE.MeshStandardMaterial({color:0xffc47c,emissive:0xff9a37,emissiveIntensity:0});
+    const glowing=box(g,lx,2.96,lz+.05,.27,.40,.30,lm);
+    box(g,lx,3.27,lz,.43,.10,.42,iron);
+    const light=new THREE.PointLight(0xffa14a,0,8,2);
+    light.position.set(lx,2.96,lz+.30);g.add(light);landmarkLanterns.push({light,glass:lm});
+    /* static shop lantern, original night lighting omitted for this daylight prototype */
+   }
+ return {x,z,r:5.5};
+}
+const mercantile=makeMercantile();
 
- const wood=M(0x60463d),stone=M(0x92918b),dark=M(0x263c48),gold=M(0xd7a65c);
- function mesh(geo,m,x,y,z){const o=new THREE.Mesh(geo,m);o.position.set(x,y,z);g.add(o);return o;}
- function block(x,y,z,w,h,d,m){return mesh(new THREE.BoxGeometry(w,h,d),m,x,y,z);}
- function mass(x,z,w,d,h,m,base=0,lean=0){const geo=new THREE.BoxGeometry(w,h,d,3,4,3),a=geo.attributes.position;for(let i=0;i<a.count;i++){let t=(a.getY(i)+h/2)/h; a.setX(i,a.getX(i)*(1+(polished?0:.10)*t)+(polished?lean*.25:lean)*t);a.setZ(i,a.getZ(i)*(1+(polished?0:.06)*t));}geo.computeVertexNormals();if(polished){m.map=pt;const trim=M(0x655044);block(x,base+.12,z,w+.08,.24,d+.08,base===0?stone:trim);block(x+lean*.25,base+h-.09,z,w+.10,.18,d+.10,trim);for(const side of [-1,1]){beam([x+side*w/2,base+.15,z+d/2],[x+side*w/2+lean*.25,base+h,z+d/2],trim,.12);for(let k=0;k<Math.floor(h/.48);k++){block(x+side*(w/2-.12)+lean*.25*k*.48/h,base+.32+k*.48,z+d/2+.025,.30,.24,.13,stone);}}}return mesh(geo,m,x,base+h/2,z);}
- function beam(a,b,m=wood,t=.19){const A=new THREE.Vector3(...a),B=new THREE.Vector3(...b),v=B.clone().sub(A);const o=mesh(new THREE.CylinderGeometry(t,t*1.12,v.length(),7),m,...A.clone().add(B).multiplyScalar(.5).toArray());o.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),v.normalize());}
- function roof(x,z,w,d,y,h,c,shift=0,thatch=false){
- const style=kind==='shop'?(h<1?'shed':'slate'):kind==='mary'?'mansard':kind==='guest'?'cottage':kind==='tavern'?'sweep':h>4?'hip':'gable';
- const n=24,rows=20,verts=[],uv=[],idx=[];
- function point(u,v){let q=2*u-1,t=2*v-1,A=Math.abs(q),B=Math.abs(t),height;
- if(style==='shed')height=h*(1-v);
- else if(style==='mansard')height=h*(A<.65?1-.25*A/.65:.75*(1-A)/.35);
- else if(style==='cottage')height=h*(1-A)+.20*Math.sin(Math.PI*A);
- else if(style==='slate')height=h*(1-A);
- else if(style==='hip')height=h*Math.min(1-A,(1-B)*2.4);
- else if(style==='sweep')height=h*Math.pow(1-B,1.6)*(.85+.15*(1-A));
- else if(style==='step')height=h*(1-A);
- else height=h*Math.pow(1-A,1.25);
- return [x+q*w/2+(style==='slate'?0:shift*.35)*(1-A),y+height,z+t*d/2];}
- for(let j=0;j<=rows;j++)for(let i=0;i<=n;i++){verts.push(...point(i/n,j/rows));uv.push(thatch?j/rows:i/n,thatch?i/n:j/rows);}
- for(let j=0;j<rows;j++)for(let i=0;i<n;i++){let k=j*(n+1)+i;idx.push(k,k+n+1,k+1,k+1,k+n+1,k+n+2);}
- const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geo.setIndex(idx);geo.computeVertexNormals();
- const canvas=document.createElement('canvas');canvas.width=512;canvas.height=512;const ctx=canvas.getContext('2d');ctx.fillStyle='#b9b9b9';ctx.fillRect(0,0,512,512);
- if(thatch){for(let i=0;i<3500;i++){let xx=stormHash(i,31)*512,yy=stormHash(i,32)*512;ctx.strokeStyle=`rgba(${i%2?255:35},${i%2?255:35},${i%2?255:35},.22)`;ctx.beginPath();ctx.moveTo(xx,yy);ctx.lineTo(xx+3,yy+18+stormHash(i,33)*35);ctx.stroke();}}
- else{for(let j=0;j<16;j++)for(let i=-1;i<12;i++){let xx=i*46+(j%2)*23,yy=j*32;let v=150+Math.floor(stormHash(i+20,j)*85);ctx.fillStyle=`rgb(${v},${v},${v})`;ctx.fillRect(xx+1,yy+1,44,30);ctx.fillStyle='#666';ctx.fillRect(xx,yy+29,46,3);ctx.fillStyle='#ddd';ctx.fillRect(xx+2,yy+2,42,2);}}
- const tex=new THREE.CanvasTexture(canvas);tex.colorSpace=THREE.SRGBColorSpace;const mat=M(c);mat.map=tex;mat.side=THREE.DoubleSide;mesh(geo,mat,0,0,0);
- // Close all four roof edges with matching plaster or timber, not floating triangular caps.
- const fill=M(kind==='shop'?0xd9b76c:kind==='mary'?0x9eb2ba:kind==='guest'?0xe3d4ac:kind==='tavern'?0xe0b980:0xc2b5a1);fill.side=THREE.DoubleSide;
- for(let side=0;side<4;side++){let vv=[],ii=[];for(let k=0;k<=n;k++){let t=k/n,p=side===0?point(t,0):side===1?point(t,1):side===2?point(0,t):point(1,t);vv.push(p[0],y-.12,p[2],...p);if(k){let i=2*k;ii.push(i-2,i-1,i,i,i-1,i+1);let prev=side===0?point((k-1)/n,0):side===1?point((k-1)/n,1):side===2?point(0,(k-1)/n):point(1,(k-1)/n);beam(prev,p,wood,.085);}}let gg=new THREE.BufferGeometry();gg.setAttribute('position',new THREE.Float32BufferAttribute(vv,3));gg.setIndex(ii);gg.computeVertexNormals();mesh(gg,fill,0,0,0);}
- if(style==='slate'){
-  const zz=z+d/2+.06, yy=y+.38;
-  block(x,yy+.42,zz,.94,.84,.16,wood);
-  block(x,yy+.42,zz+.10,.70,.60,.08,dark);
-  block(x,yy+.42,zz+.16,.06,.60,.06,gold);
-  block(x,yy+.42,zz+.16,.70,.06,.06,gold);
-  if(kind==='shop')welcomingGlass(x,yy+.13,zz+.22,.67,.58,false);
-  for(const side of [-1,1])beam([x,yy+1.04,zz+.08],[x+side*.62,yy+.76,zz+.08],wood,.075);
- }
 
- if(style==='mansard'||style==='sweep'){let zz=z+d*.30,yy=y+h*.35;block(x,yy+.45,zz,.95,1.05,.55,wood);block(x,yy+.45,zz+.30,.65,.75,.08,dark);if(kind==='tavern')welcomingGlass(x,yy+.09,zz+.36,.62,.72,false);let cap=block(x,yy+1.04,zz,1.2,.16,.8,mat);cap.rotation.z=.12;}
+// E3 Mad Mary's House — broad, freestanding two-storey townhouse.
+// Built specifically for this map; no narrow rowhouse proportions.
+function makeMaryHouse(){
+ const g=new THREE.Group();scene.add(g);
+ const [x,z]=toWorld([450,700]);g.position.set(x,0,z);
+ // Main entrance faces the residential lane to the east.
+ g.rotation.y=Math.PI/2;
+ const W=8.6,D=7.6,H=6.0,front=D/2+.13;
+ const plaster=mat(0xb9aa91),stone=mat(0x77746b),timber=mat(0x49382e),roof=mat(0x484a4a),oak=mat(0x57402d),iron=mat(0x242523),darkGlass=mat(0x252d30);
+ box(g,0,H/2,0,W,H,D,plaster);
+ box(g,0,.38,0,W+.36,.76,D+.36,stone);
+ // A broad pitched slate roof and enclosed triangular end gables.
+ const rise=2.05,over=.48;
+ for(const side of [-1,1]){
+  const edge=side*(W/2+over);
+  const vertices=[0,H+rise,-D/2-over,edge,H,-D/2-over,edge,H,D/2+over,0,H+rise,-D/2-over,edge,H,D/2+over,0,H+rise,D/2+over];
+  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));geo.computeVertexNormals();
+  const mesh=new THREE.Mesh(geo,roof);mesh.material.side=THREE.DoubleSide;g.add(mesh);
  }
- function arch(x,y,z,w,h,m){const sh=new THREE.Shape();sh.moveTo(-w/2,0);sh.lineTo(w/2,0);sh.lineTo(w/2,h-w/2);sh.quadraticCurveTo(w/2,h,x*0,h);sh.quadraticCurveTo(-w/2,h,-w/2,h-w/2);sh.closePath();return mesh(new THREE.ExtrudeGeometry(sh,{depth:.12,bevelEnabled:true,bevelThickness:.06,bevelSize:.06,bevelSegments:2,steps:1}),m,x,y,z);}
- const boarded=kind==='mary';
- const pane=new THREE.MeshStandardMaterial({color:boarded?0x202a30:kind==='tavern'?0xb88a50:kind==='manor'?0x29485e:kind==='guest'?0x52758a:0x78a7bc,roughness:.32,emissive:kind==='tavern'?0xffa53d:0x000000,emissiveIntensity:0});
- if(kind==='tavern')occupiedWindowMaterials.push(pane);
- const mullion=M(0x594737),reflection=M(0xa7c5d0),planks=[M(0x76573e),M(0x89674b),M(0x594635)];
- function welcomingGlass(x,y,z,w,h,arched=true){
-  const c=document.createElement('canvas');c.width=256;c.height=320;const q=c.getContext('2d');
-  const warm=kind==='tavern';const gr=q.createLinearGradient(0,0,0,320);
-  gr.addColorStop(0,warm?'#a96b35':'#709eaf');gr.addColorStop(.48,warm?'#f6c36c':'#b8d5d7');gr.addColorStop(1,warm?'#bd7938':'#648b99');q.fillStyle=gr;q.fillRect(0,0,256,320);
-  // Soft interior silhouettes and glass reflections, behind the glazing bars.
-  if(warm){q.fillStyle='rgba(112,48,28,.55)';for(const side of [0,1]){q.beginPath();q.moveTo(side?256:0,0);q.lineTo(side?198:58,0);q.quadraticCurveTo(side?228:28,120,side?250:6,220);q.lineTo(side?256:0,320);q.closePath();q.fill();}}
-  else{q.fillStyle='rgba(66,59,43,.55)';for(const yy of [195,275]){q.fillRect(0,yy,256,7);for(let i=0;i<6;i++){let xx=12+i*42;q.fillStyle=['#987448','#58766d','#b39461'][i%3];q.fillRect(xx,yy-34-(i%3)*8,20,34+(i%3)*8);q.fillStyle='#504b3c';q.fillRect(xx+5,yy-40-(i%3)*8,10,7);}}}
-  q.strokeStyle='rgba(255,255,230,.30)';q.lineWidth=8;q.beginPath();q.moveTo(18,110);q.lineTo(100,18);q.moveTo(25,145);q.lineTo(135,20);q.stroke();
-  q.strokeStyle='#65462e';q.lineWidth=5;q.beginPath();q.moveTo(128,0);q.lineTo(128,320);q.moveTo(0,160);q.lineTo(256,160);q.stroke();
-  if(warm){q.lineWidth=2;q.strokeStyle='rgba(100,65,35,.65)';for(let i=-320;i<400;i+=64){q.beginPath();q.moveTo(i,0);q.lineTo(i+320,320);q.moveTo(i,0);q.lineTo(i-320,320);q.stroke();}}
-  const tex=new THREE.CanvasTexture(c);tex.colorSpace=THREE.SRGBColorSpace;
-  const sh=new THREE.Shape();sh.moveTo(-w/2,0);sh.lineTo(w/2,0);if(arched){sh.lineTo(w/2,h-w/2);sh.quadraticCurveTo(w/2,h,0,h);sh.quadraticCurveTo(-w/2,h,-w/2,h-w/2);}else{sh.lineTo(w/2,h);sh.lineTo(-w/2,h);}sh.closePath();
-  const geo=new THREE.ShapeGeometry(sh);const pos=geo.attributes.position,uv=geo.attributes.uv;for(let i=0;i<pos.count;i++)uv.setXY(i,pos.getX(i)/w+.5,pos.getY(i)/h);uv.needsUpdate=true;
-  const material=new THREE.MeshStandardMaterial({map:tex,color:0xffffff,roughness:.45,emissiveMap:tex,emissive:0xffffff,emissiveIntensity:warm?.65:.35});mesh(geo,material,x,y,z);
+ for(const zz of [-D/2,D/2]){
+  const shape=new THREE.Shape();shape.moveTo(-W/2,0);shape.lineTo(W/2,0);shape.lineTo(0,rise);shape.closePath();
+  const face=new THREE.Mesh(new THREE.ShapeGeometry(shape),plaster);face.position.set(0,H,zz+(zz>0?.015:-.015));face.material.side=THREE.DoubleSide;g.add(face);
  }
- function window(x,y,z,w=1,h=1.5){
-  if(kind==='manor'){
-   const trim=M(0xe0ded0), inner=M(0xaebbc0), glass=M(0x28465b);
-   arch(x,y,z,w+.24,h+.20,trim);
-   arch(x,y+.10,z+.16,w,h,inner);
-   arch(x,y+.15,z+.31,w*.88,h*.90,glass);
-   const front=z+.49, base=y+.15, top=base+h*.90, spring=top-w*.44;
-   block(x,(base+top)/2,front,.045,top-base,.045,trim);
-   for(const yy of [base+h*.30,spring])block(x,yy,front,w*.87,.045,.045,trim);
-   for(const side of [-1,1])beam([x,spring,front],[x+side*w*.32,top-w*.13,front],trim,.026);
-   block(x,y-.04,z+.23,w+.42,.16,.42,trim);
-   return;
+ // Heavy exposed timber posts and two horizontal storey beams.
+ for(const xx of [-W*.47,0,W*.47])box(g,xx,H/2,front,.19,H-.25,.2,timber);
+ for(const yy of [2.9,H-.13])box(g,0,yy,front,W*.97,.2,.23,timber);
+ // Four broad windows with heavy, tightly closed shutters: Mary's house
+ // should look deliberately sealed, never like an ordinary occupied cottage.
+ const shutterPlank=mat(0x4e3a2b),shutterBat=mat(0x70533a),shutterHardware=mat(0x302d28);
+ for(const yy of [1.85,4.42])for(const xx of [-W*.31,W*.31]){
+  box(g,xx,yy,front+.08,1.3,1.38,.15,timber);
+  box(g,xx,yy,front+.18,1.06,1.15,.09,darkGlass);
+  // Two closed, individual plank leaves cover the glass from edge to edge.
+  for(const side of [-1,1]){
+   const sx=xx+side*.295;
+   box(g,sx,yy,front+.34,.60,1.38,.17,shutterPlank);
+   for(const seam of [-.205,0,.205])
+    box(g,sx+seam,yy,front+.442,.025,1.34,.032,shutterBat);
+   for(const band of [-.47,.47]){
+    box(g,sx,yy+band,front+.458,.57,.082,.055,shutterHardware);
+    for(const nail of [-.22,.22]){
+     const head=new THREE.Mesh(new THREE.SphereGeometry(.028,6,5),shutterBat);
+     head.position.set(sx+nail,yy+band,front+.497);g.add(head);
+    }
+   }
+   box(g,xx+side*.66,yy,front+.32,.12,1.49,.20,timber);
   }
-  arch(x,y,z,w+.20,h+.18,wood);arch(x,y+.08,z+.16,w,h,pane);
-  block(x,y-.04,z+.23,w+.42,.16,.42,stone);
-  if(kind==='tavern'||kind==='shop'){welcomingGlass(x,y+.08,z+.37,w*.94,h*.96);if(kind==='shop'){for(const side of [-1,1])block(x+side*(w*.5+.24),y+h*.48,z+.13,.34,h*.86,.12,M(0x476b64));}return;}
-  if(boarded){for(let k=0;k<3;k++){const yy=y+h*(.24+k*.26);const o=block(x,yy,z+.39,w*1.16,.19,.12,planks[k]);o.rotation.z=[-.14,.21,-.09][k];}return;}
-  block(x,y+h*.48,z+.32,.035,h*.82,.045,mullion);block(x,y+h*.48,z+.32,w*.96,.035,.045,mullion);
-  if(kind!=='tavern'){block(x-w*.27,y+h*.63,z+.325,.035,h*.20,.012,reflection).rotation.z=-.20;}
-  if(kind==='shop'){for(const side of [-1,1])block(x+side*(w*.5+.24),y+h*.48,z+.13,.34,h*.86,.12,M(0x476b64));}
+  box(g,xx,yy-0.72,front+.32,1.42,.14,.21,stone);
  }
- function door(z,w=1.7,h=2.6){arch(0,.12,z,w+.38,h+.25,stone);arch(0,.14,z+.22,w,h,wood);for(let i=-2;i<=2;i++)block(i*w/6,h*.43,z+.42,.045,h*.72,.04,gold);block(.35,1.2,z+.48,.13,.13,.13,gold);block(0,.10,z+.4,w+.7,.2,.85,stone);}
- function sign(text,x,y,z,w){const c=document.createElement('canvas');c.width=512;c.height=128;const q=c.getContext('2d');q.fillStyle='#503c35';q.fillRect(0,0,512,128);q.strokeStyle='#e5bb76';q.lineWidth=9;q.strokeRect(8,8,496,112);q.fillStyle='#ffe2a0';q.font='bold 32px Georgia';q.textAlign='center';q.fillText(text,256,76);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;mesh(new THREE.PlaneGeometry(w,w/4),new THREE.MeshBasicMaterial({map:t,side:THREE.DoubleSide}),x,y,z);}
- function tower(x,z,rad,h,c,rc){mesh(new THREE.CylinderGeometry(rad*.86,rad,h,10),M(c),x,h/2,z);mesh(new THREE.ConeGeometry(rad*1.24,h*.43,10),M(rc),x,h+h*.215,z);for(let i=0;i<3;i++)mesh(new THREE.CylinderGeometry(rad*1.04,rad*1.04,.17,10),stone,x,h*(.25+i*.29),z);}
- function chimney(x,z,y){mass(x,z,.8,.85,2.1,stone,y,.18);block(x+.18,y+2.1,z,1.05,.24,1.1,wood);}
- if(kind==='church'){
-  mass(0,-.5,5.7,10.5,5.6,M(0xb4b0a1));roof(0,-.5,6.7,11.5,5.6,3.5,0x435a69,.45);tower(-2.35,-2.8,1.65,10.5,0x9c9c91,0x526879);tower(2.35,-3.1,1.1,6.5,0xaaa99c,0x526879);mass(0,3.4,4.2,4.6,4.5,M(0xbab4a4));roof(0,3.4,5,5.2,4.5,2.5,0x435a69);door(5.75,2.0,3.2);window(0,3.65,5.8,1.25,1.65);for(let i=0;i<3;i++){let z=-3.6+i*3;for(const side of [-1,1]){let o=arch(side*2.94,2,z,1.05,2.5,dark);o.rotation.y=side*Math.PI/2;}}block(-2.35,15.5,-2.8,.15,1.1,.15,gold);block(-2.35,15.65,-2.8,.8,.15,.15,gold);landmarkLantern(g,-1.7,2.7,6);landmarkLantern(g,1.7,2.7,6);
- }else if(kind==='tavern'){
-  mass(0,-.4,6.6,6,3.2,M(0xc58a61));mass(-.6,-.8,5.4,5.1,2.5,M(0xe0b980),3.2,-.45);roof(-.8,-.8,6.5,6.2,5.7,2.9,0x935047,-.65);mass(2.2,1.3,2.1,3.6,3.5,M(0xb97050));roof(2.2,1.3,2.9,4.3,3.5,1.65,0x9a5644);door(3.45);window(-2.1,1.1,3.0,1.35,1.5);window(-1.6,3.65,2.0);window(.25,3.65,2.0);chimney(-2.5,-1.5,5.8);sign('BLOOD OF THE VINE',0,3.15,3.8,3.8);for(const a of [-2.6,2.6])landmarkLantern(g,a,2.5,3.55);
- }else if(kind==='shop'){
-  mass(0,-.45,6.6,5.7,3.1,M(0xd9b76c));mass(.7,-.65,4.6,5.1,2.7,M(0xe5c988),3.1,.45);roof(.8,-.65,5.7,6.1,5.8,2.7,0x4d7774,.65);door(3.2);for(const a of [-2,2]){window(a,.8,2.7,1.5,1.65);block(a,.55,3.25,1.8,.2,.65,wood);}roof(0,3.1,7.1,1.6,3.05,.65,0x63877a);window(.5,3.6,2.15,1.3,1.6);sign("BILDRATH'S MERCANTILE",0,4.35,3.95,4.4);chimney(-1.4,-1.5,5.5);landmarkLantern(g,-2.9,2.7,3.1);landmarkLantern(g,2.9,2.7,3.1);
- }else if(kind==='mary'){
-  mass(0,-.5,5.5,6.4,3.3,M(0x829da8));mass(-.7,-.4,6.3,6.1,3.0,M(0x9eb2ba),3.3,-.65);roof(-1,-.4,7.2,7,6.3,3.4,0x52617c,-1.1);mass(2.65,-1,2.1,3.8,5.2,M(0x728c9c));roof(2.65,-1,2.9,4.5,5.2,2.3,0x52617c);door(2.85);window(-1.9,1.1,2.9);window(-2.3,3.8,2.95,1.1,1.7);window(.25,3.8,2.95,1.1,1.7);chimney(1.5,-2,6.3);landmarkLantern(g,-1.5,2.5,3.1);
- {const front=2.85; const mat=M;
+ // Door is slightly inset and framed by a small protective porch.
+ box(g,0,1.36,front+.21,1.55,2.72,.22,oak);
+ for(const xx of [-.48,0,.48])box(g,xx,1.36,front+.35,.045,2.6,.07,timber);
+ for(const yy of [.55,2.24])box(g,0,yy,front+.38,1.48,.1,.08,iron);
+ box(g,.51,1.35,front+.44,.12,.42,.12,iron);
+ box(g,0,.18,front+.8,2.1,.36,1.15,stone);
+ box(g,0,2.98,front+.64,2.6,.18,1.25,roof);
+ for(const xx of [-1.16,1.16])box(g,xx,1.53,front+1.18,.15,2.88,.15,timber);
  // Mary's hand-lettered warning, nailed to the door rather than a shop sign.
  const warningCanvas=document.createElement('canvas');warningCanvas.width=640;warningCanvas.height=300;
  const wc=warningCanvas.getContext('2d');
@@ -1474,7 +1692,7 @@ function polishedLandmark(kind,site,angle,r){
  const warningTexture=new THREE.CanvasTexture(warningCanvas);warningTexture.colorSpace=THREE.SRGBColorSpace;
  const warningSign=new THREE.Mesh(new THREE.PlaneGeometry(.94,.45),
   new THREE.MeshStandardMaterial({map:warningTexture,roughness:1,side:THREE.DoubleSide}));
- warningSign.position.set(-.02,1.70,front+.51);warningSign.rotation.z=-.065;g.add(warningSign);
+ warningSign.position.set(-.02,1.70,front+.428);warningSign.rotation.z=-.065;g.add(warningSign);
  // A simple protective wooden cross, weather-worn and slightly crooked.
  const crossWood=mat(0x70513b);
  const crossPost=box(g,1.38,2.14,front+.36,.13,.91,.11,crossWood);
@@ -1509,36 +1727,101 @@ function polishedLandmark(kind,site,angle,r){
    bloom.position.set(potX+dx*1.5,.87+(k%3)*.07,potZ+dz*1.6);g.add(bloom);
   }
  }
-
- }
-
- }else if(kind==='guest'){
-  mass(-1.1,-.3,6.1,7.3,3.4,M(0xe3d4ac));roof(-1.1,-.3,7.3,8.3,3.4,3.4,0xb99a56,.5,true);mass(2.5,-1.2,3.2,4.9,4.6,M(0xb4c29a));roof(2.5,-1.2,4.1,5.8,4.6,2.6,0xa98b4e,0,true);door(4.1);window(-2.5,1,3.55,1.2,1.6);window(2.5,1.2,1.45);window(2.5,3,1.45);block(-2.6,5.65,-1.7,.78,3.0,.82,M(0x98634e));for(let k=0;k<6;k++)block(-2.6,4.35+k*.43,-1.7,.80,.045,.84,M(0x776052));block(-2.6,7.19,-1.7,1.04,.22,1.08,stone);sign('GUEST HOUSE',0,3.15,4.3,2.7);landmarkLantern(g,-1.6,2.5,4.2);landmarkLantern(g,1.6,2.5,4.2);
- }else{
-  mass(0,-.8,10.2,8.8,6.6,M(0xc2b5a1));roof(0,-.8,11.3,10,6.6,4.4,0x783e53,.6);tower(-5.5,-.8,2.15,8.5,0x9e9b99,0x783e53);tower(5.5,-1.7,1.85,7.5,0x9e9b99,0x783e53);mass(0,3.4,4.5,3.9,5.5,M(0xd0c2ad));roof(0,3.4,5.3,4.8,5.5,3.1,0x783e53);door(5.55,2.5,3.4);window(0,3.85,5.45,1.4,1.5);for(const a of [-3.6,3.6])for(const y of [1.4,4.1]){window(a,y,3.65,1.25,1.9);}chimney(-3,-2,8);chimney(3,-2,8);for(const a of [-3.2,3.2]){block(a,1.1,13.56,.75,2.2,.75,stone);for(let i=0;i<7;i++){let xx=a+Math.sign(a)*i*1.15;block(xx,.8,13.56,.12,1.6,.12,wood);}block(a+Math.sign(a)*3.5,.7,13.56,7,.12,.12,wood);}landmarkLantern(g,-2.6,3,5.7);landmarkLantern(g,2.6,3,5.7);
- }
- return {x,z,r};
+ // Side chimney makes the silhouette recognizable from the road.
+ box(g,W*.30,H+.3,-D*.19,.76,2.4,.8,stone);
+ box(g,W*.30,H+1.56,-D*.19,.99,.17,1.03,stone);
+ for(const lx of [-2.55,2.55])landmarkLantern(g,lx,3.0,front+.50);
+ return {x,z,r:5.65};
 }
-function makeChurch(){return animatedLandmark('church',CHURCH_SITE,Math.atan2(548-CHURCH_SITE[0],548-CHURCH_SITE[1]),6.3);}
-const church=makeChurch();
-
-// E2 tavern: original custom façade and detailing transferred from Barovia v5.21.
-// E2 now occupies the former brick townhouse site northeast of the plaza, facing south.
-function makeTavern(){return polishedLandmark('tavern',TAVERN_SITE,0,5.2);}
-const tavern=makeTavern();
-// E1 Bildrath's Mercantile — custom original v5.21 storefront transferred intact.
-function makeMercantile(){return polishedLandmark('shop',[655,650],Math.PI,5.5);}
-const mercantile=makeMercantile();
-
-
-// E3 Mad Mary's House — broad, freestanding two-storey townhouse.
-// Built specifically for this map; no narrow rowhouse proportions.
-function makeMaryHouse(){return polishedLandmark('mary',[450,700],Math.PI/2,5.65);}
 const maryHouse=makeMaryHouse();
 
 
 // E5 Guest House — wide two-storey inn-like residence, located south of E3 on the same west side of the southern lane.
-function makeGuestHouse(){return polishedLandmark('guest',[450,930],Math.PI/2,6.3);}
+function makeGuestHouse(){
+ const g=new THREE.Group();scene.add(g);
+ // On the same (west) side of the residential lane as Mary's townhouse, farther south.
+ const [x,z]=toWorld([450,930]);g.position.set(x,0,z);
+ g.rotation.y=Math.PI/2; // front faces east toward the lane
+ const W=9.6,D=8.0,H=5.8,front=D/2+.13;
+ const plaster=mat(0xc5b99c),foundation=mat(0x6d6c63),beam=mat(0x60452f);
+ const shingles=mat(0x665c50),shingleAlt=mat(0x7a6a55),oak=mat(0x795435);
+ const iron=mat(0x292a27),glass=mat(0x53686c),warm=mat(0xd8ae6e);
+ box(g,0,H/2,0,W,H,D,plaster);
+ box(g,0,.38,0,W+.35,.76,D+.35,foundation);
+ // Substantial, pitched roof with a real ridge, broad overhang and layered shingles.
+ const rise=2.25,over=.65;
+ for(const side of [-1,1]){
+  const edge=side*(W/2+over);
+  const verts=[0,H+rise,-D/2-over,edge,H,-D/2-over,edge,H,D/2+over,0,H+rise,-D/2-over,edge,H,D/2+over,0,H+rise,D/2+over];
+  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));geo.computeVertexNormals();
+  const m=new THREE.Mesh(geo,shingles);m.material.side=THREE.DoubleSide;g.add(m);
+  for(let i=0;i<5;i++){
+   const t=(i+.5)/5,xx=side*(W/2+over)*(1-t),yy=H+rise*t+.04;
+   const strip=box(g,xx,yy,0,.10,.07,D+1.45,i%2?shingles:shingleAlt);
+   strip.rotation.z=side===-1?Math.atan2(rise,W/2+over):-Math.atan2(rise,W/2+over);
+  }
+ }
+ for(const zz of [-D/2,D/2]){
+  const shape=new THREE.Shape();shape.moveTo(-W/2,0);shape.lineTo(W/2,0);shape.lineTo(0,rise);shape.closePath();
+  const tri=new THREE.Mesh(new THREE.ShapeGeometry(shape),plaster);tri.position.set(0,H,zz+(zz>0?.02:-.02));tri.material.side=THREE.DoubleSide;g.add(tri);
+ }
+ // Wider, less distressed frontage than E3: half-timber framing and balanced bays.
+ for(const xx of [-W*.47,-W*.18,W*.18,W*.47])box(g,xx,H/2,front,.17,H-.2,.20,beam);
+ for(const yy of [2.95,H-.13])box(g,0,yy,front,W*.96,.20,.22,beam);
+ for(const yy of [1.88,4.30])for(const xx of [-W*.34,W*.34]){
+  box(g,xx,yy,front+.10,1.53,1.42,.17,beam);
+  box(g,xx,yy,front+.21,1.28,1.18,.07,glass);
+  box(g,xx,yy,front+.27,.08,1.28,.10,beam);
+  box(g,xx,yy,front+.28,1.35,.08,.10,beam);
+  for(const side of [-1,1])box(g,xx+side*.94,yy,front+.14,.32,1.48,.12,oak);
+ }
+ // Wide oak entry and a sheltered timber porch.
+ box(g,0,1.42,front+.22,1.85,2.84,.22,oak);
+ for(const xx of [-.6,-.2,.2,.6])box(g,xx,1.42,front+.36,.045,2.7,.07,beam);
+ for(const yy of [.57,2.31])box(g,0,yy,front+.40,1.77,.10,.09,iron);
+ box(g,.66,1.38,front+.47,.13,.50,.13,iron);
+ box(g,0,.17,front+.92,2.8,.34,1.55,foundation);
+ box(g,0,3.03,front+1.02,3.8,.24,2.12,shingles);
+ for(const xx of [-1.62,1.62])box(g,xx,1.52,front+1.95,.18,3.02,.18,beam);
+ // Light honey-oak sign, with dark wood-burned lettering rather than paint.
+ const signCanvas=document.createElement('canvas');signCanvas.width=1024;signCanvas.height=340;
+ const c=signCanvas.getContext('2d');
+ const woodWash=c.createLinearGradient(0,0,0,340);
+ woodWash.addColorStop(0,'#d3ad77');woodWash.addColorStop(.5,'#bf945f');woodWash.addColorStop(1,'#cba570');
+ c.fillStyle=woodWash;c.fillRect(0,0,1024,340);
+ for(let i=0;i<55;i++){
+  const sy=(i*83)%340;
+  c.strokeStyle=`rgba(94,56,28,${.045+(i%5)*.012})`;c.lineWidth=1+(i%4);
+  c.beginPath();c.moveTo(7,sy);
+  c.bezierCurveTo(240,sy+Math.sin(i)*8,700,sy-7,1018,sy+3);c.stroke();
+ }
+ c.strokeStyle='#78512f';c.lineWidth=15;c.strokeRect(13,13,998,314);
+ c.strokeStyle='rgba(78,44,22,.28)';c.lineWidth=5;c.strokeRect(29,29,966,282);
+ c.textAlign='center';c.textBaseline='middle';
+ c.shadowColor='rgba(45,25,13,.45)';c.shadowBlur=6;c.shadowOffsetY=2;
+ c.fillStyle='#4b2c18';c.font='bold 73px Georgia';c.fillText('Welcome weary',512,132);
+ c.font='bold 88px Georgia';c.fillText('travellers',512,240);
+ c.shadowColor='transparent';c.shadowBlur=0;c.shadowOffsetY=0;
+ const tex=new THREE.CanvasTexture(signCanvas);tex.colorSpace=THREE.SRGBColorSpace;
+ const sign=new THREE.Mesh(new THREE.PlaneGeometry(3.28,1.09),
+  new THREE.MeshStandardMaterial({map:tex,roughness:1,side:THREE.DoubleSide}));
+ sign.position.set(0,3.57,front+2.13);g.add(sign);
+ for(const xx of [-1.37,1.37]){
+  box(g,xx,4.20,front+2.14,.07,.30,.08,iron);
+  const nail=new THREE.Mesh(new THREE.SphereGeometry(.055,8,6),iron);
+  nail.position.set(xx,3.95,front+2.20);g.add(nail);
+ }
+ // Brick chimney and a little warm lantern on either side of the door.
+ box(g,-W*.31,H+.28,-D*.18,.94,2.35,.95,foundation);
+ box(g,-W*.31,H+1.48,-D*.18,1.16,.20,1.17,foundation);
+ for(const xx of [-1.24,1.24]){
+  box(g,xx,2.25,front+.34,.36,.60,.34,iron);
+  box(g,xx,2.26,front+.54,.25,.40,.10,warm);
+  box(g,xx,2.61,front+.35,.48,.10,.44,iron);
+ }
+ for(const lx of [-2.4,2.4])landmarkLantern(g,lx,2.9,front+.55);
+ return {x,z,r:6.3};
+}
 const guestHouse=makeGuestHouse();
 
 // Unkeyed village residence between E3 and E5: broad cottage from the
@@ -1549,7 +1832,7 @@ function makeResidentialHouse(){
  g.rotation.y=Math.PI/2;
  const W=8.2,D=7.1,H=4.7,F=D/2+.13;
  const plaster=mat(0xb8aa8c),beam=mat(0x59412d),stone=mat(0x777267),
-       shingles=mat(0x695b48),wood=mat(0x765334),glass=mat(0x83a9bb);
+       shingles=mat(0x695b48),wood=mat(0x765334),glass=mat(0x45565a);
  box(g,0,H/2,0,W,H,D,plaster);
  box(g,0,.35,0,W+.24,.7,D+.24,stone);
  // Original Barovia cottage vocabulary: broad gable, timber bands, shutters.
@@ -1574,7 +1857,110 @@ const residentialHouse=makeResidentialHouse();
 
 // E4 Burgomaster's Mansion — set back at the end of the straight southern
 // street. Keep its north-facing design and existing iron gate intact.
-function makeBurgomasterMansion(){return polishedLandmark('manor',MANOR_SITE,Math.PI,10.1);}
+function makeBurgomasterMansion(){
+ const g=new THREE.Group();scene.add(g);
+ const [x,z]=toWorld(MANOR_SITE);g.position.set(x,0,z);
+ g.rotation.y=Math.PI; // local front (+Z) points north, up the terminating street
+ const W=15.8,D=10.8,H=7.3,F=D/2+.16;
+ const stone=mat(0x686b64),plaster=mat(0xa69b84),timber=mat(0x40352c),slate=mat(0x383d42),
+       slateLight=mat(0x55595a),oak=mat(0x463126),iron=mat(0x252626),glass=mat(0x333e46);
+ box(g,0,H/2,0,W,H,D,plaster);
+ box(g,0,.57,0,W+.55,1.14,D+.55,stone);
+ // Thick stone corner buttresses and defensive-looking quoins.
+ for(const xx of [-W/2+.30,W/2-.30])for(const zz of [-D/2+.3,D/2-.3]){
+  box(g,xx,H/2,zz,.78,H,.78,stone);
+  for(let yy=1.0;yy<H;yy+=1.25)box(g,xx,yy,zz,.94,.18,.94,slateLight);
+ }
+ // Wide high pitched roof and enclosing gables.
+ const rise=3.7,over=.85;
+ for(const side of [-1,1]){
+  const edge=side*(W/2+over),v=[0,H+rise,-D/2-over,edge,H,-D/2-over,edge,H,D/2+over,0,H+rise,-D/2-over,edge,H,D/2+over,0,H+rise,D/2+over];
+  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(v,3));geo.computeVertexNormals();
+  const panel=new THREE.Mesh(geo,slate);panel.material.side=THREE.DoubleSide;g.add(panel);
+  for(let i=1;i<9;i++){
+   const t=i/9,xx=side*(W/2+over)*(1-t),yy=H+rise*t+.025;
+   const seam=box(g,xx,yy,0,.08,.06,D+1.78,i%2?slateLight:slate);
+   seam.rotation.z=side===-1?Math.atan2(rise,W/2+over):-Math.atan2(rise,W/2+over);
+  }
+ }
+ for(const zz of [-D/2,D/2]){
+  const sh=new THREE.Shape();sh.moveTo(-W/2,0);sh.lineTo(W/2,0);sh.lineTo(0,rise);sh.closePath();
+  const tri=new THREE.Mesh(new THREE.ShapeGeometry(sh),plaster);tri.position.set(0,H,zz+(zz>0?.025:-.025));tri.material.side=THREE.DoubleSide;g.add(tri);
+ }
+ // Front stonework and symmetrical shuttered windows on both floors.
+ for(const yy of [2.1,5.35])for(const xx of [-W*.39,-W*.23,W*.23,W*.39]){
+  box(g,xx,yy,F+.08,1.40,1.85,.21,stone);
+  box(g,xx,yy,F+.20,1.12,1.55,.09,glass);
+  box(g,xx,yy,F+.29,.09,1.58,.10,iron);
+  box(g,xx,yy,F+.30,1.15,.10,.10,iron);
+  for(const side of [-1,1]){
+   const shutter=box(g,xx+side*.87,yy,F+.26,.39,1.88,.14,oak);
+   for(const sy of [-.55,0,.55])box(g,xx+side*.87,yy+sy,F+.35,.36,.065,.05,timber);
+  }
+ }
+ // Massive double oak doors beneath a broad stone porch.
+ box(g,0,1.72,F+.20,3.15,3.45,.28,stone);
+ for(const side of [-1,1]){
+  box(g,side*.77,1.65,F+.38,1.45,3.26,.19,oak);
+  for(let k=-2;k<=2;k++)box(g,side*.77+k*.24,1.65,F+.51,.045,3.08,.06,timber);
+  for(const yy of [.75,2.62])box(g,side*.77,yy,F+.55,1.30,.12,.07,iron);
+  box(g,side*.20,1.60,F+.65,.13,.54,.12,iron);
+ }
+ box(g,0,.19,F+1.38,4.2,.38,2.75,stone);
+ box(g,0,3.85,F+1.18,5.35,.36,2.65,slate);
+ for(const xx of [-2.32,2.32]){
+  box(g,xx,1.94,F+2.23,.40,3.88,.40,stone);
+  box(g,xx,3.77,F+2.23,.64,.20,.64,stone);
+ }
+ // Roof dormers, tall stone chimneys, and an old family crest above the door.
+ for(const xx of [-W*.28,W*.28]){
+  box(g,xx,H+1.17,F*.15,1.78,2.15,1.6,plaster);
+  box(g,xx,H+1.26,F*.15,1.18,1.25,.13,glass);
+  box(g,xx,H+2.32,F*.15,2.3,.30,2.0,slate);
+ }
+ for(const xx of [-W*.37,W*.36]){
+  box(g,xx,H+1.25,-D*.26,1.20,4.25,1.18,stone);
+  box(g,xx,H+3.48,-D*.26,1.48,.30,1.46,slateLight);
+ }
+ const shieldCanvas=document.createElement('canvas');shieldCanvas.width=320;shieldCanvas.height=360;
+ const c=shieldCanvas.getContext('2d');c.clearRect(0,0,320,360);
+ c.beginPath();c.moveTo(50,28);c.lineTo(270,28);c.lineTo(260,225);c.quadraticCurveTo(160,335,60,225);c.closePath();
+ c.fillStyle='#4b302a';c.fill();c.strokeStyle='#b49a68';c.lineWidth=13;c.stroke();
+ c.fillStyle='#d8c18c';c.font='bold 155px Georgia';c.textAlign='center';c.fillText('B',160,218);
+ const crest=new THREE.Mesh(new THREE.PlaneGeometry(1.42,1.6),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(shieldCanvas),transparent:true,side:THREE.DoubleSide}));
+ crest.position.set(0,5.72,F+.22);g.add(crest);
+ // Damaged boundary fencing and gate opening aligned with the private approach.
+ const fenceZ=F+8.0;
+ for(const side of [-1,1]){
+  for(let i=0;i<6;i++){
+   const fx=side*(3.7+i*1.55);
+   box(g,fx,.78,fenceZ,.16,1.55,.16,timber);
+  }
+  box(g,side*7.65,.60,fenceZ,7.9,.14,.16,timber);
+  box(g,side*7.65,1.25,fenceZ,7.9,.14,.16,timber);
+  box(g,side*3.2,1.03,fenceZ,.72,2.06,.72,stone);
+ }
+ // Wide iron entrance gate at the end of the walk-up, clear of the main street.
+ // Its two open leaves sit between the original stone pillars, facing the street.
+ const gateIron=mat(0x252722),gateAccent=mat(0x796847);
+ for(const side of [-1,1]){
+  const leaf=new THREE.Group();leaf.position.set(side*2.88,0,fenceZ);g.add(leaf);
+  leaf.rotation.y=side*.58; // swung open to welcome the approaching player
+  box(leaf,-side*1.27,1.30,0,2.55,.13,.14,gateIron);
+  box(leaf,-side*1.27,.35,0,2.55,.13,.14,gateIron);
+  for(let i=0;i<8;i++){
+   const lx=-side*(.16+i*.32);
+   box(leaf,lx,1.13,0,.065,2.18,.07,gateIron);
+   const tip=new THREE.Mesh(new THREE.ConeGeometry(.105,.26,4),gateAccent);
+   tip.position.set(lx,2.32,0);leaf.add(tip);
+  }
+  box(g,side*3.2,2.19,fenceZ,.86,.26,.86,stone);
+  const finial=new THREE.Mesh(new THREE.SphereGeometry(.27,10,8),gateAccent);
+  finial.position.set(side*3.2,2.55,fenceZ);g.add(finial);
+ }
+ for(const lx of [-5.8,5.8])landmarkLantern(g,lx,3.0,F+.45);
+ return {x,z,r:10.1};
+}
 const mansion=makeBurgomasterMansion();
 applyAtmosphere();
 
@@ -1894,7 +2280,7 @@ document.getElementById('reset').addEventListener('click',()=>{
 const villageHomes=[];
 const homeWall=[0xf0e9d9,0x994b3b,0xf5f0e2,0x967254,0xe6d4ae,0xb8b6a7,0xd4a47d].map(mat);
 const homeRoof=[0x82664b,0x514d50,0x626b65,0x79583d,0x3d4147,0x59524c,0x7c5145].map(mat);
-const homeTimber=mat(0x493728),homeStone=mat(0x77746c),homeWindow=new THREE.MeshStandardMaterial({color:0x83a9bb,roughness:.35}),homeOak=mat(0x69452b),homeIron=mat(0x272725);
+const homeTimber=mat(0x493728),homeStone=mat(0x77746c),homeWindow=mat(0x354b4c),homeOak=mat(0x69452b),homeIron=mat(0x272725);
 const homeTrims=[0x523b29,0xddd0ba,0x6d4932,0x473b2c,0x3b3029,0x514439,0x5e3d31].map(mat);
 const homeDoors=[0x754c32,0x4d3025,0x92643e,0x6e4a2f,0x533929,0x6b4932,0x805033].map(mat);
 const homeShutters=[0x47605b,0x423c36,0x6c533b,0x45564c,0x493a34,0x665547,0x3e4c54].map(mat);
@@ -1962,10 +2348,10 @@ function villageHome(px,py,style,rotation=0,scale=1){
   for(const yy of (H>5?[2.0,4.3]:[2.3])){
    box(g,xx,yy,front+.1,1.32,1.35,.14,trim);
    box(g,xx,yy,front+.2,1.05,1.1,.09,homeWindow);
-   box(g,xx-.79,yy,front+.16,.30,1.33,.10,shutterMat);
-   box(g,xx+.79,yy,front+.16,.30,1.33,.10,shutterMat);
-   box(g,xx,yy,front+.27,.035,1.13,.04,trim);
-   box(g,xx,yy,front+.28,1.08,.035,.04,trim);
+   box(g,xx-.59,yy,front+.22,.23,1.33,.13,shutterMat);
+   box(g,xx+.59,yy,front+.22,.23,1.33,.13,shutterMat);
+   box(g,xx,yy,front+.27,.075,1.13,.07,trim);
+   box(g,xx,yy,front+.28,1.08,.07,.06,trim);
   }
  }
  box(g,0,1.33,front+.21,1.43,2.65,.23,doorMat);
@@ -3428,7 +3814,7 @@ function enterBuilding(id){
  if(activeInterior||!locationPanel.hidden)return;
  activeRoom=roomCache.get(id)||makeInteriorRoom(id);
  activeRoom.visible=true;activeInterior=id;
- if(id==='E2'||id==='E6')randomizeVillagePatrons(activeRoom);
+ if(id==='E2')randomizeVillagePatrons(activeRoom);
  if(id==='E2')resetTavernBatEgg();
  if(id==='E6')resetChurchOrgan();
  insidePlayer.x=0;insidePlayer.z=activeRoom.userData.d/2-1.6;
@@ -3460,6 +3846,7 @@ function leaveBuilding(){
  for(const k of Object.keys(keys))keys[k]=false;
  applyAtmosphere();refreshDoorHint();
  syncBaroviaAudio();
+ classicSync();
 }
 function walkInterior(dt){
  const room=activeRoom.userData;
@@ -4083,18 +4470,9 @@ window.addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','Arr
 window.addEventListener('keyup',e=>keys[e.code]=false);
 document.getElementById('reset').onclick=()=>Object.assign(player,{x:(1285-WIDTH/2)/SCALE,z:(548-HEIGHT/2)/SCALE,heading:-Math.PI/2});
 document.getElementById('reset').addEventListener('click',e=>{if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()){e.preventDefault();e.stopImmediatePropagation();}},true);
-// v5.98: independent exterior camera mode; existing movement and triggers remain intact.
-let quarterView=true, quarterDistance=24;
-const viewButton=document.getElementById('overview');
-const playerMarker=new THREE.Group();
-const markerRing=new THREE.Mesh(new THREE.RingGeometry(.65,.83,40),new THREE.MeshBasicMaterial({color:0xffd071,side:THREE.DoubleSide}));
-markerRing.rotation.x=-Math.PI/2;markerRing.position.y=.07;playerMarker.add(markerRing);
-const markerBody=new THREE.Mesh(new THREE.ConeGeometry(.48,1.5,8),new THREE.MeshStandardMaterial({color:0x9c733f}));markerBody.position.y=.8;playerMarker.add(markerBody);scene.add(playerMarker);
-function syncViewButton(){viewButton.textContent=quarterView?'View: 3/4':overhead?'View: Overhead':'View: First person';}
-viewButton.onclick=()=>{if(quarterView){quarterView=false;overhead=true;}else if(overhead){overhead=false;}else{quarterView=true;}syncViewButton();};syncViewButton();
-renderer.domElement.addEventListener('wheel',e=>{if(!quarterView||activeInterior)return;e.preventDefault();quarterDistance=Math.max(12,Math.min(48,quarterDistance+e.deltaY*.025));},{passive:false});
+document.getElementById('overview').onclick=()=>{overhead=!overhead;document.getElementById('overview').textContent=overhead?'First-person view':'Overhead view'};
 window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);resizeWeatherCanvas()});
-let last=performance.now();function animate(now){requestAnimationFrame(animate);const dt=Math.min(.05,(now-last)/1000);last=now;if(activeInterior){playerMarker.visible=false;updateWeatherEffects(now);walkInterior(dt);return;}playerMarker.visible=quarterView;playerMarker.position.set(player.x,0,player.z);const rot=2.2*dt;if(!locationPanel.hidden){for(const key of Object.keys(keys))keys[key]=false;}if(keys.ArrowLeft)player.heading-=rot;if(keys.ArrowRight)player.heading+=rot;let f=(keys.ArrowUp?1:0)-(keys.ArrowDown?1:0),side=(keys.KeyD?1:0)-(keys.KeyA?1:0);const speed=(keys.ShiftLeft||keys.ShiftRight?15:7)*dt;const dx=(Math.sin(player.heading)*f+Math.cos(player.heading)*side)*speed,dz=(-Math.cos(player.heading)*f+Math.sin(player.heading)*side)*speed;const nx=player.x+dx,nz=player.z+dz;if(Math.abs(nx)<WIDTH/(2*SCALE)-1&&Math.abs(nz)<HEIGHT/(2*SCALE)-1&&Math.hypot(nx-church.x,nz-church.z)>church.r&&Math.hypot(nx-tavern.x,nz-tavern.z)>tavern.r&&Math.hypot(nx-mercantile.x,nz-mercantile.z)>mercantile.r&&Math.hypot(nx-maryHouse.x,nz-maryHouse.z)>maryHouse.r&&Math.hypot(nx-guestHouse.x,nz-guestHouse.z)>guestHouse.r&&Math.hypot(nx-residentialHouse.x,nz-residentialHouse.z)>residentialHouse.r&&Math.hypot(nx-mansion.x,nz-mansion.z)>mansion.r&&!hitsVillagePerimeter(nx,nz)&&villageHomes.every(h=>Math.hypot(nx-h.x,nz-h.z)>h.r)){player.x=nx;player.z=nz}if(quarterView){const h=player.heading;camera.position.set(player.x-Math.sin(h)*quarterDistance*.72,quarterDistance,player.z+Math.cos(h)*quarterDistance*.72);camera.lookAt(player.x+Math.sin(h)*3,0,player.z-Math.cos(h)*3);playerMarker.position.set(player.x,0,player.z);}else if(overhead){camera.position.set(player.x,90,player.z+5);camera.lookAt(player.x,0,player.z)}else{camera.position.set(player.x,1.72,player.z);camera.lookAt(player.x+Math.sin(player.heading)*10,1.72,player.z-Math.cos(player.heading)*10)}skyDome.position.copy(camera.position);updateNearbyFog(now);refreshLanternLighting();updateLocationProximity();refreshDoorHint();villageUpdateEncounterSprites();renderer.render(scene,camera);drawMap();document.getElementById('pos').textContent=`Location: ${Math.round(player.x*SCALE+WIDTH/2)}, ${Math.round(player.z*SCALE+HEIGHT/2)} · ${onRoad(player.x,player.z)?'On road':'Off road (grass)'}`};requestAnimationFrame(animate);
+let last=performance.now();function animate(now){requestAnimationFrame(animate);const dt=Math.min(.05,(now-last)/1000);last=now;if(activeInterior){updateWeatherEffects(now);walkInterior(dt);return;}if(document.body.classList.contains("classic-outside")){updateLocationProximity();villageUpdateEncounterSprites();drawMap();return;}const rot=2.2*dt;if(!locationPanel.hidden){for(const key of Object.keys(keys))keys[key]=false;}if(keys.ArrowLeft)player.heading-=rot;if(keys.ArrowRight)player.heading+=rot;let f=(keys.ArrowUp?1:0)-(keys.ArrowDown?1:0),side=(keys.KeyD?1:0)-(keys.KeyA?1:0);const speed=(keys.ShiftLeft||keys.ShiftRight?15:7)*dt;const dx=(Math.sin(player.heading)*f+Math.cos(player.heading)*side)*speed,dz=(-Math.cos(player.heading)*f+Math.sin(player.heading)*side)*speed;const nx=player.x+dx,nz=player.z+dz;if(Math.abs(nx)<WIDTH/(2*SCALE)-1&&Math.abs(nz)<HEIGHT/(2*SCALE)-1&&Math.hypot(nx-church.x,nz-church.z)>church.r&&Math.hypot(nx-tavern.x,nz-tavern.z)>tavern.r&&Math.hypot(nx-mercantile.x,nz-mercantile.z)>mercantile.r&&Math.hypot(nx-maryHouse.x,nz-maryHouse.z)>maryHouse.r&&Math.hypot(nx-guestHouse.x,nz-guestHouse.z)>guestHouse.r&&Math.hypot(nx-residentialHouse.x,nz-residentialHouse.z)>residentialHouse.r&&Math.hypot(nx-mansion.x,nz-mansion.z)>mansion.r&&!hitsVillagePerimeter(nx,nz)&&villageHomes.every(h=>Math.hypot(nx-h.x,nz-h.z)>h.r)){player.x=nx;player.z=nz}if(overhead){camera.position.set(player.x,90,player.z+5);camera.lookAt(player.x,0,player.z)}else{camera.position.set(player.x,1.72,player.z);camera.lookAt(player.x+Math.sin(player.heading)*10,1.72,player.z-Math.cos(player.heading)*10)}skyDome.position.copy(camera.position);updateNearbyFog(now);refreshLanternLighting();updateLocationProximity();refreshDoorHint();villageUpdateEncounterSprites();renderer.render(scene,camera);drawMap();document.getElementById('pos').textContent=`Location: ${Math.round(player.x*SCALE+WIDTH/2)}, ${Math.round(player.z*SCALE+HEIGHT/2)} · ${onRoad(player.x,player.z)?'On road':'Off road (grass)'}`};requestAnimationFrame(animate);
 
 // v5.39: multiplayer bridge — no geometry, weather or encounter changes.
 window.DNDPOV_ZONE_BRIDGE={
@@ -4165,9 +4543,9 @@ function villageRevealEncounter(title,description){
   const forwardVector=new THREE.Vector3();camera.getWorldDirection(forwardVector);forwardVector.y=0;forwardVector.normalize();
   const sideVector=new THREE.Vector3(-forwardVector.z,0,forwardVector.x);
   const lateral=(i-(assets.length-1)/2)*2.65;
-  sp.position.copy(quarterView&&!activeInterior?new THREE.Vector3(player.x,1.72,player.z):camera.position).addScaledVector(forwardVector,9+Math.abs(lateral)*.6).addScaledVector(sideVector,lateral);
+  sp.position.copy(camera.position).addScaledVector(forwardVector,9+Math.abs(lateral)*.6).addScaledVector(sideVector,lateral);
   const height=/bat|ghost|wraith/.test(asset)?3.7:/wolf|worg/.test(asset)?2.65:3.4;
-  sp.position.y=(quarterView&&!activeInterior?1.72:camera.position.y)-1.65+height*.51;sp.scale.set(height*1.45,height,1);
+  sp.position.y=camera.position.y-1.65+height*.51;sp.scale.set(height*1.45,height,1);
   sp.renderOrder=100;sp.material.depthTest=false;
   scene.add(sp);villageEncounterSprites.push(sp);
  }
@@ -4200,9 +4578,31 @@ function villageUpdateEncounterSprites(){
 }
 
 
-document.title='DNDPOV — Village of Barovia v5.98 BASIC · All Barovia Edition';
-document.querySelector('#hud b').textContent='DNDPOV · BAROVIA BASIC · v5.98 · ALL BAROVIA';
+document.title='DNDPOV — Village of Barovia v5.83 BASIC · All Barovia Edition';
+document.querySelector('#hud b').textContent='DNDPOV · BAROVIA BASIC · v5.87 · ALL BAROVIA';
 
+
+// Classic map navigation; original village scene and interior engine retained.
+const classicBoard=document.createElement('section');classicBoard.id='classicBoard';classicBoard.innerHTML=`<h1>BAROVIA · Adventure map</h1><p>Choose a landmark. Explore interiors or enter Castle Ravenloft.</p><div id="classicMap"><svg viewBox="0 0 1000 650" preserveAspectRatio="none"><defs><pattern id="woods" width="43" height="48" patternUnits="userSpaceOnUse"><path d="M20 3L7 29H15L4 42H36L25 29H33Z" fill="#263729" stroke="#536348"/></pattern></defs><rect width="1000" height="650" fill="#49543b"/><rect width="1000" height="650" fill="url(#woods)" opacity=".65"/><path d="M0 610Q230 510 180 350T320 0" fill="none" stroke="#6c9293" stroke-width="19"/><path d="M1000 320L790 320M340 490Q220 560 120 540L95 370Q125 220 240 85" fill="none" stroke="#c4aa78" stroke-width="13"/><path d="M0 0L120 0 75 85 150 45 240 0 360 0 285 105 210 60 120 145Z" fill="#73766c" opacity=".7"/><text x="560" y="55" fill="#e7d6af" font-size="24" text-anchor="middle">VILLAGE OF BAROVIA</text></svg><canvas id="classicVillage" width="1332" height="1500"></canvas></div><div id="classicList"></div><p id="classicStatus">Select a destination · village travel is abbreviated.</p>`;document.body.append(classicBoard);
+const classicReturn=document.createElement('button');classicReturn.id='classicReturn';classicReturn.textContent='↩ Exit to adventure map';classicReturn.hidden=true;document.body.append(classicReturn);
+const classicMap=classicBoard.querySelector('#classicMap'),classicList=classicBoard.querySelector('#classicList'),classicCanvas=classicBoard.querySelector('#classicVillage');
+let classicPosition=null;try{classicPosition=JSON.parse(sessionStorage.getItem('rpgpovClassicPosition')||'null');}catch(e){}
+const classicParty=document.createElement('div');classicParty.id='classicParty';classicParty.textContent='♟ PARTY';classicMap.append(classicParty);
+function classicSetPosition(x,y,id){classicPosition={x,y,id};try{sessionStorage.setItem('rpgpovClassicPosition',JSON.stringify(classicPosition));}catch(e){}classicMarker();}
+function classicMarker(){const p=classicPosition||{x:34+45*(player.x*SCALE+WIDTH/2)/WIDTH,y:15+75*(player.z*SCALE+HEIGHT/2)/HEIGHT};classicParty.style.left=p.x+'%';classicParty.style.top=p.y+'%';}
+if(classicPosition?.id){const site=adventureSites.find(a=>a.id===classicPosition.id);if(site){player.x=site.x;player.z=site.z;}}
+let classicFirstPerson=false;
+const classicToggle=document.createElement('button');classicToggle.id='classicToggle';classicToggle.textContent='Switch to first person';document.body.append(classicToggle);
+classicToggle.onclick=()=>{if(activeInterior||window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.())return;document.exitPointerLock?.();closeLocation();for(const k of Object.keys(keys))keys[k]=false;classicFirstPerson=!classicFirstPerson;overhead=false;if(!classicFirstPerson)classicSetPosition(34+45*(player.x*SCALE+WIDTH/2)/WIDTH,15+75*(player.z*SCALE+HEIGHT/2)/HEIGHT,null);classicSync();};
+function classicSync(){const boardVisible=!activeInterior&&!classicFirstPerson;classicMarker();classicBoard.hidden=!boardVisible;classicReturn.hidden=!activeInterior;classicToggle.hidden=!!activeInterior;classicToggle.textContent=classicFirstPerson?'Return to adventure map':'Switch to first person';document.body.classList.toggle('classic-outside',boardVisible);if(boardVisible)classicCanvas.getContext('2d').drawImage(map,0,0);}
+function classicTravel(){const status=document.getElementById("classicStatus");if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()){status.textContent="Resolve the active encounter before continuing.";return false;}window.DNDPOV_AUTO_DM_TOOLS?.advanceTurn?.();if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()){status.textContent="Encounter on the way — resolve it, then select your destination again.";return false;}status.textContent="";return true;}
+function classicVisit(id){if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()){document.getElementById('classicStatus').textContent='Resolve the active encounter before continuing.';return;}const site=adventureSites.find(a=>a.id===id);if(!site)return;closeLocation();if(!classicTravel())return;player.x=site.x;player.z=site.z;nearbyLocationId=id;const k=keyedPlaces.find(k=>k.id===id);if(k)classicSetPosition(34+45*k.p[0]/WIDTH,15+75*k.p[1]/HEIGHT,id);drawMap();if(id==='E7'){showLocation(id);}else{enterBuilding(id);}classicSync();}
+function classicLink(file,x,y){if(!classicTravel())return;classicSetPosition(x,y,null);location.href=file+"?classic=1";}
+function classicPin(label,x,y,action){for(const parent of [classicMap,classicList]){const b=document.createElement('button');b.textContent=parent===classicMap?label.split(" ")[0]:label;b.title=label;b.setAttribute("aria-label",label);b.onclick=action;if(parent===classicMap){b.style.left=x+'%';b.style.top=y+'%';}parent.append(b);}}
+const classicIcons={E1:'🛒',E2:'🍺',E3:'🏠',E4:'🏰',E5:'🛏',E6:'⛪',E7:'🪦'};
+for(const k of keyedPlaces){classicPin(classicIcons[k.id]+' '+k.name,34+45*k.p[0]/WIDTH,15+75*k.p[1]/HEIGHT,()=>classicVisit(k.id));}
+classicPin('🏰 Castle Ravenloft',24,12,()=>classicLink('ravenloft.html',24,12));classicPin('🐎 Black carriage',12,43,()=>classicLink('road_to_tser.html',12,43));classicPin('⛺ Tser Pool / Madame Eva',12,83,()=>classicLink('road_to_tser.html',12,83));classicPin('🚪 Gates of Barovia',88,48,()=>classicLink('old_svalich_road.html',88,48));classicPin('🌲 Old Svalich Road',92,22,()=>classicLink('old_svalich_road.html',92,22));classicPin('🍺 Last Chance Tavern',92,77,()=>classicLink('old_svalich_road.html',92,77));
+classicReturn.onclick=()=>{if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.())return;document.exitPointerLock?.();closeLocation();classicFirstPerson=false;leaveBuilding();classicSync();};document.querySelector('#hud b').textContent='RPGPOV · BAROVIA CLASSIC v1.6';document.querySelector('#hud p:not(.build-notes p)').textContent='Choose a landmark on the adventure map.';classicSync();setInterval(classicSync,350);
 </script>
 <!-- DNDPOV local multiplayer: matching Castle Ravenloft Host/Join protocol -->
 <style id="dndpovMpStyle">
@@ -4469,29 +4869,55 @@ const panel=document.createElement('section');panel.id='aiDmPanel';panel.hidden=
 panel.innerHTML='<header><b>Adventure Journal · v5.83</b><button type="button" id="aiDmClose" aria-label="Close journal">×</button></header><div id="aiDmPlace"></div><div id="aiDmControls"><button id="aiDmReadAgain" type="button">Read Again</button><button id="aiDmPartyOpen" type="button">⚔ Party / Sheets</button><label id="aiDmToggleLabel"><input id="aiDmToggle" type="checkbox" checked> AI DM · Local edition</label></div><div id="aiDmStyleSliders"><div class="dmStyleItem"><label for="aiDmHeroism">Heroism <output id="aiDmHeroismValue">25% · Gritty</output></label><input id="aiDmHeroism" type="range" min="0" max="100" step="1" value="25"><div class="dmStyleScale"><span>Unforgiving</span><span>Legendary</span></div></div><div class="dmStyleItem"><label for="aiDmVerbosityRange">Verbosity <output id="aiDmVerbosityValue">3 · Normal</output></label><input id="aiDmVerbosityRange" type="range" min="1" max="5" step="1" value="3"><div class="dmStyleScale"><span>Brief</span><span>Immersive</span></div></div></div><div id="aiDmLog" aria-live="polite"></div><div id="aiDmCompose"><textarea id="aiDmInput" placeholder="Ask the Dungeon Master…"></textarea><footer><button id="aiDmConference" type="button">We have a conference</button><span id="aiDmStatus">AI ready</span><button id="aiDmSend" type="button">Send</button></footer></div>';
 document.body.append(panel);
 const partyBox=document.createElement('section');partyBox.id='aiDmPartyBox';partyBox.hidden=true;
-partyBox.innerHTML=`<header><b>⚔ Character Party Manager · v5.60</b><button type="button" id="partyClose" aria-label="Close character manager">×</button></header>
-<div class="partyContent"><p>Build your adventuring party. Upload a text-based PDF (up to 3 MB / 12 pages), review its details, then save it for your AI Dungeon Master.</p>
-<label class="partyUpload"><strong>📜 Upload a Character Sheet</strong><span>Choose a PDF to extract character details · PDF, up to 3 MB</span><input id="partyFile" type="file" accept="application/pdf,.pdf"></label>
-<div id="partyMessage" role="status">Ready to import a character sheet.</div>
-<label>CHARACTER NAME<input id="partyName" type="text" placeholder="e.g. Brother Garrick"></label>
-<div id="partyPreview" class="partyPreview" aria-live="polite"><div class="partyPreviewTitle">Character at a glance</div><div class="partyStats" id="partyStats"></div><div id="partySections" class="partySections"></div><div class="partyPreviewNote">Organized from the PDF. Review the original sheet before saving; missing information is never invented.</div></div>
-<details class="partyRaw"><summary>✎ Edit original character sheet text</summary><label>EXTRACTED CHARACTER DETAILS<textarea id="partySheet" spellcheck="false" placeholder="Name, class, level, HP, AC, THAC0, stats, saving throws, weapons, spells, equipment…"></textarea></label></details>
-<div class="partyEditHint">Correct any extraction errors here before saving. The AI receives the reviewed text, not the PDF.</div>
-<div class="partyActions"><button id="partySave" type="button">✓ Save to Party</button><button id="partyClear" type="button">New / Clear</button></div>
-<div class="partySectionHeading"><h3>Adventuring Party</h3><span id="partyCount" style="color:#b9a2d1;font:12px system-ui">0 / 8 characters</span></div><div id="partyRoster"></div>
-<small>Local testing only · Combat automation is not enabled yet. Keep DM-only secrets out of character sheets.</small></div>`;
+partyBox.innerHTML=`<header><b>⚔ ARC Party Selection · v5.72</b><button type="button" id="partyClose" aria-label="Close character manager">×</button></header>
+<div class="partyContent">
+<p class="arcIntro"><strong>Adventure Ready Characters (ARC’s)</strong><span>Seven fully prepared characters. Four are selected by default; choose 3–5 for your party. Check Player Controlled to play that character yourself; leave it unchecked for the AI to handle everything for that character. <strong>The 3 B’s — Battles, Banter, Behaviour:</strong> Your AI Dungeon Master plays AI-controlled companions using their biographies and character sheets. A timid barbarian acts timidly, even in battle; each ARC’s personality shapes how they fight, speak and react.</span></p>
+<div class="partySectionHeading"><h3>Choose Your Party</h3><span id="partyCount"></span></div>
+<p id="arcStyleHint" class="partyEditHint"></p><div id="partyRoster" class="arcChoiceGrid"></div>
+<div id="partyControlHint" class="partyEditHint"></div>
+<div class="partySectionHeading"><h3>Character Sheet</h3></div>
+<label class="partyCharacterPicker" for="partyCharacterSelect">SELECT A CHARACTER IN YOUR PARTY
+<select id="partyCharacterSelect"><option value="">— Select an ARC —</option></select></label>
+<div id="partyPreview" class="partyPreview" aria-live="polite"><div class="partyPreviewTitle">Complete Character Sheet · Read Only</div><div class="partyStats" id="partyStats"></div><div id="partySections" class="partySections"></div></div>
+<div id="partyMessage" role="status"></div>
+<div hidden id="partyLegacyControls"><div id="partyLocationNotice"></div><section id="partyRecruitArea"><div id="partyTemplates"></div><button id="partyAddDefaults" type="button"></button><details id="partyCustomDetails"><form id="partyCustomForm"><div id="partyCustomPack"></div></form></details></section><input id="partyNameEditCheck" type="checkbox"><label id="partyRenameField"><input id="partyName"></label><details id="arcBiography"><div id="arcBiographyContent"></div></details><section class="partyCheckedEditor"><div id="partyEditFields"></div></section><textarea id="partySheet"></textarea><div id="partyEditorPack"></div><button id="partySave"></button><button id="partyClear"></button></div>
+</div>`;
 document.body.append(partyBox);
 let editingPartyId='';
 const partyMsg=partyBox.querySelector('#partyMessage'),partyName=partyBox.querySelector('#partyName'),partySheet=partyBox.querySelector('#partySheet');
-const partyApi=async(path,body)=>{const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session,...body})});const data=await r.json();if(!r.ok)throw Error(data.error||'Request failed');return data};
+const partyCharacterSelect=partyBox.querySelector('#partyCharacterSelect'),partyRenameField=partyBox.querySelector('#partyRenameField');
+let partyLocalMode=true;
+const partyLocalKey=()=>`dndpov_svalich_roster_v1_${session}`;
+const partyLocalRead=()=>{try{return JSON.parse(localStorage.getItem(partyLocalKey())||'{}')}catch{return {}}};
+const partyLocalWrite=r=>localStorage.setItem(partyLocalKey(),JSON.stringify(r));
+const partyLocalApi=(path,body)=>{
+ const roster=partyLocalRead();
+ if(path.endsWith('/list'))return {characters:Object.values(roster)};
+ if(path.endsWith('/save')){const id=/^[a-f0-9]{32}$/.test(body.id||'')?body.id:crypto.randomUUID().replaceAll('-','');
+  if(!roster[id]&&Object.keys(roster).length>=8)throw Error('Maximum 8 characters');
+  roster[id]={id,name:String(body.name||'').trim().slice(0,80),sheet:String(body.sheet||'').slice(0,14000)};
+  if(!roster[id].name||roster[id].sheet.length<10)throw Error('Enter a name and character sheet');
+  partyLocalWrite(roster);return {id,name:roster[id].name,saved:true};}
+ if(path.endsWith('/delete')){delete roster[body.id];partyLocalWrite(roster);return {deleted:true};}
+ throw Error('Unsupported character action');
+};
+const partyApi=async(path,body)=>{
+ if(partyLocalMode)return partyLocalApi(path,body);
+ try{const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session,...body})});
+  const data=await r.json();if(!r.ok){if(r.status===404||r.status===503)throw Error('AI server unavailable');throw Error(data.error||'Request failed')}
+  return data;
+ }catch(err){if(!/AI server unavailable|Failed to fetch|NetworkError|Unexpected token|JSON/.test(String(err.message)))throw err;
+  partyLocalMode=true;partyMsg.textContent='Browser-only character storage: AI server unavailable. You can still create and edit characters here.';
+  return partyLocalApi(path,body);}
+};
 const partyPreview=partyBox.querySelector('#partyPreview'),partyStats=partyBox.querySelector('#partyStats');
 function updatePartyPreview(){
  const t=partySheet.value, lines=t.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
  partyPreview.classList.toggle('visible',!!t.trim());partyStats.replaceChildren();
  const sections=partyBox.querySelector('#partySections');sections.replaceChildren();if(!t.trim())return;
- const headings=['Saving Throws','Weapons & Attacks','Equipment & Treasure','Spells','Special Abilities','Character Background','Questions to Ask the AI DM'];
+ const headings=['Saving Throws','Weapons & Attacks','Ammunition & Charges','Potions & Consumables','Equipment & Treasure','Spells','Spell Components & Foci','Special Abilities','Character Background','Questions to Ask the AI DM','DNDPOV LOADOUT BEGIN'];
  const headingIndex=(name)=>lines.findIndex(l=>l.toLowerCase()===name.toLowerCase());
- const sectionText=(name)=>{const i=headingIndex(name);if(i<0)return '';let j=i+1;while(j<lines.length&&!headings.some(h=>h.toLowerCase()===lines[j].toLowerCase())&&!/^TEST DATA ONLY/i.test(lines[j]))j++;return lines.slice(i+1,j).join(' ')};
+ const sectionText=(name)=>{const i=headingIndex(name);if(i<0)return '';let j=i+1;while(j<lines.length&&!headings.some(h=>h.toLowerCase()===lines[j].toLowerCase())&&!/^TEST DATA ONLY|^DNDPOV LOADOUT BEGIN/i.test(lines[j]))j++;return lines.slice(i+1,j).join(' ')};
  const headerEnd=Math.max(0,headingIndex('Saving Throws'));
  const main=lines.slice(0,headerEnd);
  const numbers=main.filter(l=>/^\d+(?:\s*\/\s*\d+)?$/.test(l));
@@ -4515,14 +4941,653 @@ function updatePartyPreview(){
  for(const name of headings){const content=sectionText(name);if(!content)continue;const body=makeSection(name);body.textContent=content}
 }
 partySheet.addEventListener('input',updatePartyPreview);
-const partyClear=()=>{editingPartyId='';partyName.value='';partySheet.value='';partyBox.querySelector('#partyFile').value='';updatePartyPreview()};
-async function partyRefresh(){const d=await partyApi('/api/character/list',{});const target=partyBox.querySelector('#partyRoster');target.replaceChildren();partyBox.querySelector('#partyCount').textContent=d.characters.length+' / 8 characters';for(const c of d.characters){const row=document.createElement('div');row.className='partyRow';const name=document.createElement('strong');name.textContent=c.name;const edit=document.createElement('button');edit.textContent='Edit';edit.onclick=()=>{editingPartyId=c.id;partyName.value=c.name;partySheet.value=c.sheet;updatePartyPreview()};const del=document.createElement('button');del.textContent='Remove';del.onclick=async()=>{if(!confirm('Remove '+c.name+'?'))return;await partyApi('/api/character/delete',{id:c.id});if(editingPartyId===c.id)partyClear();partyRefresh()};row.append(name,edit,del);target.append(row)}if(!d.characters.length)target.textContent='No characters added yet.'}
-panel.querySelector('#aiDmPartyOpen').onclick=()=>{partyBox.hidden=false;partyRefresh().catch(e=>partyMsg.textContent=e.message)};
+// v5.66 — Ravenloft party creator. Choose existing characters from the roster dropdown; only the inn recruits.
+// v1.92 — Adventure Ready Characters: biographies and AI behaviour reference.
+const ARC_BIOGRAPHIES={"Alaric": ["A sworn paladin who measures his worth by the safety of those travelling beside him.", "Honourable, steadfast and protective; earnest with occasional dry humour.", "Protect the vulnerable and uphold promises even when the road grows dangerous.", "Failing someone who trusted his protection; being forced to choose between mercy and duty.", "Treats companions as people under his protection, but must learn to respect their independence.", "Offers to stand between danger and the party; challenges needless cruelty; can gradually learn that courage includes asking for help."], "Malachar": ["A wizard whose studies have led him to investigate the supernatural and the restless dead.", "Analytical, sceptical and curious; speaks in precise observations.", "Understand strange magic without squandering the resources needed to survive.", "Being deceived by an apparently rational explanation; losing control of a magical situation.", "Values companions who challenge his assumptions, though he may sound dismissive.", "Examines evidence and recommends caution; curiosity can tempt him into risk; may learn to trust intuition and other people."], "Seraphina": ["A travelling cleric who regards care for the suffering as a sacred responsibility.", "Compassionate, resolute and reflective; offers thoughtful moral counsel.", "Keep the party alive and offer comfort to those abandoned by hope.", "Arriving too late to save someone; having compassion exploited.", "Tries to mediate disputes and notices when a companion is struggling.", "Prioritizes the wounded, speaks against abandonment, and can grow more discerning without losing compassion."], "Kael": ["A ranger accustomed to reading trails and surviving beyond the safety of settlements.", "Quiet, observant and fiercely loyal; humour is sparse and wry.", "Guide companions safely through unfamiliar wilderness.", "Missing a warning sign or leading the party into an ambush.", "Shows care through practical actions more readily than words.", "Scouts and studies tracks; prefers stealth to spectacle; may learn to share concerns instead of carrying them alone."], "Mira": ["A nimble halfling thief whose resourcefulness has helped her survive difficult roads.", "Quick-witted, independent and playful, with a strong dislike of bullies.", "Find a way through danger without sacrificing her freedom or friends.", "Being trapped, helpless or betrayed by someone she trusted.", "Teases companions she likes and watches closely before granting trust.", "Looks for unconventional routes and hidden details; may conceal worries behind jokes; can develop deeper trust."]};
+ARC_BIOGRAPHIES.Brenna=['A veteran guard who left familiar walls to protect travellers.','Practical, loyal, and forthright.','Bring companions safely through danger.','Failing those relying on her.','Shows trust through actions.','Holds the line and speaks plainly; learns when restraint is stronger than force.'];
+ARC_BIOGRAPHIES.Elowen=['A wandering storyteller drawn toward forgotten legends.','Empathetic, inquisitive, and expressive.','Preserve stories and help companions find hope.','Silence, isolation, and being unable to help.','Builds bonds by listening.','Asks questions, notices emotions, and uses wit to ease tension; can grow into a steadier leader.'];
+const ARC_BIO_LABELS=['Background','Personality','Motivations','Fears','Relationships','Behaviour & Growth'];
+function arcBiographyText(name){
+ const b=ARC_BIOGRAPHIES[name];return b?ARC_BIO_LABELS.map((label,i)=>label+': '+b[i]).join('\\n'):'';
+}
+function arcCanonicalName(character){
+ const sample=partyDefaults.find(x=>x.id===character?.id);
+ return sample?.name||character?.name||'';
+}
+function arcShowBiography(character){
+ const panel=partyBox.querySelector('#arcBiography'),content=partyBox.querySelector('#arcBiographyContent');
+ const name=arcCanonicalName(character),bio=ARC_BIOGRAPHIES[name];
+ panel.hidden=!bio;panel.open=false;content.replaceChildren();
+ if(!bio)return;
+ ARC_BIO_LABELS.forEach((label,i)=>{
+  const p=document.createElement('p'),strong=document.createElement('strong');
+  strong.textContent=label+': ';p.append(strong,document.createTextNode(bio[i]));content.append(p);
+ });
+}
+const partyDefaults=[
+ {id:'a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1',name:'Alaric',loadout:{primary:'Long sword',backup:'None',sidearm:'Dagger',armor:'Plate mail',shield:true,potions:2,ammoType:'None',ammo:0,rations:5,rope:true,backpack:true,lantern:true,spellbook:false,components:false,holySymbol:true,thievesTools:false,other:5},race:'Human',className:'Paladin',alignment:'Lawful Good',level:7,
+  stats:[16,12,15,10,14,17],hp:43,ac:2,thac0:15,move:'12',
+  weapons:'Long sword (1d8), dagger (1d4); plate mail and shield.',
+  equipment:'Holy symbol, backpack, rations, lantern, rope, holy water, wooden stakes.',
+  spells:'Paladin abilities: Detect Evil, Lay on Hands, Protection from Evil. No memorized priest spells at this level.',
+  personality:'Honourable, protective, steadfast. BATTLE: defend the vulnerable. BANTER: earnest and occasionally dry. BEHAVIOUR: will not casually endorse cruelty or dishonour.'},
+ {id:'b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2',name:'Malachar',loadout:{primary:'Quarterstaff',backup:'Dagger',sidearm:'None',armor:'None',shield:false,potions:2,ammoType:'None',ammo:0,rations:5,rope:false,backpack:true,lantern:true,spellbook:true,components:true,holySymbol:false,thievesTools:false,other:4},race:'Human',className:'Wizard',alignment:'Neutral Good',level:5,
+  stats:[9,16,12,17,13,11],hp:19,ac:8,thac0:19,move:'12',
+  weapons:'Quarterstaff (1d6), dagger (1d4); no armour.',
+  equipment:'Spellbook, ink, components pouch, candle, parchment, lantern.',
+  spells:'Spellbook: Detect Magic, Magic Missile, Protection from Evil, Shield, Mirror Image, Web, Hold Undead, Dispel Magic. Prepared spells must be confirmed before casting; track slots and expenditure.',
+  personality:'Scholarly, sceptical, curious about the undead. BATTLE: preserve spells and control threats. BANTER: sharp observations. BEHAVIOUR: examines clues before taking risks.'},
+ {id:'c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3',name:'Seraphina',loadout:{primary:'Mace',backup:'Sling',sidearm:'None',armor:'Chain mail',shield:true,potions:3,ammoType:'Sling stones',ammo:20,rations:5,rope:false,backpack:true,lantern:false,spellbook:false,components:false,holySymbol:true,thievesTools:false,other:5},race:'Human',className:'Cleric',alignment:'Lawful Good',level:6,
+  stats:[13,11,15,12,17,14],hp:34,ac:4,thac0:18,move:'9',
+  weapons:'Mace (1d6+1), sling; chain mail and shield.',
+  equipment:'Holy symbol, healer supplies, bandages, holy water, rations, prayer book.',
+  spells:'Cleric abilities: Turn Undead. Prayer repertoire: Bless, Cure Light Wounds, Detect Evil, Protection from Evil, Hold Person, Spiritual Hammer, Dispel Magic, Remove Curse. Prepared spells and remaining slots must be tracked.',
+  personality:'Compassionate but unflinching. BATTLE: turn undead, protect and heal. BANTER: thoughtful moral counsel. BEHAVIOUR: refuses to abandon the injured.'},
+ {id:'d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4',name:'Kael',loadout:{primary:'Longbow',backup:'Long sword',sidearm:'Dagger',armor:'Studded leather',shield:false,potions:2,ammoType:'Arrows',ammo:40,rations:5,rope:true,backpack:true,lantern:false,spellbook:false,components:false,holySymbol:false,thievesTools:false,other:6},race:'Half-Elf',className:'Ranger',alignment:'Neutral Good',level:6,
+  stats:[15,17,14,12,15,10],hp:41,ac:4,thac0:15,move:'12',
+  weapons:'Longbow (1d8), long sword (1d8), dagger (1d4); studded leather.',
+  equipment:'Quiver, trail rations, rope, tinderbox, hunting knife, cloak, herbs.',
+  spells:'Ranger skills: tracking, wilderness lore, stealth in natural terrain. No memorized priest spells at this level.',
+  personality:'Observant, quiet, fiercely loyal. BATTLE: ranged cover and flanking. BANTER: short, wry remarks. BEHAVIOUR: scouts, watches tracks and avoids unnecessary noise.'},
+ {id:'e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5',name:'Mira',loadout:{primary:'Short sword',backup:'Sling',sidearm:'Dagger',armor:'Leather',shield:false,potions:2,ammoType:'Sling stones',ammo:20,rations:5,rope:true,backpack:true,lantern:false,spellbook:false,components:false,holySymbol:false,thievesTools:true,other:3},race:'Halfling',className:'Thief',alignment:'Chaotic Good',level:5,
+  stats:[10,18,13,13,12,15],hp:28,ac:4,thac0:18,move:'6',
+  weapons:'Short sword (1d6), dagger (1d4), sling; leather armour.',
+  equipment:'Thieves tools, small mirror, chalk, rope, lock picks, spare cloak.',
+  spells:'Thief skills: Open Locks, Find/Remove Traps, Move Silently, Hide in Shadows, Climb Walls, Hear Noise, Backstab. Percentages to be confirmed on character sheet.',
+  personality:'Mischievous, quick-witted, loyal beneath the jokes. BATTLE: avoid direct clashes, exploit openings. BANTER: irreverent humour. BEHAVIOUR: checks doors, traps and valuables, but values the party.'}
+];
+partyDefaults.push(
+ {...partyDefaults[0],id:'f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6',name:'Brenna',className:'Fighter',alignment:'Neutral Good',stats:[17,12,16,10,12,11],hp:53,ac:3,thac0:15,loadout:{...partyDefaults[0].loadout,primary:'Battle axe',backup:'Dagger',sidearm:'None',armor:'Chain mail',shield:true,holySymbol:false},weapons:'Battle axe, dagger; chain mail and shield.',spells:'Fighter combat training; no memorized spells.',personality:'Practical, steadfast and protective. BATTLE: holds the front line. BANTER: straightforward humour. BEHAVIOUR: judges people by actions.'},
+ {...partyDefaults[3],id:'a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7',name:'Elowen',className:'Bard',alignment:'Chaotic Good',stats:[11,15,12,15,13,17],hp:29,ac:6,thac0:18,loadout:{...partyDefaults[3].loadout,primary:'Short sword',backup:'Dagger',sidearm:'None',armor:'Leather',shield:false,ammoType:'None',ammo:0},weapons:'Short sword, dagger; leather armour.',spells:'Bard abilities: lore, performance and limited arcane magic; track spell slots.',personality:'Warm, observant and quick with a story. BATTLE: supports allies. BANTER: curious and expressive. BEHAVIOUR: seeks human connections.'}
+);
+// Additional Ravenloft ARCs, each with its own playable sheet and fixed level progression.
+partyDefaults.push(
+ {...partyDefaults[5],id:'b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8',name:'Thrain Ironbeard',race:'Dwarf',className:'Fighter',level:6,alignment:'Lawful Good',stats:[17,11,17,10,13,9],hp:55,ac:3,thac0:15,move:'6',personality:'Stubborn, honourable dwarf veteran. BATTLE: protects allies with his axe. BANTER: dry and direct. BEHAVIOUR: suspicious of dark magic.'},
+ {...partyDefaults[3],id:'c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9',name:'Lirael Moonwhisper',race:'Elf',className:'Ranger',level:7,alignment:'Neutral Good',stats:[14,18,13,13,15,12],hp:44,ac:4,thac0:14,move:'12',personality:'Patient elven scout. BATTLE: accurate longbow fire. BANTER: measured observations. BEHAVIOUR: watches for supernatural danger.'},
+ {...partyDefaults[1],id:'dadadadadadadadadadadadadadada',name:'Cassian Ashborne',race:'Human',className:'Sorcerer',level:6,alignment:'Chaotic Good',stats:[9,15,13,17,12,16],hp:22,ac:8,thac0:19,move:'12',spells:'Arcane sorcery: Magic Missile, Shield, Mirror Image, Web, Dispel Magic. Use fixed level-specific spell limits.',personality:'Bold intuitive spellcaster. BATTLE: disrupts enemy magic. BANTER: witty and restless. BEHAVIOUR: distrusts tyrants.'},
+ {...partyDefaults[2],id:'ebebebebebebebebebebebebebebebeb',name:'Sylvara Greenleaf',race:'Elf',className:'Druid',level:5,alignment:'True Neutral',stats:[11,14,14,12,17,13],hp:30,ac:6,thac0:18,move:'12',loadout:{...partyDefaults[2].loadout,primary:'Quarterstaff',backup:'Sling',armor:'Leather',shield:false},weapons:'Quarterstaff, sling; leather armour.',spells:'Druidic prayers: Entangle, Faerie Fire, Cure Light Wounds, Barkskin, Call Lightning. Track prepared spells and slots.',personality:'Protective guardian of nature. BATTLE: controls terrain and heals. BANTER: quiet, incisive. BEHAVIOUR: protects living things and distrusts corruption.'}
+);
 
-partyBox.querySelector('#partyClose').onclick=()=>partyBox.hidden=true;
+// v2.25 — Eight additional Adventure Ready Characters. Existing ARCs retained.
+const ARC_NEW_CHARACTERS=[
+ {name:'Brother Joram',template:'Sylvara Greenleaf',race:'Dwarf',className:'Druid',level:6,alignment:'Neutral Good',stats:[14,10,17,12,17,11],hp:43,ac:6,thac0:18,personality:'A stern, earthwise brother who speaks for stone, root and living things. BATTLE: heals and restrains. BANTER: patient, dry humour.',spells:'Druidic prayers: Entangle, Faerie Fire, Cure Light Wounds, Barkskin, Call Lightning. Track slots and components.'},
+ {name:'Elandor Swiftblade',template:'Lirael Moonwhisper',race:'Elf',className:'Fighter / Sorcerer',level:7,alignment:'Chaotic Good',stats:[15,17,13,16,12,14],hp:45,ac:5,thac0:15,personality:'A poised swordmage who uses quick steel and measured sorcery. BATTLE: defend allies with sword and spell. BANTER: proud but courteous.',spells:'Multiclass swordmage: Magic Missile, Shield, Mirror Image, Web. Track arcane slots; armor can interfere with spellcasting.'},
+ {name:'Arathor Moonshadow',template:'Kael',race:'Elf',className:'Ranger',level:6,alignment:'Neutral Good',stats:[14,18,14,13,16,10],hp:42,ac:4,thac0:15,personality:'A moonlit-forest tracker, watchful and spare with words. BATTLE: cover from range. BANTER: observant, quietly compassionate.'},
+ {name:'Elara Nightwind',template:'Brenna',race:'Human',className:'Fighter / Sorcerer',level:6,alignment:'Neutral Good',stats:[15,15,14,15,12,16],hp:40,ac:5,thac0:16,personality:'A pragmatic battlemage with a quick temper and a quicker blade. BATTLE: protect the rear line with steel and spells. BANTER: forthright.',spells:'Multiclass swordmage: Magic Missile, Shield, Mirror Image, Dispel Magic. Track arcane slots; armor can interfere with spellcasting.'},
+ {name:'Virelya Red Veil',template:'Cassian Ashborne',race:'Human',className:'Sorcerer',level:7,alignment:'Chaotic Neutral',stats:[9,14,12,16,12,18],hp:25,ac:8,thac0:18,personality:'A guarded spellcaster with a dangerous reputation and secrets of her own. BATTLE: disrupt threats. BANTER: cryptic and perceptive.',spells:'Innate sorcery: Magic Missile, Shield, Mirror Image, Web, Dispel Magic, Dimension Door. Track level-specific spell limits.'},
+ {name:'Thorn Underleaf',template:'Mira',race:'Halfling',className:'Thief',level:6,alignment:'Chaotic Good',stats:[11,18,13,13,12,15],hp:29,ac:4,thac0:18,personality:'An irrepressible lock-picker with an eye for overlooked doors. BATTLE: stealth and flank. BANTER: mischievous, loyal.'},
+ {name:'Maelis Vorn',template:'Malachar',race:'Human',className:'Wizard',level:7,alignment:'True Neutral',stats:[9,14,12,18,14,11],hp:23,ac:8,thac0:18,personality:'An austere scholar of forbidden histories. BATTLE: use control magic sparingly. BANTER: exacting and skeptical.',spells:'Prepared wizardry: Magic Missile, Shield, Detect Magic, Mirror Image, Web, Invisibility, Dispel Magic, Hold Undead, Dimension Door. Track slots 4 / 3 / 2 / 1.'},
+ {name:'Alaric Duskfall',template:'Alaric',race:'Human',className:'Paladin',level:7,alignment:'Lawful Good',stats:[17,12,15,10,14,16],hp:50,ac:2,thac0:14,personality:'A solemn paladin bound by an oath to confront darkness. BATTLE: shield companions and oppose undead. BANTER: disciplined, compassionate.'},
+ {name:'Fenwick Thistlegear',template:'Malachar',race:'Gnome',className:'Illusionist',level:6,alignment:'Chaotic Good',stats:[8,16,13,17,12,14],hp:24,ac:7,thac0:19,personality:'An eccentric, brilliant and sarcastic illusionist who questions every supernatural phenomenon. BATTLE: misdirects foes with clever illusions. BANTER: irreverent, endlessly curious, and often convinced the horrors of Barovia are tricks.',spells:'Illusionist spells: Color Spray, Detect Illusion, Phantasmal Force, Invisibility, Mirror Image, Hypnotic Pattern. Track prepared spells and slots.'}
+];
+for(const arc of ARC_NEW_CHARACTERS){
+ ARC_BIOGRAPHIES[arc.name]=[
+  arc.name+' entered Barovia with a past they rarely discuss and a purpose they will not abandon.',
+  arc.personality.split(' BATTLE:')[0],
+  'Survive the mists and help the party face the dangers of Ravenloft.',
+  'Losing companions to the darkness of Barovia.',
+  'Slow to trust strangers but protective of companions who earn loyalty.',
+  arc.personality
+ ];
+}
+for(let i=0;i<ARC_NEW_CHARACTERS.length;i++){
+ const {template,...changes}=ARC_NEW_CHARACTERS[i];
+ const base=partyDefaults.find(c=>c.name===template);
+ partyDefaults.push({...base,...changes,id:'arc-new-'+String(i+1).padStart(2,'0')+'-20261119',loadout:{...base.loadout}});
+}
+// v1.83 — Hardwired level-specific demo builds for the five sample adventurers.
+// HP is an illustrative, fixed starting value (not rolled). STR/DEX/CON/INT/WIS/CHA
+// do not rise automatically in AD&D 2E. Custom characters keep manual progression.
+const partyLevelBuilds={
+ Alaric:{
+  5:{hp:37,thac0:16,attacks:'1 melee attack per round',abilities:'Paladin: Detect Evil at will; Lay on Hands heals 10 HP once per day; Protection from Evil (10-foot radius) once per day; +2 to saving throws; turn undead as a level 3 cleric. No priest spell slots before paladin level 9.',saves:'Warrior level 5 saving-throw progression; paladin +2 bonus to saving throws.'},
+  6:{hp:43,thac0:15,attacks:'1 melee attack per round',abilities:'Paladin: Detect Evil at will; Lay on Hands heals 12 HP once per day; Protection from Evil (10-foot radius) once per day; +2 to saving throws; turn undead as a level 4 cleric. No priest spell slots before paladin level 9.',saves:'Warrior level 6 saving-throw progression; paladin +2 bonus to saving throws.'},
+  7:{hp:50,thac0:14,attacks:'3 melee attacks every 2 rounds',abilities:'Paladin: Detect Evil at will; Lay on Hands heals 14 HP once per day; Protection from Evil (10-foot radius) once per day; +2 to saving throws; turn undead as a level 5 cleric. No priest spell slots before paladin level 9.',saves:'Warrior level 7 saving-throw progression; paladin +2 bonus to saving throws.'}
+ },
+ Malachar:{
+  5:{hp:16,thac0:19,attacks:'1 attack per round',slots:'4 / 2 / 1',spells:'Prepared (level 5): 1st (4): Magic Missile ×2, Shield, Detect Magic; 2nd (2): Mirror Image, Web; 3rd (1): Dispel Magic. Slots: 4 / 2 / 1. Spellbook also contains Protection from Evil and Hold Undead. Component supplies are finite.',abilities:'Wizard level 5: 1st–3rd-level spells available; 4/2/1 prepared slots; no 4th-level spells. Spell preparation and expenditure must be tracked.',saves:'Wizard level 5 saving-throw progression.'},
+  6:{hp:19,thac0:19,attacks:'1 attack per round',slots:'4 / 2 / 2',spells:'Prepared (level 6): 1st (4): Magic Missile ×2, Shield, Detect Magic; 2nd (2): Mirror Image, Web; 3rd (2): Dispel Magic, Hold Undead. Slots: 4 / 2 / 2. Spellbook also contains Protection from Evil. Component supplies are finite.',abilities:'Wizard level 6: 1st–3rd-level spells available; 4/2/2 prepared slots; no 4th-level spells. Spell preparation and expenditure must be tracked.',saves:'Wizard level 6 saving-throw progression.'},
+  7:{hp:22,thac0:18,attacks:'1 attack per round',slots:'4 / 3 / 2 / 1',spells:'Prepared (level 7): 1st (4): Magic Missile ×2, Shield, Detect Magic; 2nd (3): Mirror Image, Web, Invisibility; 3rd (2): Dispel Magic, Hold Undead; 4th (1): Dimension Door. Slots: 4 / 3 / 2 / 1. Spellbook contains all listed spells plus Protection from Evil. Component supplies are finite.',abilities:'Wizard level 7: gains 4th-level spells; 4/3/2/1 prepared slots. Spell preparation and expenditure must be tracked.',saves:'Wizard level 7 saving-throw progression.'}
+ },
+ Seraphina:{
+  5:{hp:29,thac0:18,attacks:'1 melee attack per round',slots:'3 / 3 / 1',spells:'Prepared base slots (level 5): 1st (3): Bless, Cure Light Wounds, Protection from Evil; 2nd (3): Hold Person, Spiritual Hammer, Spiritual Hammer; 3rd (1): Dispel Magic. Base slots: 3 / 3 / 1 (before Wisdom bonus spells). Track expended spells.',abilities:'Cleric level 5: Turn Undead using level 5 cleric table; 1st–3rd-level priest spells. Wisdom-based bonus spells require separate adjudication.',saves:'Priest level 5 saving-throw progression.'},
+  6:{hp:34,thac0:18,attacks:'1 melee attack per round',slots:'3 / 3 / 2',spells:'Prepared base slots (level 6): 1st (3): Bless, Cure Light Wounds, Protection from Evil; 2nd (3): Hold Person, Spiritual Hammer, Spiritual Hammer; 3rd (2): Dispel Magic, Remove Curse. Base slots: 3 / 3 / 2 (before Wisdom bonus spells). Track expended spells.',abilities:'Cleric level 6: Turn Undead using level 6 cleric table; 1st–3rd-level priest spells. Wisdom-based bonus spells require separate adjudication.',saves:'Priest level 6 saving-throw progression.'},
+  7:{hp:40,thac0:16,attacks:'1 melee attack per round',slots:'3 / 3 / 2 / 1',spells:'Prepared base slots (level 7): 1st (3): Bless, Cure Light Wounds, Protection from Evil; 2nd (3): Hold Person, Spiritual Hammer, Spiritual Hammer; 3rd (2): Dispel Magic, Remove Curse; 4th (1): Cure Serious Wounds. Base slots: 3 / 3 / 2 / 1 (before Wisdom bonus spells). Track expended spells.',abilities:'Cleric level 7: Turn Undead using level 7 cleric table; gains 4th-level priest spells. Wisdom-based bonus spells require separate adjudication.',saves:'Priest level 7 saving-throw progression.'}
+ },
+ Kael:{
+  5:{hp:35,thac0:16,attacks:'1 attack per round',abilities:'Ranger level 5: tracking and woodland stealth; favoured enemy bonus against the chosen enemy type; no priest spells before ranger level 8. Keep arrows and rations finite.',saves:'Warrior level 5 saving-throw progression.'},
+  6:{hp:41,thac0:15,attacks:'1 attack per round',abilities:'Ranger level 6: tracking and woodland stealth; favoured enemy bonus against the chosen enemy type; no priest spells before ranger level 8. Keep arrows and rations finite.',saves:'Warrior level 6 saving-throw progression.'},
+  7:{hp:47,thac0:14,attacks:'3 melee attacks every 2 rounds; bow attacks follow weapon rules',abilities:'Ranger level 7: tracking and woodland stealth; favoured enemy bonus against the chosen enemy type; gains warrior 3/2 melee attack rate. No priest spells before ranger level 8.',saves:'Warrior level 7 saving-throw progression.'}
+ },
+ Mira:{
+  5:{hp:24,thac0:18,attacks:'1 attack per round',skills:'Open Locks 55%; Find/Remove Traps 45%; Move Silently 60%; Hide in Shadows 55%; Climb Walls 90%; Hear Noise 30%. Backstab ×3. These are fixed demo allocations; adjust for campaign rules.',abilities:'Thief level 5: Backstab ×3; use the preset thief skill percentages; can scout, detect traps and open locks.',saves:'Rogue level 5 saving-throw progression.'},
+  6:{hp:28,thac0:18,attacks:'1 attack per round',skills:'Open Locks 60%; Find/Remove Traps 50%; Move Silently 65%; Hide in Shadows 60%; Climb Walls 90%; Hear Noise 35%. Backstab ×3. These are fixed demo allocations; adjust for campaign rules.',abilities:'Thief level 6: Backstab ×3; increased preset thief skill percentages; can scout, detect traps and open locks.',saves:'Rogue level 6 saving-throw progression.'},
+  7:{hp:32,thac0:17,attacks:'1 attack per round',skills:'Open Locks 65%; Find/Remove Traps 55%; Move Silently 70%; Hide in Shadows 65%; Climb Walls 92%; Hear Noise 40%. Backstab ×3. These are fixed demo allocations; adjust for campaign rules.',abilities:'Thief level 7: Backstab ×3; increased preset thief skill percentages; can scout, detect traps and open locks.',saves:'Rogue level 7 saving-throw progression.'}
+ }
+};
+// v1.92: complete fixed level builds for the two additional ARCs.
+partyLevelBuilds.Brenna={
+ 5:{hp:45,thac0:16,attacks:'1 melee attack per round',abilities:'Fighter: weapon training, front-line defence and tactical positioning.',saves:'Warrior level 5 saving-throw progression.'},
+ 6:{hp:53,thac0:15,attacks:'1 melee attack per round',abilities:'Fighter: weapon training, front-line defence and tactical positioning.',saves:'Warrior level 6 saving-throw progression.'},
+ 7:{hp:61,thac0:14,attacks:'3 melee attacks every 2 rounds with a specialized weapon, otherwise 1',abilities:'Fighter: weapon specialization, front-line defence and tactical positioning.',saves:'Warrior level 7 saving-throw progression.'}
+};
+partyLevelBuilds.Elowen={
+ 5:{hp:25,thac0:18,attacks:'1 attack per round',abilities:'Bard: lore, influence, performance and limited wizard spellcasting; confirm memorized spells.',saves:'Rogue level 5 saving-throw progression.'},
+ 6:{hp:29,thac0:18,attacks:'1 attack per round',abilities:'Bard: lore, influence, performance and limited wizard spellcasting; confirm memorized spells.',saves:'Rogue level 6 saving-throw progression.'},
+ 7:{hp:33,thac0:17,attacks:'1 attack per round',abilities:'Bard: lore, influence, performance and limited wizard spellcasting; confirm memorized spells.',saves:'Rogue level 7 saving-throw progression.'}
+};
+// Additional ARC builds: fixed HP/THAC0 and class-dependent abilities by level.
+for(const [name,baseHp,kind] of [['Thrain Ironbeard',55,'Fighter'],['Lirael Moonwhisper',44,'Ranger'],['Cassian Ashborne',22,'Sorcerer'],['Sylvara Greenleaf',30,'Druid']]){
+ const baseLevel=partyDefaults.find(c=>c.name===name).level;
+ partyLevelBuilds[name]={};
+ for(const level of [5,6,7]){
+  const hp=Math.max(12,baseHp+(level-baseLevel)*(kind==='Fighter'?8:kind==='Ranger'?6:kind==='Sorcerer'?3:5));
+  const thac0=kind==='Fighter'||kind==='Ranger'?21-level:kind==='Druid'?20-Math.floor(level/3):20-Math.floor(level/4);
+  const ability=kind==='Fighter'?'Dwarven resilience, front-line fighting and weapon specialization.':kind==='Ranger'?'Elven tracking, woodland stealth and bow expertise; no ranger priest spells before level 8.':kind==='Sorcerer'?'Innate arcane spellcasting; this is an RPGPOV adaptation to the original AD&D-era module.': 'Druidic spellcasting, wilderness lore and nature magic; track spell expenditure.';
+  partyLevelBuilds[name][level]={hp,thac0,attacks:level===7&&(kind==='Fighter'||kind==='Ranger')?'3 melee attacks every 2 rounds':'1 attack per round',abilities:ability,saves:(kind==='Fighter'||kind==='Ranger'?'Warrior':kind==='Druid'?'Priest':'Wizard')+' level '+level+' saving-throw progression.',spells:partyDefaults.find(c=>c.name===name).spells};
+ }
+}
+// Added ARCs inherit the fixed level 5–7 class progression from their matching archetype.
+for(const arc of ARC_NEW_CHARACTERS){
+ const c=partyDefaults.find(x=>x.name===arc.name);
+ const source=partyLevelBuilds[arc.template];
+ partyLevelBuilds[arc.name]={};
+ for(const level of [5,6,7]){
+  const p=source[level];
+  const base=source[c.level];
+  partyLevelBuilds[arc.name][level]={...p,
+   hp:Math.max(12,c.hp+(p.hp-base.hp)),
+   thac0:c.thac0+(p.thac0-base.thac0),
+   spells:c.spells,
+   abilities:c.className.includes('/')?'Fighter / Sorcerer multiclass: martial combat and arcane spells; spellcasting and armor restrictions require DM adjudication. '+(p.abilities||''):p.abilities};
+ }
+}
+function partyPresetFor(c,level){const preset=partyLevelBuilds[c.name]?.[level];if(!preset)throw Error('Sample adventurers have complete builds for levels 5, 6 and 7 only.');return preset;}
+function partySheetLevel(sheet){const m=String(sheet||'').match(/^Level\s*:?\s*(\d+)/mi);return m?Number(m[1]):NaN;}
+function partyPresetSpells(c,preset){return preset.spells||c.spells;}
+function partyPresetWeapons(c,preset){return c.weapons+' Attacks: '+preset.attacks+'.';}
+const partySeedKey=()=>`dndpov_svalich_seeded_v1_${session}`;
+const partyControlKey=()=>`dndpov_svalich_control_v1_${session}`;
+let partyRosterCache=[],partySeedBusy=false,partyLastInn=null,partyLastClaims='';
+const partyInInn=()=>!!window.DNDPOV_SVALICH_CAN_RECRUIT?.();
+const partyMultiplayer=()=>window.DNDPOV_MP;
+const partyLocalSelection=()=>{try{const a=JSON.parse(localStorage.getItem(partyControlKey())||'null');return Array.isArray(a)?a:[partyDefaults[0].id]}catch{return [partyDefaults[0].id]}};
+const partyActiveKey=()=>`dndpov_svalich_active_arcs_v1_${session}`;
+const partyActive=()=>{try{const a=JSON.parse(localStorage.getItem(partyActiveKey())||'null');return Array.isArray(a)?a:partyDefaults.slice(0,4).map(x=>x.id)}catch{return partyDefaults.slice(0,4).map(x=>x.id)}};
+const partySetActive=a=>localStorage.setItem(partyActiveKey(),JSON.stringify(a));
+
+// v2.36 — client-side, read-only battle reference for the selected ARCs.
+// This panel uses existing party state; it never calls or changes an API or session.
+const arcQuickPortraits={Alaric:'knight',Malachar:'wizard',Seraphina:'cleric',Kael:'elf_ranger',Mira:'rogue',Brenna:'fighter',Elowen:'bard','Thrain Ironbeard':'dwarf','Lirael Moonwhisper':'elf_archer','Cassian Ashborne':'sorcerer','Sylvara Greenleaf':'druid','Brother Joram':'brother_joram','Elandor Swiftblade':'elandor_swiftblade','Arathor Moonshadow':'arathor_moonshadow','Elara Nightwind':'elara_nightwind','Virelya Red Veil':'virelya_red_veil','Thorn Underleaf':'thorn_underleaf','Maelis Vorn':'maelis_vorn','Alaric Duskfall':'alaric_duskfall','Fenwick Thistlegear':'fenwick_thistlegear'};
+const arcQuickStyle=document.createElement('style');arcQuickStyle.textContent=`
+#arcQuickToggle{position:fixed;right:0;top:49%;transform:translateY(-50%);z-index:55;background:#493424;color:#ffe2ac;border:1px solid #bd955e;border-right:0;border-radius:8px 0 0 8px;padding:15px 7px;writing-mode:vertical-rl;font:700 12px Georgia,serif;letter-spacing:1px;cursor:pointer;box-shadow:0 3px 14px #0009}
+#arcQuickPanel{position:fixed;right:0;top:0;height:100vh;width:min(365px,92vw);box-sizing:border-box;z-index:56;transform:translateX(102%);transition:transform .22s ease;background:#1d1c23f5;border-left:2px solid #ae8957;color:#f4e5ca;box-shadow:-12px 0 35px #0009;display:flex;flex-direction:column;font:13px/1.4 Georgia,serif}
+#arcQuickPanel.open{transform:translateX(0)}#arcQuickPanel header{display:flex;align-items:center;justify-content:space-between;padding:13px 14px;background:#312a2b;border-bottom:1px solid #9b7851}#arcQuickPanel header strong{font-size:17px;color:#f1d49f}#arcQuickClose{font-size:22px;padding:1px 9px;background:#493424;color:#ffe2ac;border:1px solid #ad875b;cursor:pointer}#arcQuickCards{overflow:auto;padding:11px;flex:1}#arcQuickCards .arcQuickCard{border:1px solid #68543f;background:#28252b;border-radius:7px;padding:10px;margin-bottom:11px}#arcQuickCards .arcQuickTop{display:flex;gap:10px;align-items:center;margin-bottom:8px}#arcQuickCards img,#arcQuickCards .arcQuickFallback{width:65px;height:78px;object-fit:cover;object-position:center 28%;border-radius:4px;border:1px solid #9b8057;background:#3b3042;flex:none}#arcQuickCards .arcQuickFallback{display:grid;place-items:center;font-size:24px}#arcQuickCards .arcQuickName{font:bold 15px Georgia,serif;color:#f7d59e}#arcQuickCards .arcQuickMeta{font:12px Georgia,serif;color:#d6c5b4;margin-top:4px}#arcQuickCards .arcQuickHp{color:#f5b5a4;font-weight:bold;margin-top:5px}#arcQuickCards .arcQuickDetail{padding:6px 0;border-top:1px solid #51463d;white-space:pre-wrap;overflow-wrap:anywhere}#arcQuickCards .arcQuickDetail b{color:#e6c58d}#arcQuickCards .arcQuickHint{color:#bcae9c;font:11px Georgia,serif;padding:4px 0 12px} @media(max-width:650px){#arcQuickToggle{top:56%;padding:10px 5px}}`;
+document.head.append(arcQuickStyle);
+const arcQuickToggle=document.createElement('button');arcQuickToggle.id='arcQuickToggle';arcQuickToggle.type='button';arcQuickToggle.textContent='⚔ PARTY';arcQuickToggle.setAttribute('aria-label','Open party battle quick reference');
+const arcQuickPanel=document.createElement('aside');arcQuickPanel.id='arcQuickPanel';arcQuickPanel.setAttribute('aria-label','Party battle quick reference');arcQuickPanel.innerHTML='<header><strong>⚔ Party · Battle Reference</strong><button type="button" id="arcQuickClose" aria-label="Close battle reference">×</button></header><div id="arcQuickCards"></div>';
+document.body.append(arcQuickToggle,arcQuickPanel);
+function arcQuickSheetSection(sheet,heading){const lines=String(sheet||'').split(/\r?\n/).map(x=>x.trim());const start=lines.findIndex(x=>x.toLowerCase()===heading.toLowerCase());if(start<0)return '';const heads=['Saving Throws','Weapons & Attacks','Ammunition & Charges','Potions & Consumables','Equipment & Treasure','Spells','Spell Components & Foci','Special Abilities','Character Background','Questions to Ask the AI DM','DNDPOV LOADOUT BEGIN'];let end=start+1;while(end<lines.length&&!heads.some(x=>x.toLowerCase()===lines[end].toLowerCase()))end++;return lines.slice(start+1,end).filter(Boolean).join(' · ').slice(0,350)}
+function arcQuickStat(sheet,label,fallback){const match=String(sheet||'').match(new RegExp('^'+label+'\\s*:\\s*([^\\r\\n]+)','im'));return match?match[1].trim():fallback}
+function arcQuickRender(){const host=arcQuickPanel.querySelector('#arcQuickCards');host.replaceChildren();const active=partyActive();for(const id of active){const c=partyDefaults.find(x=>x.id===id);if(!c)continue;const row=partyRosterCache.find(x=>x.id===id);const sheet=row?.sheet||partyDefaultSheet(c);const name=row?.name||c.name;const level=partySheetLevel(sheet)||c.level;const hp=arcQuickStat(sheet,'HIT POINTS',String(c.hp));const card=document.createElement('section');card.className='arcQuickCard';const top=document.createElement('div');top.className='arcQuickTop';const portrait=arcQuickPortraits[c.name];if(portrait){const img=document.createElement('img');img.src=arcPortraitPath(c.name,portrait);img.alt=name+' portrait';img.loading='lazy';top.append(img)}else{const fallback=document.createElement('div');fallback.className='arcQuickFallback';fallback.textContent=name.slice(0,1);top.append(fallback)}const identity=document.createElement('div');identity.innerHTML='<div class="arcQuickName"></div><div class="arcQuickMeta"></div><div class="arcQuickHp"></div>';identity.children[0].textContent=name;identity.children[1].textContent=c.className+' · Level '+level;identity.children[2].textContent='HP '+hp;top.append(identity);card.append(top);const details=[['Weapons',arcQuickSheetSection(sheet,'Weapons & Attacks')||c.weapons],['Magic / Spells',arcQuickSheetSection(sheet,'Spells')||c.spells],['Abilities',arcQuickSheetSection(sheet,'Special Abilities')]];for(const [label,value] of details){if(!value||value==='None')continue;const detail=document.createElement('div');detail.className='arcQuickDetail';const bold=document.createElement('b');bold.textContent=label+': ';detail.append(bold,document.createTextNode(value));card.append(detail)}host.append(card)}if(!host.children.length)host.textContent='Select your Adventure Ready Characters in Party / Sheets first.';const hint=document.createElement('div');hint.className='arcQuickHint';hint.textContent='Read-only quick reference · values from your character sheets';host.append(hint)}
+arcQuickToggle.onclick=()=>{arcQuickRender();arcQuickPanel.classList.add('open');arcQuickToggle.hidden=true};
+arcQuickPanel.querySelector('#arcQuickClose').onclick=()=>{arcQuickPanel.classList.remove('open');arcQuickToggle.hidden=false};
+
+const partySetSelection=a=>localStorage.setItem(partyControlKey(),JSON.stringify([...new Set(a)]));
+const partyAiKey=()=>`dndpov_svalich_ai_arcs_v1_${session}`;
+const partyAiIds=()=>{try{const v=JSON.parse(localStorage.getItem(partyAiKey())||'null');return Array.isArray(v)?v:partyDefaults.slice(1).map(c=>c.id)}catch{return partyDefaults.slice(1).map(c=>c.id)}};
+const partySetAiIds=ids=>localStorage.setItem(partyAiKey(),JSON.stringify([...new Set(ids)]));
+const partyEsc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// v1.81 — a deliberately simple, transparent FIELD-CARRY house rule (not the AD&D 2E encumbrance table).
+// The structured loadout is authoritative; prose on a character sheet cannot create extra items.
+const partyGearWeapons={'None':0,'Long sword':4,'Short sword':3,'Dagger':1,'Mace':8,'Quarterstaff':4,'Longbow':3,'Shortbow':2,'Crossbow':7,'Warhammer':6,'Spear':5,'Battle axe':7,'Sling':1,'Club':3};
+const partyGearArmor={'None':0,'Leather':15,'Studded leather':20,'Chain mail':40,'Scale mail':40,'Splint mail':40,'Plate mail':50,'Full plate':70};
+const partyGearAmmo={'None':0,'Arrows':.15,'Bolts':.10,'Sling stones':.20};
+const partyGearKeys=['primary','backup','sidearm','armor','shield','potions','ammoType','ammo','rations','rope','backpack','lantern','spellbook','components','holySymbol','thievesTools','other'];
+const partyGearEmpty=()=>({primary:'None',backup:'None',sidearm:'None',armor:'None',shield:false,potions:0,ammoType:'None',ammo:0,rations:0,rope:false,backpack:true,lantern:false,spellbook:false,components:false,holySymbol:false,thievesTools:false,other:0});
+const partyGearOption=(value)=>'<option value="'+partyEsc(value)+'">'+partyEsc(value)+'</option>';
+function partyGearBuild(container,custom){
+ const weaponOptions=Object.keys(partyGearWeapons).map(partyGearOption).join('');
+ const sideOptions=['None','Dagger','Sling','Club'].map(partyGearOption).join('');
+ const armorOptions=Object.keys(partyGearArmor).map(partyGearOption).join('');
+ const ammoOptions=Object.keys(partyGearAmmo).map(partyGearOption).join('');
+ const sel=(k,label,options)=>'<label class="partyPackField"><span class="partyGearFieldHeading"><input data-gear-enable="'+k+'" type="checkbox"> '+label+'</span><select data-gear="'+k+'" disabled>'+options+'</select></label>';
+ const num=(k,label,max)=>'<label class="partyPackField"><span class="partyGearFieldHeading"><input data-gear-enable="'+k+'" type="checkbox"> '+label+'</span><input data-gear="'+k+'" type="number" min="0" max="'+max+'" step="1" value="0" disabled></label>';
+ const check=(k,label)=>'<label class="partyPackCheck"><input data-gear="'+k+'" type="checkbox">'+label+'</label>';
+ container.innerHTML='<h4>🎒 '+(custom?'Starting Pack Check':'Carried Gear · Pack Check')+'</h4><p>Check the items you want to carry or change. Limit <b>3 potions or holy-water vials TOTAL</b>, <b>3 weapons</b>, and a realistic Strength-based carrying load. Every vial, arrow and component is finite.</p><div class="partyPackGrid">'+
+  sel('primary','Main weapon',weaponOptions)+sel('backup','Backup weapon',weaponOptions)+sel('sidearm','Small sidearm',sideOptions)+sel('armor','Armour worn',armorOptions)+
+  num('potions','Potions + holy-water vials (0–3)',3)+sel('ammoType','Ammunition type',ammoOptions)+num('ammo','Ammunition (0–40)',40)+num('rations','Rations / days (0–7)',7)+
+  check('shield','Shield · 10 lb')+check('rope','Rope · 10 lb')+check('backpack','Backpack · 2 lb')+check('lantern','Lantern · 3 lb')+
+  check('spellbook','Spellbook · 5 lb')+check('components','Spell component pouch · 2 lb')+check('holySymbol','Holy symbol · 1 lb')+check('thievesTools','Thieves’ tools · 2 lb')+
+  num('other','Other carried gear · total weight in lb',60)+'</div><div class="partyPackResult" role="status" aria-live="polite"></div>';
+ partyGearApply(container,partyGearEmpty());
+ container.addEventListener('change',e=>{
+  const check=e.target.closest('[data-gear-enable]');
+  if(check){const field=container.querySelector('[data-gear="'+check.dataset.gearEnable+'"]');
+   field.disabled=!check.checked;
+   if(!check.checked)field.value=field.type==='number'?'0':'None';
+   else if(field.value==='None'||field.value==='0')field.value=field.type==='number'?'1':(Array.from(field.options).find(o=>o.value!=='None')?.value||'None');
+  }
+  partyGearRender(container,custom);
+ });
+ container.addEventListener('input',()=>partyGearRender(container,custom));
+}
+function partyGearApply(container,gear){for(const key of partyGearKeys){const input=container.querySelector('[data-gear="'+key+'"]');if(!input)continue;
+ if(input.type==='checkbox')input.checked=!!gear[key];else input.value=gear[key]??partyGearEmpty()[key];
+ const enable=container.querySelector('[data-gear-enable="'+key+'"]');
+ if(enable){enable.checked=input.type==='number'?Number(input.value)>0:input.value!=='None';input.disabled=!enable.checked;}
+ }
+ partyGearRender(container,container.id==='partyCustomPack');}
+function partyGearRead(container){const g={};for(const key of partyGearKeys){const input=container.querySelector('[data-gear="'+key+'"]');g[key]=input.type==='checkbox'?input.checked:input.type==='number'?Number(input.value):input.value;}return g;}
+function partyGearSheetValue(sheet,key){const m=String(sheet||'').match(new RegExp('^'+key+'\\s*:\\s*([^\\n]+)','im'));return m?.[1]?.trim()||'';}
+function partyGearIdentity(custom){if(custom){const f=partyBox.querySelector('#partyCustomForm');return {strength:Number(f.elements.namedItem('STR')?.value),race:f.elements.namedItem('race')?.value||'Human'};}
+ return {strength:Number(partyGearSheetValue(partySheet.value,'STR')),race:partyGearSheetValue(partySheet.value,'Race')||'Human'};}
+function partyGearCheck(g,strength,race){const errors=[];
+ if(!Number.isInteger(strength)||strength<3||strength>18)errors.push('Enter STR (3–18) on the character sheet to calculate the carrying limit.');
+ for(const k of ['potions','ammo','rations','other'])if(!Number.isInteger(g[k])||g[k]<0)errors.push('Use nonnegative whole numbers for supplies.');
+ if(g.potions>3)errors.push('Maximum 3 potions / holy-water vials per character.');
+ if(g.ammo>40)errors.push('Maximum 40 arrows, bolts or sling stones in the starting pack.');
+ if(g.rations>7)errors.push('Maximum 7 days of rations in the starting pack.');
+ if(g.other>60)errors.push('Other gear must be itemized; maximum 60 lb in this field.');
+ if(g.ammo>0&&g.ammoType==='None')errors.push('Choose an ammunition type when carrying ammunition.');
+ if(g.ammo===0&&g.ammoType!=='None')errors.push('Enter an ammunition quantity, or choose None.');
+ if(!Object.hasOwn(partyGearWeapons,g.primary)||!Object.hasOwn(partyGearWeapons,g.backup)||!['None','Dagger','Sling','Club'].includes(g.sidearm)||!Object.hasOwn(partyGearArmor,g.armor)||!Object.hasOwn(partyGearAmmo,g.ammoType))errors.push('Choose valid equipment from the menus.');
+ const cap=Number.isInteger(strength)&&strength>=3&&strength<=18?strength*8*(['Halfling','Gnome'].includes(race)?0.75:1):0;
+ const weight=(partyGearWeapons[g.primary]||0)+(partyGearWeapons[g.backup]||0)+(partyGearWeapons[g.sidearm]||0)+(partyGearArmor[g.armor]||0)+
+  (g.shield?10:0)+g.potions*1+g.ammo*(partyGearAmmo[g.ammoType]||0)+g.rations*2+(g.rope?10:0)+(g.backpack?2:0)+(g.lantern?3:0)+
+  (g.spellbook?5:0)+(g.components?2:0)+(g.holySymbol?1:0)+(g.thievesTools?2:0)+g.other;
+ if(cap&&weight>cap+.001)errors.push('Overloaded: reduce equipment until your carried weight is within the limit.');
+ return {weight:Math.round(weight*10)/10,capacity:cap,errors:[...new Set(errors)]};
+}
+function partyGearRender(container,custom){const g=partyGearRead(container),id=partyGearIdentity(custom),r=partyGearCheck(g,id.strength,id.race);
+ const el=container.querySelector('.partyPackResult');el.classList.toggle('good',!r.errors.length);el.classList.toggle('bad',!!r.errors.length);
+ el.textContent='';const heading=document.createElement('strong');heading.textContent='Pack weight: '+r.weight+' / '+(r.capacity||'?')+' lb · '+(r.errors.length?'CHECK REQUIRED':'WITHIN LIMIT');el.append(heading);
+ const detail=document.createElement('div');detail.textContent=r.errors.join(' ')||'Ready: '+g.potions+' / 3 potion or holy-water vials, '+[g.primary,g.backup,g.sidearm].filter(x=>x!=='None').length+' / 3 weapons. Other gear weight must include anything not listed above.';el.append(detail);return r;
+}
+function partyGearExtract(sheet){const m=String(sheet||'').match(/^DNDPOV_LOADOUT_V1:\s*(\{[^\n]*\})/m);if(!m)return null;try{const o=JSON.parse(m[1]);return Object.assign(partyGearEmpty(),o)}catch{return null}}
+function partyGearAppend(sheet,gear,strength,race){const clean=String(sheet||'').replace(/\n*DNDPOV LOADOUT BEGIN\n[\s\S]*?DNDPOV LOADOUT END\s*/g,'\n').trim();
+ const r=partyGearCheck(gear,strength,race);
+ const summary=['DNDPOV LOADOUT BEGIN','CARRIED GEAR — authoritative item counts',
+ 'Weapons: '+[gear.primary,gear.backup,gear.sidearm].filter(x=>x!=='None').join(', '),
+ 'Armour: '+gear.armor+(gear.shield?' + shield':''),
+ 'Potions / holy-water vials: '+gear.potions+' TOTAL (maximum 3)',
+ 'Ammunition: '+(gear.ammo?gear.ammo+' '+gear.ammoType:'none'),
+ 'Rations: '+gear.rations+' days',
+ 'Other: '+[gear.rope?'rope':'',gear.backpack?'backpack':'',gear.lantern?'lantern':'',gear.spellbook?'spellbook':'',gear.components?'component pouch':'',gear.holySymbol?'holy symbol':'',gear.thievesTools?'thieves tools':''].filter(Boolean).join(', ')+(gear.other?'; miscellaneous gear '+gear.other+' lb':''),
+ 'Weight: '+r.weight+' / '+r.capacity+' lb (simplified field-carry house rule)',
+ 'DNDPOV_LOADOUT_V1: '+JSON.stringify(gear),'DNDPOV LOADOUT END'].join('\n');
+ return clean+'\n\n'+summary;}
+const partyCustomPack=partyBox.querySelector('#partyCustomPack'),partyEditorPack=partyBox.querySelector('#partyEditorPack');
+partyGearBuild(partyCustomPack,true);partyGearBuild(partyEditorPack,false);
+partyBox.querySelector('#partyCustomForm').addEventListener('input',()=>partyGearRender(partyCustomPack,true));
+partySheet.addEventListener('input',()=>partyGearRender(partyEditorPack,false));
+const partyEditSpecs=[
+ {key:'Level',label:'Level · sample presets 5 / 6 / 7',type:'number',min:1,max:20},
+ {key:'HIT POINTS',label:'Hit points (1–99)',type:'number',min:1,max:99},
+ {key:'ARMOR CLASS',label:'Armour Class',type:'number',min:-10,max:10},
+ {key:'THAC0',label:'THAC0',type:'number',min:1,max:25},
+ {key:'MOVE',label:'Movement',type:'text'},
+ ...['STR','DEX','CON','INT','WIS','CHA'].map(key=>({key,label:key,type:'number',min:3,max:18})),
+ {key:'Spells',label:'Prepared spells',type:'textarea',section:true},
+ {key:'Spell Components & Foci',label:'Spell components and focus',type:'textarea',section:true},
+ {key:'Weapons & Attacks',label:'Weapons and attacks',type:'textarea',section:true},
+ {key:'Ammunition & Charges',label:'Ammunition and charges',type:'textarea',section:true},
+ {key:'Potions & Consumables',label:'Potions and consumables',type:'textarea',section:true},
+ {key:'Equipment & Treasure',label:'Other equipment and treasure',type:'textarea',section:true},
+ {key:'Character Background',label:'Background / personality',type:'textarea',section:true}
+];
+const partyEditSectionTitles=['Saving Throws','Weapons & Attacks','Ammunition & Charges','Potions & Consumables','Equipment & Treasure','Spells','Spell Components & Foci','Special Abilities','Character Background','Questions to Ask the AI DM','DNDPOV LOADOUT BEGIN'];
+const partyEditFields=partyBox.querySelector('#partyEditFields');
+for(const spec of partyEditSpecs){
+ const wrap=document.createElement('label');wrap.className='partyEditField';wrap.dataset.editKey=spec.key;
+ const header=document.createElement('span');header.className='partyEditToggle';
+ const checked=document.createElement('input');checked.type='checkbox';checked.className='partyEditChecked';checked.setAttribute('aria-label','Edit '+spec.label);
+ header.append(checked,document.createTextNode(spec.label));
+ const input=document.createElement(spec.type==='textarea'?'textarea':'input');
+ if(spec.type!=='textarea'){input.type=spec.type;if(spec.min!==undefined)input.min=spec.min;if(spec.max!==undefined)input.max=spec.max;}
+ input.className='partyEditValue';input.disabled=true;if(spec.type==='textarea')input.rows=3;
+ checked.onchange=()=>{input.disabled=!checked.checked;if(checked.checked)input.focus();};
+ wrap.append(header,input);partyEditFields.append(wrap);
+}
+partyEditFields.querySelector('[data-edit-key="Level"] .partyEditValue').addEventListener('change',e=>{
+ const sample=partyDefaults.find(c=>c.id===editingPartyId);
+ if(sample&&e.target.value){partyMsg.textContent=sample.name+' level '+e.target.value+': save at the inn to load the matching HP, THAC0, spells, skills and attacks. This replaces the previous level-dependent selections.';}
+});
+const partyNameEditCheck=partyBox.querySelector('#partyNameEditCheck');
+partyNameEditCheck.onchange=()=>{
+ const canRename=!!editingPartyId&&partyNameEditCheck.checked;
+ partyRenameField.hidden=!canRename;
+ partyName.disabled=!canRename;
+ if(canRename)partyName.focus();
+};
+function partyEditSectionValue(sheet,key){
+ const lines=String(sheet||'').split(/\r?\n/),i=lines.findIndex(l=>l.trim().toLowerCase()===key.toLowerCase());
+ if(i<0)return '';
+ let j=i+1;while(j<lines.length&&!partyEditSectionTitles.some(h=>h.toLowerCase()===lines[j].trim().toLowerCase()))j++;
+ return lines.slice(i+1,j).join('\n').trim();
+}
+function partyCheckedEditsLoad(sheet){
+ const sample=partyDefaults.find(c=>c.id===editingPartyId);
+ const levelRow=Array.from(partyEditFields.children).find(x=>x.dataset.editKey==='Level');
+ const levelInput=levelRow.querySelector('.partyEditValue');
+ levelInput.min=sample?'5':'1';levelInput.max=sample?'7':'20';
+ levelRow.querySelector('.partyEditToggle').lastChild.textContent=sample?'Level · hardwired build (5 / 6 / 7)':'Level · custom character (manual progression)';
+ levelInput.title=sample?'Select 5, 6 or 7. Saving at the inn recalculates HP, THAC0, spells and class features.':'Custom levels require manual adjustment of class features.';
+ for(const spec of partyEditSpecs){const row=Array.from(partyEditFields.children).find(x=>x.dataset.editKey===spec.key);
+  const box=row.querySelector('.partyEditChecked'),input=row.querySelector('.partyEditValue');
+  box.checked=false;input.disabled=true;
+  const value=spec.section?partyEditSectionValue(sheet,spec.key):spec.key==='Level'?(String(sheet).match(/^Level\s*:?\s*(\d+)/mi)?.[1]||''):partyGearSheetValue(sheet,spec.key);
+  input.value=value==='Unassigned'?'':value;
+ }
+ partyNameEditCheck.checked=false;partyNameEditCheck.disabled=!editingPartyId;
+ partyName.disabled=true;partyRenameField.hidden=true;
+}
+function partyCheckedEditsApply(sheet){
+ let result=String(sheet||'');
+ for(const spec of partyEditSpecs){
+  const row=Array.from(partyEditFields.children).find(x=>x.dataset.editKey===spec.key);
+  if(!row.querySelector('.partyEditChecked').checked)continue;
+  const input=row.querySelector('.partyEditValue'),value=input.value.trim();
+  if(!value)throw Error('Enter '+spec.label+' or uncheck that edit.');
+  if(spec.type==='number'&&(!Number.isInteger(Number(value))||Number(value)<spec.min||Number(value)>spec.max))throw Error(spec.label+' must be '+spec.min+' to '+spec.max+'.');
+  if(spec.section){
+   const lines=result.split(/\r?\n/),i=lines.findIndex(l=>l.trim().toLowerCase()===spec.key.toLowerCase());
+   if(i<0){const marker=lines.findIndex(l=>l.trim()==='DNDPOV LOADOUT BEGIN');const at=marker<0?lines.length:marker;lines.splice(at,0,spec.key,value);}
+   else{let j=i+1;while(j<lines.length&&!partyEditSectionTitles.some(h=>h.toLowerCase()===lines[j].trim().toLowerCase()))j++;lines.splice(i+1,j-i-1,value);}
+   result=lines.join('\n');
+  }else{
+   const prefix=spec.key==='Level'?'Level ':spec.key+': ';
+   const line=spec.key==='Level'?/^Level\s*:?\s*[^\n]*/mi:new RegExp('^'+spec.key+'\\s*:\\s*[^\\n]*','mi');
+   result=line.test(result)?result.replace(line,prefix+value):(prefix+value+'\n'+result);
+  }
+ }
+ return result;
+}
+function partyGearLoadEditor(sheet,id){const template=partyDefaults.find(c=>c.id===id);partyGearApply(partyEditorPack,partyGearExtract(sheet)||template?.loadout||partyGearEmpty());partyCheckedEditsLoad(sheet);}
+function partyLegacyDefaultSheet(c){return partyGearAppend([
+ `Name: ${c.name}`,`Race: ${c.race}`,`Class: ${c.className}`,`Level ${c.level}`,`Alignment: ${c.alignment}`,
+ ...['STR','DEX','CON','INT','WIS','CHA'].map((x,i)=>`${x}: ${c.stats[i]}`),
+ `HIT POINTS: ${c.hp}`,`ARMOR CLASS: ${c.ac}`,`THAC0: ${c.thac0}`,`MOVE: ${c.move}`,
+ 'Saving Throws','Use AD&D 2E class and level tables; adjust for magical equipment and effects.',
+ 'Weapons & Attacks',c.weapons,'Ammunition & Charges',c.loadout.ammo?c.loadout.ammo+' '+c.loadout.ammoType:'None',
+ 'Potions & Consumables',c.loadout.potions+' total potions / holy-water vials. Specify the exact types before departure.','Equipment & Treasure',c.equipment,
+ 'Spells',c.spells,'Spell Components & Foci','Confirm exact types and quantities before departure.','Special Abilities','AD&D 2E class features; validate race and level restrictions.',
+ 'Character Background',c.personality,'Questions to Ask the AI DM',
+ 'Confirm starting equipment, spell preparation, thief percentages, saving throws and situational bonuses before mechanical resolution.'
+ ].join('\n'),c.loadout,c.stats[0],c.race);}
+function partyDefaultSheet(c,level=c.level){
+ const preset=partyPresetFor(c,level);
+ return partyGearAppend([
+  `Name: ${c.name}`,`Race: ${c.race}`,`Class: ${c.className}`,`Level ${level}`,`Alignment: ${c.alignment}`,
+  ...['STR','DEX','CON','INT','WIS','CHA'].map((x,i)=>`${x}: ${c.stats[i]}`),
+  `HIT POINTS: ${preset.hp}`,`ARMOR CLASS: ${c.ac}`,`THAC0: ${preset.thac0}`,`MOVE: ${c.move}`,
+  'Saving Throws',preset.saves,
+  'Weapons & Attacks',partyPresetWeapons(c,preset),'Ammunition & Charges',c.loadout.ammo?c.loadout.ammo+' '+c.loadout.ammoType:'None',
+  'Potions & Consumables',c.loadout.potions+' total potions / holy-water vials. Specify the exact types before departure.','Equipment & Treasure',c.equipment,
+  'Spells',partyPresetSpells(c,preset),'Spell Components & Foci','Confirm exact types and quantities before departure.',
+  'Special Abilities',preset.abilities+(preset.skills?' Thief skills: '+preset.skills:''),
+  'Character Background',c.personality,'Questions to Ask the AI DM',
+  'Level '+level+' preset selected. Record starting equipment, spell preparation, saving throw modifiers and situational bonuses before mechanical resolution.'
+ ].join('\n'),c.loadout,c.stats[0],c.race);
+}
+function partyPresetReplaceField(sheet,key,value){
+ const re=key==='Level'?/^Level\s*:?\s*[^\n]*/mi:new RegExp('^'+key+'\\s*:\\s*[^\\n]*','mi');
+ const line=(key==='Level'?'Level ':key+': ')+value;
+ return re.test(sheet)?sheet.replace(re,line):line+'\n'+sheet;
+}
+function partyPresetReplaceSection(sheet,key,value){
+ const lines=sheet.split(/\r?\n/);
+ const i=lines.findIndex(l=>l.trim().toLowerCase()===key.toLowerCase());
+ if(i<0){const marker=lines.findIndex(l=>l.trim()==='DNDPOV LOADOUT BEGIN');lines.splice(marker<0?lines.length:marker,0,key,value);}
+ else{let j=i+1;while(j<lines.length&&!partyEditSectionTitles.some(h=>h.toLowerCase()===lines[j].trim().toLowerCase()))j++;lines.splice(i+1,j-i-1,value);}
+ return lines.join('\n');
+}
+function partyApplyLevelPreset(sheet,c,level){
+ const preset=partyPresetFor(c,level);
+ let result=partyPresetReplaceField(sheet,'Level',level);
+ result=partyPresetReplaceField(result,'HIT POINTS',preset.hp);
+ result=partyPresetReplaceField(result,'THAC0',preset.thac0);
+ for(const [section,value] of [
+  ['Saving Throws',preset.saves],
+  ['Weapons & Attacks',partyPresetWeapons(c,preset)],
+  ['Spells',partyPresetSpells(c,preset)],
+  ['Special Abilities',preset.abilities+(preset.skills?' Thief skills: '+preset.skills:'')]
+ ])result=partyPresetReplaceSection(result,section,value);
+ return result;
+}
+function partyAllRows(){const result=[];for(const preset of partyDefaults){if(!result.some(c=>c.id===preset.id))result.push({id:preset.id,name:preset.name,sheet:partyDefaultSheet(preset),virtual:true});}const mp=partyMultiplayer();
+ if(mp?.connected&&mp.claimSupported){for(const remote of mp.roster||[]){
+  if(!result.some(c=>c.id===remote.id))result.push({id:remote.id,name:remote.name||'Adventurer',sheet:'',remote:true});
+ }}return result;}
+function partyPlayerClaims(){const mp=partyMultiplayer();return mp?.connected&&mp.claimSupported?mp.claims||[]:[];}
+window.DNDPOV_ARC_ROSTER=()=>partyAllRows().filter(c=>partyActive().includes(c.id));
+function partyControlInfo(){const rows=partyAllRows().filter(c=>partyActive().includes(c.id)),mp=partyMultiplayer(),claims=partyPlayerClaims();
+ const aiIds=partyAiIds();const player=[],ai=[];
+ for(const c of rows){const claim=claims.find(x=>x.characterId===c.id);
+  const isPlayerControlled=!!claim?.online||!aiIds.includes(c.id);
+  (isPlayerControlled?player:ai).push(c.name);
+ }return {player,ai};}
+window.DNDPOV_PARTY_CONTROL=partyControlInfo;
+function partyLocationSync(){ /* ARCs are always selectable; no recruitment or editing. */ }
+function renderPartyTemplates(){const container=partyBox.querySelector('#partyTemplates');container.replaceChildren();
+ const rows=partyAllRows();for(const c of partyDefaults){const card=document.createElement('div');card.className='partyTemplate';
+  const title=document.createElement('strong');title.textContent=c.name+' · '+c.className;
+  const meta=document.createElement('span');meta.textContent=c.race+' · Level '+c.level+' starting build · 5 / 6 / 7 available';
+  const b=document.createElement('button');b.type='button';
+  const exists=rows.some(x=>x.id===c.id||x.name.toLowerCase()===c.name.toLowerCase());
+  b.textContent='Available ARC';b.disabled=true;
+  b.onclick=async()=>{if(!partyInInn())return;try{await partyAddDefault(c);await partyRefresh(false)}catch(e){partyMsg.textContent=e.message}};
+  const bioButton=document.createElement('button');bioButton.type='button';bioButton.textContent='📖 Biography';
+  bioButton.onclick=()=>{const panel=partyBox.querySelector('#arcBiography');arcShowBiography(c);panel.hidden=false;panel.open=true;panel.scrollIntoView({behavior:'smooth',block:'nearest'});};
+  card.append(title,meta,b,bioButton);container.append(card);
+ }}
+function partySelectCharacter(id){
+ const c=partyDefaults.find(x=>x.id===id&&partyActive().includes(x.id));
+ if(!c){editingPartyId='';partyPreview.classList.remove('visible');return;}
+ editingPartyId=c.id;partyCharacterSelect.value=c.id;
+ const sheet=partyDefaultSheet(c);partySheet.value=sheet;
+ updatePartyPreview();partyMsg.textContent='Read-only character sheet for '+c.name+'.';
+}
+function partyHasPendingEdits(){
+ if(!editingPartyId)return false;
+ const original=partyRosterCache.find(c=>c.id===editingPartyId);
+ if(!original)return false;
+ if(partyNameEditCheck.checked&&partyName.value.trim()!==original.name)return true;
+ if(partyEditFields.querySelector('.partyEditChecked:checked'))return true;
+ const current=partyGearRead(partyEditorPack);
+ const previous=partyGearExtract(original.sheet)||partyDefaults.find(c=>c.id===editingPartyId)?.loadout||partyGearEmpty();
+ return partyGearKeys.some(k=>current[k]!==previous[k]);
+}
+partyCharacterSelect.onchange=()=>partySelectCharacter(partyCharacterSelect.value);
+const ARC_CLASSIC_FILES={
+ 'Brother Joram':'Brother_Joram_Hollow_Brightened.png',
+ 'Elandor Swiftblade':'Elandor Swiftblade.png',
+ 'Arathor Moonshadow':'Arathor Moonshadow.png',
+ 'Elara Nightwind':'Elara Nightwind.png',
+ 'Virelya Red Veil':'Virelya_RedVeil.png',
+ 'Thorn Underleaf':'Thorn_Underleaf_Brightened.png',
+ 'Maelis Vorn':'ChatGPT Image Oct 27, 2025, 07_33_13 AM.png',
+ 'Alaric Duskfall':'Sir_Alaric_Duskfall_Brightened.png'
+};
+const ARC_ABSTRACT_FILES={
+ 'Alaric':'alaric.webp','Malachar':'theron.webp','Seraphina':'seraphina.webp',
+ 'Kael':'kael.webp','Mira':'mira.webp','Brenna':'brenna.webp','Elowen':'elowen.webp',
+ 'Thrain Ironbeard':'thrain_ironbeard.webp','Lirael Moonwhisper':'lirael_moonwhisper.webp',
+ 'Cassian Ashborne':'cassian_ashborne.webp','Sylvara Greenleaf':'sylvara_greenleaf.webp'
+};
+let arcStyle='animated';
+const ARC_ANIMATED_FILES = {"Alaric": "alaric.jpg", "Malachar": "malachar.jpg", "Seraphina": "seraphina.jpg", "Kael": "kael.jpg", "Mira": "mira.jpg", "Brenna": "brenna.jpg", "Elowen": "elowen.jpg", "Thrain Ironbeard": "thrain_ironbeard.jpg", "Lirael Moonwhisper": "lirael_moonwhisper.jpg", "Cassian Ashborne": "cassian_ashborne.jpg", "Sylvara Greenleaf": "sylvara_greenleaf.jpg", "Brother Joram": "brother_joram.jpg", "Elandor Swiftblade": "elandor_swiftblade.jpg", "Arathor Moonshadow": "arathor_moonshadow.jpg", "Elara Nightwind": "elara_nightwind.jpg", "Virelya Red Veil": "virelya_red_veil.jpg", "Thorn Underleaf": "thorn_underleaf.jpg", "Maelis Vorn": "maelis_vorn.jpg", "Alaric Duskfall": "alaric_duskfall.jpg", "Fenwick Thistlegear": "fenwick_thistlegear.jpg"};
+function arcVisibleCharacters(){return partyDefaults;}
+function arcPortraitPath(name,fallback){return 'arc_characters/animated/'+(ARC_ANIMATED_FILES[name]||ARC_ANIMATED_FILES.Alaric);}
+function arcRenderStyleTabs(){
+  partyBox.querySelector('#arcStyleHint').textContent=arcVisibleCharacters().length+' Animated Adventure Ready Characters · Existing character sheets and AI abilities are unchanged.';
+}
+function renderPartyRoster(){
+ const grid=partyBox.querySelector('#partyRoster');grid.replaceChildren();
+ const active=partyActive();
+ arcRenderStyleTabs();
+ partyBox.querySelector('#partyCount').textContent=active.length+' / 5 selected · minimum 3';
+ for(const c of arcVisibleCharacters()){
+  const card=document.createElement('div');card.className='arcChoiceCard';
+  if(active.includes(c.id))card.classList.add('selected');
+  const portraitFiles={Alaric:'knight',Malachar:'wizard',Seraphina:'cleric',Kael:'elf_ranger',Mira:'rogue',Brenna:'fighter',Elowen:'bard','Thrain Ironbeard':'dwarf','Lirael Moonwhisper':'elf_archer','Cassian Ashborne':'sorcerer','Sylvara Greenleaf':'druid','Brother Joram':'brother_joram','Elandor Swiftblade':'elandor_swiftblade','Arathor Moonshadow':'arathor_moonshadow','Elara Nightwind':'elara_nightwind','Virelya Red Veil':'virelya_red_veil','Thorn Underleaf':'thorn_underleaf','Maelis Vorn':'maelis_vorn','Alaric Duskfall':'alaric_duskfall','Fenwick Thistlegear':'fenwick_thistlegear'};
+  if(portraitFiles[c.name]){
+   const portrait=document.createElement('img');portrait.className='arcPortrait';portrait.loading='lazy';portrait.alt=c.name+' character portrait';portrait.src=arcPortraitPath(c.name,portraitFiles[c.name]);card.append(portrait);
+  }else{
+   const portrait=document.createElement('div');portrait.className='arcPortrait arcPortraitPending';portrait.textContent=c.name.split(/\s+/).map(x=>x[0]).slice(0,2).join('');portrait.title='Portrait not yet assigned';card.append(portrait);
+  }
+  const heading=document.createElement('div');heading.className='arcChoiceHeading';
+  const label=document.createElement('label');const check=document.createElement('input');check.type='checkbox';check.checked=active.includes(c.id);
+  const name=document.createElement('strong');name.textContent=c.name;
+  label.append(check,name);heading.append(label);
+  const aiLabel=document.createElement('label');aiLabel.className='arcAiToggle';aiLabel.title='Checked: human player controls this ARC. Unchecked: AI handles all Battles, Banter, Behaviour, resources and exploration.';
+  const aiCheck=document.createElement('input');aiCheck.type='checkbox';aiCheck.checked=!partyAiIds().includes(c.id);aiCheck.disabled=!active.includes(c.id);
+  aiLabel.append(aiCheck,document.createTextNode('Player Controlled'));heading.append(aiLabel);
+  aiCheck.onchange=()=>{const ids=partyAiIds();partySetAiIds(aiCheck.checked?ids.filter(id=>id!==c.id):[...ids,c.id]);partyMsg.textContent=c.name+(aiCheck.checked?' is player controlled.':' is fully AI controlled.');};
+  const meta=document.createElement('div');meta.className='arcChoiceMeta';meta.textContent=c.race+' · '+c.className+' · Level '+c.level+' · '+c.alignment;
+  const bioButton=document.createElement('button');bioButton.type='button';bioButton.textContent='📖 Biography';
+  const bio=document.createElement('div');bio.className='arcCardBio';bio.hidden=true;
+  const items=ARC_BIOGRAPHIES[c.name];if(items)ARC_BIO_LABELS.forEach((key,i)=>{const p=document.createElement('p');const strong=document.createElement('strong');strong.textContent=key+': ';p.append(strong,document.createTextNode(items[i]));bio.append(p)});
+  bioButton.onclick=()=>{bio.hidden=!bio.hidden;bioButton.textContent=bio.hidden?'📖 Biography':'Close Biography'};
+  check.onchange=()=>{
+   const ids=partyActive();
+   if(check.checked&&ids.length>=5){check.checked=false;partyMsg.textContent='Maximum five characters.';return;}
+   if(!check.checked&&ids.length<=3){check.checked=true;partyMsg.textContent='Minimum three characters.';return;}
+   partySetActive(check.checked?[...ids,c.id]:ids.filter(x=>x!==c.id));
+   window.DNDPOV_MP_SET_ARCS?.(partyActive());
+   if(!check.checked&&editingPartyId===c.id){editingPartyId='';partyCharacterSelect.value='';partyPreview.classList.remove('visible');}
+   partyMsg.textContent='';renderPartyRoster();
+  };
+  card.append(heading,meta,bioButton,bio);grid.append(card);
+ }
+ partyCharacterSelect.replaceChildren(new Option('— Select an ARC —',''));
+ for(const c of partyDefaults.filter(c=>partyActive().includes(c.id)))partyCharacterSelect.add(new Option(c.name+' · '+c.className+' · Level '+c.level,c.id));
+ if(editingPartyId&&!partyActive().includes(editingPartyId))editingPartyId='';
+ partyCharacterSelect.value=editingPartyId||'';
+ partyBox.querySelector('#partyControlHint').textContent='Four ARCs are selected by default. Check or uncheck characters above (3 minimum, 5 maximum). Use the Player Controlled checkbox beside each selected name. Unchecked means the AI runs that character completely. All sheets are read-only.';
+}
+async function partyAddDefault(c){if(!partyInInn())throw Error('You must be inside The Last Chance Inn to recruit.');
+ const rows=partyRosterCache;if(rows.some(x=>x.id===c.id||x.name.toLowerCase()===c.name.toLowerCase()))return;
+ if(rows.length>=8)throw Error('Party is full (8 maximum)');
+ await partyApi('/api/character/save',{id:c.id,name:c.name,sheet:partyDefaultSheet(c)});
+ window.DNDPOV_MP_REGISTER?.(c.id,c.name,c.className);
+}
+async function partySeedDefaults(){if(partySeedBusy||!partyInInn())return;partySeedBusy=true;
+ try{for(const c of partyDefaults)await partyAddDefault(c);
+  localStorage.setItem(partySeedKey(),'yes');
+ }finally{partySeedBusy=false;}}
+async function partyRefresh(seed=true){let d;try{d=await partyApi('/api/character/list',{});}catch(e){renderPartyRoster();partyMsg.textContent='Offline ARC selection: all seven preset characters are available. Saved server changes require the multiplayer server.';return {characters:partyAllRows()};}
+ partyRosterCache=Array.isArray(d.characters)?d.characters:[];
+ if(seed&&partyInInn()&&partyRosterCache.length<7){
+  await partySeedDefaults();d=await partyApi('/api/character/list',{});partyRosterCache=Array.isArray(d.characters)?d.characters:[];
+ }
+ // Upgrade only untouched v1.82 sample sheets. Never overwrite a customized sheet.
+ if(partyInInn()){
+  let upgraded=false;
+  for(const row of partyRosterCache){const sample=partyDefaults.find(c=>c.id===row.id);
+   if(sample&&row.sheet===partyLegacyDefaultSheet(sample)){
+    await partyApi('/api/character/save',{id:row.id,name:row.name,sheet:partyDefaultSheet(sample)});upgraded=true;
+   }
+  }
+  if(upgraded){d=await partyApi('/api/character/list',{});partyRosterCache=Array.isArray(d.characters)?d.characters:[];}
+ }
+ renderPartyRoster();return d;}
+const partyClear=()=>{
+ editingPartyId='';partyCharacterSelect.value='';partyName.value='';partySheet.value='';
+ partyGearApply(partyEditorPack,partyGearEmpty());partyCheckedEditsLoad('');
+ partyNameEditCheck.checked=false;partyNameEditCheck.disabled=true;partyName.disabled=true;partyRenameField.hidden=true;
+ updatePartyPreview();partyLocationSync();
+};
+window.DNDPOV_OPEN_PARTY_MANAGER=()=>{if(partyInInn())window.DNDPOV_SVALICH_MARK_PARTY_REVIEWED?.();partyBox.hidden=false;partyLocationSync();renderPartyRoster();partyRefresh().catch(e=>partyMsg.textContent=e.message)};
+panel.querySelector('#aiDmPartyOpen').onclick=window.DNDPOV_OPEN_PARTY_MANAGER;
+partyBox.querySelector('#partyClose').onclick=()=>{partyBox.hidden=true;window.DNDPOV_I6_PARTY_REVIEW_COMPLETE?.();};
 partyBox.querySelector('#partyClear').onclick=partyClear;
-partyBox.querySelector('#partyFile').onchange=async(e)=>{const file=e.target.files?.[0];if(!file)return;if(file.size>3000000){partyMsg.textContent='PDF exceeds 3 MB';return}partyMsg.textContent='Reading PDF…';try{const b64=await new Promise((resolve,reject)=>{const fr=new FileReader();fr.onload=()=>resolve(String(fr.result).split(',')[1]);fr.onerror=reject;fr.readAsDataURL(file)});const d=await partyApi('/api/character/upload',{filename:file.name,pdf_base64:b64});partySheet.value=d.extracted;updatePartyPreview();partyName.value=partyName.value||file.name.replace(/\.pdf$/i,'').replace(/[_-]/g,' ');editingPartyId='';partyMsg.textContent='PDF extracted. Review the text and click Save character.'}catch(err){partyMsg.textContent=err.message}};
-partyBox.querySelector('#partySave').onclick=async()=>{try{const d=await partyApi('/api/character/save',{id:editingPartyId,name:partyName.value,sheet:partySheet.value});editingPartyId=d.id;partyMsg.textContent=d.name+' saved to local party.';await partyRefresh()}catch(e){partyMsg.textContent=e.message}};
+partyBox.querySelector('#partyAddDefaults').onclick=async()=>{if(!partyInInn())return;
+ try{await partySeedDefaults();await partyRefresh(false);partyMsg.textContent='Available default adventurers added.'}
+ catch(e){partyMsg.textContent=e.message}};
+partyBox.querySelector('#partySave').onclick=async()=>{
+ if(!editingPartyId){partyMsg.textContent='Choose a character from the party dropdown to edit. To add a new character, use Create / Recreate Your Character at the inn.';return;}
+ try{
+  const existing=partyRosterCache.find(c=>c.id===editingPartyId);
+  if(editingPartyId){
+   const sample=partyDefaults.find(c=>c.id===editingPartyId);
+   if(sample){
+    const levelRow=Array.from(partyEditFields.children).find(x=>x.dataset.editKey==='Level');
+    const levelChecked=levelRow.querySelector('.partyEditChecked').checked;
+    const newLevel=levelChecked?Number(levelRow.querySelector('.partyEditValue').value):partySheetLevel(partySheet.value);
+    const oldLevel=partySheetLevel(existing?.sheet);
+    if(!Number.isInteger(newLevel)||newLevel<5||newLevel>7)throw Error('Sample characters have hardwired level 5, 6 and 7 builds only.');
+    if(levelChecked||newLevel!==oldLevel){
+     if(!partyInInn())throw Error('Choose a sample character’s starting level at The Last Chance Inn. Level-ups after departure must be earned in play.');
+     partySheet.value=partyApplyLevelPreset(partySheet.value,sample,newLevel);
+     partyMsg.textContent=sample.name+' · Level '+newLevel+' build applied (HP, THAC0, spells and class abilities).';
+    }
+   }
+   partySheet.value=partyCheckedEditsApply(partySheet.value);updatePartyPreview();
+  }
+  const name=(partyNameEditCheck.checked?partyName.value:existing?.name)?.trim()||'';
+  if(!name||partySheet.value.trim().length<10)throw Error('Enter a name and a complete character sheet');
+  if(editingPartyId&&partyNameEditCheck.checked)partySheet.value=partySheet.value.replace(/^Name:\s*[^\n]*/mi,'Name: '+name);
+  const hpText=partyGearSheetValue(partySheet.value,'HIT POINTS');
+  if(hpText&&hpText!=='Unassigned'&&(!Number.isInteger(Number(hpText))||Number(hpText)<1||Number(hpText)>99))throw Error('Hit points must be a whole number from 1 to 99.');
+  if(!editingPartyId&&partyAllRows().length>=8)throw Error('Party is full (8 maximum)');
+  const gear=partyGearRead(partyEditorPack),identity=partyGearIdentity(false),check=partyGearCheck(gear,identity.strength,identity.race);
+  if(check.errors.length)throw Error(check.errors.join(' '));
+  const oldSheet=partyRosterCache.find(c=>c.id===editingPartyId)?.sheet||'';
+  const previous=partyGearExtract(oldSheet);
+  if(!partyInInn()&&previous&&(['potions','ammo','rations'].some(k=>gear[k]>previous[k])||
+   ['primary','backup','sidearm','armor','shield','rope','backpack','lantern','spellbook','components','holySymbol','thievesTools','other'].some(k=>gear[k]!==previous[k])))
+   if(!confirm('Outside The Last Chance Inn, new gear must be found in the adventure. Confirm these changes reflect items actually acquired or exchanged in play.'))return;
+  const finalSheet=partyGearAppend(partySheet.value,gear,identity.strength,identity.race);
+  if(finalSheet.length>14000)throw Error('Character sheet is too long. Shorten it to keep the full pack manifest.');
+  const d=await partyApi('/api/character/save',{id:editingPartyId,name,sheet:finalSheet});
+  partySheet.value=finalSheet;
+  if(!editingPartyId)window.DNDPOV_MP_REGISTER?.(d.id,name,(finalSheet.match(/Class:\s*([^\n]+)/i)||[])[1]||'Adventurer');
+  editingPartyId=d.id;partyGearLoadEditor(finalSheet,d.id);await partyRefresh(false);
+  partySelectCharacter(d.id);partyMsg.textContent=d.name+' saved'+(partyLocalMode?' in this browser.':'.');
+ }catch(e){partyMsg.textContent=e.message}};
+partyBox.querySelector('#partyCustomForm').onsubmit=async(e)=>{e.preventDefault();if(!partyInInn()){partyMsg.textContent='Create characters at The Last Chance Inn.';return;}
+ try{if(partyAllRows().length>=8)throw Error('Party is full (8 maximum)');
+  const f=new FormData(e.currentTarget),get=k=>String(f.get(k)||'').trim();
+  const name=get('name').slice(0,80),race=get('race'),cls=get('class'),level=Number(get('level'));
+  if(!name||!Number.isInteger(level)||level<1||level>20)throw Error('Enter a valid name and level (1–20)');
+  if(cls==='Paladin'&&race!=='Human')throw Error('AD&D 2E paladins must be human. Choose Human or another class.');
+  const abilities=['STR','DEX','CON','INT','WIS','CHA'].map(k=>{const v=get(k);if(v&&(Number(v)<3||Number(v)>18))throw Error(k+' must be 3–18');return k+': '+(v||'Unassigned')});
+  const hp=get('hp'),ac=get('ac'),thac0=get('thac0');
+  if(hp&&(!Number.isInteger(Number(hp))||Number(hp)<1||Number(hp)>99))throw Error('Hit points must be 1–99.');
+  const gear=partyGearRead(partyCustomPack),checked=partyGearCheck(gear,Number(get('STR')),race);
+  if(checked.errors.length)throw Error(checked.errors.join(' '));
+  const sheetBody=[`Name: ${name}`,`Race: ${race}`,`Class: ${cls}`,`Level ${level}`,`Alignment: ${get('alignment')}`,
+   ...abilities,`HIT POINTS: ${hp||'Unassigned'}`,`ARMOR CLASS: ${ac||'Unassigned'}`,`THAC0: ${thac0||'Unassigned'}`,`MOVE: ${get('move')||'Unassigned'}`,
+   'Saving Throws','Unassigned — consult class and level tables.',
+   'Weapons & Attacks',get('weapons')||'Not specified','Ammunition & Charges',get('ammunition')||'None recorded',
+   'Potions & Consumables',get('potions')||'None recorded','Equipment & Treasure',get('equipment')||'Not specified',
+   'Spells',get('spells')||'None specified','Spell Components & Foci',get('components')||'None recorded','Special Abilities','Use class and race rules; confirm with DM.',
+   'Character Background',get('personality')||'Personality and history to be developed in play.',
+   'Questions to Ask the AI DM','Confirm unassigned statistics and legal class/race combinations before using combat mechanics.'
+  ].join('\n');
+  const sheet=partyGearAppend(sheetBody,gear,Number(get('STR')),race);
+  if(sheet.length>14000)throw Error('Character sheet is too long. Shorten the text fields.');
+  const id=crypto.randomUUID().replaceAll('-','');
+  await partyApi('/api/character/save',{id,name,sheet});window.DNDPOV_MP_REGISTER?.(id,name,cls);
+  partyMsg.textContent=name+' joined the party.';e.currentTarget.reset();partyGearApply(partyCustomPack,partyGearEmpty());e.currentTarget.closest('details').open=false;
+  await partyRefresh(false);partySelectCharacter(id);
+ }catch(err){partyMsg.textContent=err.message}};
+let partyMpUpdateAt=0;
+window.addEventListener('dndpov:mp-state',()=>{if(partyBox.hidden)return;const now=Date.now();if(now-partyMpUpdateAt<450)return;partyMpUpdateAt=now;renderPartyRoster()});
+window.addEventListener('dndpov:character-claim-error',e=>{partyMsg.textContent=e.detail?.message||'Character is already claimed';renderPartyRoster()});
+window.addEventListener('dndpov:mp-connected',()=>{const mp=partyMultiplayer();if(!mp?.claimSupported)return;
+ // Restore this player's intended controls. Server ownership checks decide which claims succeed.
+ setTimeout(()=>{for(const id of partyLocalSelection())window.DNDPOV_MP_CLAIM?.(id,true)},350);
+});
+window.DNDPOV_PARTY_VALIDATE_DEPARTURE=async()=>{
+ const n=partyActive().length;
+ if(n<3||n>5){window.DNDPOV_OPEN_PARTY_MANAGER?.();partyMsg.textContent='Choose 3–5 ARCs before departing.';return false;}
+ return true;
+};
+setInterval(partyLocationSync,700);
+// Seed the original five only when the player begins at the inn. Never overwrite an existing party.
+setTimeout(()=>{if(partyInInn())partyRefresh().catch(e=>console.warn('Party setup:',e.message))},1700);
 const log=panel.querySelector('#aiDmLog'),input=panel.querySelector('#aiDmInput'),place=panel.querySelector('#aiDmPlace'),toggle=panel.querySelector('#aiDmToggle'),status=panel.querySelector('#aiDmStatus');
 // Shared Last Chance Inn / Tser Pool settings, kept across all adventure legs.
 const heroismRange=panel.querySelector('#aiDmHeroism');
@@ -4917,7 +5982,7 @@ setInterval(checkLocation,350);checkLocation();
    // units traveled outdoors; the button also advances nonmovement activities.
    // Teleports, resets and multiplayer position jumps are deliberately ignored.
    const p=window.DNDPOV_ZONE_BRIDGE?.getPosition?.();
-   if(p&&lastCoords&&autoActive()&&!movementLocked()&&position!=='inside'){
+   if(!document.body.classList.contains("classic-outside")&&p&&lastCoords&&autoActive()&&!movementLocked()&&position!=='inside'){
     const step=Math.hypot(p.x-lastCoords.x,p.y-lastCoords.y);
     if(step>0&&step<110){
      travelDistance+=step;
@@ -5387,9 +6452,7 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
 <script id="arcQuickSharedScript">
 (()=>{
 "use strict";
-const RPGPOV_OFFLINE_ARCS=[{"id":"a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1","name":"Alaric","race":"Human","className":"Paladin","level":7,"hp":43,"weapons":"Long sword (1d8), dagger (1d4); plate mail and shield.","spells":"Paladin abilities: Detect Evil, Lay on Hands, Protection from Evil. No memorized priest spells at this level.","abilities":"Honourable, protective, steadfast. BATTLE: defend the vulnerable. BANTER: earnest and occasionally dry. BEHAVIOUR: will not casually endorse cruelty or dishonour."},{"id":"b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2","name":"Malachar","race":"Human","className":"Wizard","level":5,"hp":19,"weapons":"Quarterstaff (1d6), dagger (1d4); no armour.","spells":"Spellbook: Detect Magic, Magic Missile, Protection from Evil, Shield, Mirror Image, Web, Hold Undead, Dispel Magic. Prepared spells must be confirmed before casting; track slots and expenditure.","abilities":"Scholarly, sceptical, curious about the undead. BATTLE: preserve spells and control threats. BANTER: sharp observations. BEHAVIOUR: examines clues before taking risks."},{"id":"c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3","name":"Seraphina","race":"Human","className":"Cleric","level":6,"hp":34,"weapons":"Mace (1d6+1), sling; chain mail and shield.","spells":"Cleric abilities: Turn Undead. Prayer repertoire: Bless, Cure Light Wounds, Detect Evil, Protection from Evil, Hold Person, Spiritual Hammer, Dispel Magic, Remove Curse. Prepared spells and remaining slots must be tracked.","abilities":"Compassionate but unflinching. BATTLE: turn undead, protect and heal. BANTER: thoughtful moral counsel. BEHAVIOUR: refuses to abandon the injured."},{"id":"d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4","name":"Kael","race":"Half-Elf","className":"Ranger","level":6,"hp":41,"weapons":"Longbow (1d8), long sword (1d8), dagger (1d4); studded leather.","spells":"Ranger skills: tracking, wilderness lore, stealth in natural terrain. No memorized priest spells at this level.","abilities":"Observant, quiet, fiercely loyal. BATTLE: ranged cover and flanking. BANTER: short, wry remarks. BEHAVIOUR: scouts, watches tracks and avoids unnecessary noise."},{"id":"e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5","name":"Mira","race":"Halfling","className":"Thief","level":5,"hp":28,"weapons":"Short sword (1d6), dagger (1d4), sling; leather armour.","spells":"Thief skills: Open Locks, Find/Remove Traps, Move Silently, Hide in Shadows, Climb Walls, Hear Noise, Backstab. Percentages to be confirmed on character sheet.","abilities":"Mischievous, quick-witted, loyal beneath the jokes. BATTLE: avoid direct clashes, exploit openings. BANTER: irreverent humour. BEHAVIOUR: checks doors, traps and valuables, but values the party."}];
-const RPGPOV_ANIMATED_FILES={"Alaric":"alaric.jpg","Malachar":"malachar.jpg","Seraphina":"seraphina.jpg","Kael":"kael.jpg","Mira":"mira.jpg"};
-const portraits={Alaric:'knight',Malachar:'wizard',Seraphina:'cleric',Kael:'elf_ranger',Mira:'rogue',Brenna:'fighter',Elowen:'bard','Thrain Ironbeard':'dwarf','Lirael Moonwhisper':'elf_archer','Cassian Ashborne':'sorcerer','Sylvara Greenleaf':'druid','Brother Joram':'brother_joram','Elandor Swiftblade':'elandor_swiftblade','Arathor Moonshadow':'arathor_moonshadow','Elara Nightwind':'elara_nightwind','Virelya Red Veil':'virelya_red_veil','Thorn Underleaf':'thorn_underleaf','Maelis Vorn':'maelis_vorn','Alaric Duskfall':'alaric_duskfall','Fenwick Thistlegear':'fenwick_thistlegear'};
+const portraits={"Alaric": "alaric.jpg", "Malachar": "malachar.jpg", "Seraphina": "seraphina.jpg", "Kael": "kael.jpg", "Mira": "mira.jpg", "Brenna": "brenna.jpg", "Elowen": "elowen.jpg", "Thrain Ironbeard": "thrain_ironbeard.jpg", "Lirael Moonwhisper": "lirael_moonwhisper.jpg", "Cassian Ashborne": "cassian_ashborne.jpg", "Sylvara Greenleaf": "sylvara_greenleaf.jpg", "Brother Joram": "brother_joram.jpg", "Elandor Swiftblade": "elandor_swiftblade.jpg", "Arathor Moonshadow": "arathor_moonshadow.jpg", "Elara Nightwind": "elara_nightwind.jpg", "Virelya Red Veil": "virelya_red_veil.jpg", "Thorn Underleaf": "thorn_underleaf.jpg", "Maelis Vorn": "maelis_vorn.jpg", "Alaric Duskfall": "alaric_duskfall.jpg", "Fenwick Thistlegear": "fenwick_thistlegear.jpg"};
 const toggle=document.createElement('button');
 toggle.id='arcQuickToggle';toggle.type='button';toggle.textContent='⚔ PARTY';
 toggle.setAttribute('aria-label','Open party battle quick reference');
@@ -5408,17 +6471,71 @@ function section(sheet,heading){
  return lines.slice(start+1,end).filter(Boolean).join(' · ').slice(0,350);
 }
 function stat(sheet,label){
- const line=esc(sheet).split(/\r?\n/).find(x=>x.trim().toLowerCase().startsWith(label.toLowerCase()+':'));
- return line?line.slice(line.indexOf(':')+1).trim():'';
+ const key=String(label).toLowerCase();
+ for(const line of esc(sheet).split(/\r?\n/)){
+  const trimmed=line.trim();
+  const lower=trimmed.toLowerCase();
+  if(lower.startsWith(key+':'))return trimmed.slice(label.length+1).trim();
+  if(key==='level'){
+   const match=trimmed.match(/^level\s+(\d+)\b/i);
+   if(match)return match[1];
+  }
+ }
+ return '';
 }
 function activeIds(){
  try{
   const session=sessionStorage.getItem('dndpov_ai_session');
-  if(!session)return RPGPOV_OFFLINE_ARCS.slice(0,4).map(c=>c.id);
+  if(!session)return null;
   const stored=localStorage.getItem('dndpov_svalich_active_arcs_v1_'+session);
   const ids=stored?JSON.parse(stored):null;
-  return Array.isArray(ids)?ids:RPGPOV_OFFLINE_ARCS.slice(0,4).map(c=>c.id);
- }catch{return RPGPOV_OFFLINE_ARCS.slice(0,4).map(c=>c.id);}
+  return Array.isArray(ids)?ids:null;
+ }catch{return null;}
+}
+
+// Browser BASIC: use the working Old Svalich Road roster when the local API is absent.
+const partyDefaults=[
+ {id:'a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1',name:'Alaric',loadout:{primary:'Long sword',backup:'None',sidearm:'Dagger',armor:'Plate mail',shield:true,potions:2,ammoType:'None',ammo:0,rations:5,rope:true,backpack:true,lantern:true,spellbook:false,components:false,holySymbol:true,thievesTools:false,other:5},race:'Human',className:'Paladin',alignment:'Lawful Good',level:7,
+  stats:[16,12,15,10,14,17],hp:43,ac:2,thac0:15,move:'12',
+  weapons:'Long sword (1d8), dagger (1d4); plate mail and shield.',
+  equipment:'Holy symbol, backpack, rations, lantern, rope, holy water, wooden stakes.',
+  spells:'Paladin abilities: Detect Evil, Lay on Hands, Protection from Evil. No memorized priest spells at this level.',
+  personality:'Honourable, protective, steadfast. BATTLE: defend the vulnerable. BANTER: earnest and occasionally dry. BEHAVIOUR: will not casually endorse cruelty or dishonour.'},
+ {id:'b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2',name:'Malachar',loadout:{primary:'Quarterstaff',backup:'Dagger',sidearm:'None',armor:'None',shield:false,potions:2,ammoType:'None',ammo:0,rations:5,rope:false,backpack:true,lantern:true,spellbook:true,components:true,holySymbol:false,thievesTools:false,other:4},race:'Human',className:'Wizard',alignment:'Neutral Good',level:5,
+  stats:[9,16,12,17,13,11],hp:19,ac:8,thac0:19,move:'12',
+  weapons:'Quarterstaff (1d6), dagger (1d4); no armour.',
+  equipment:'Spellbook, ink, components pouch, candle, parchment, lantern.',
+  spells:'Spellbook: Detect Magic, Magic Missile, Protection from Evil, Shield, Mirror Image, Web, Hold Undead, Dispel Magic. Prepared spells must be confirmed before casting; track slots and expenditure.',
+  personality:'Scholarly, sceptical, curious about the undead. BATTLE: preserve spells and control threats. BANTER: sharp observations. BEHAVIOUR: examines clues before taking risks.'},
+ {id:'c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3',name:'Seraphina',loadout:{primary:'Mace',backup:'Sling',sidearm:'None',armor:'Chain mail',shield:true,potions:3,ammoType:'Sling stones',ammo:20,rations:5,rope:false,backpack:true,lantern:false,spellbook:false,components:false,holySymbol:true,thievesTools:false,other:5},race:'Human',className:'Cleric',alignment:'Lawful Good',level:6,
+  stats:[13,11,15,12,17,14],hp:34,ac:4,thac0:18,move:'9',
+  weapons:'Mace (1d6+1), sling; chain mail and shield.',
+  equipment:'Holy symbol, healer supplies, bandages, holy water, rations, prayer book.',
+  spells:'Cleric abilities: Turn Undead. Prayer repertoire: Bless, Cure Light Wounds, Detect Evil, Protection from Evil, Hold Person, Spiritual Hammer, Dispel Magic, Remove Curse. Prepared spells and remaining slots must be tracked.',
+  personality:'Compassionate but unflinching. BATTLE: turn undead, protect and heal. BANTER: thoughtful moral counsel. BEHAVIOUR: refuses to abandon the injured.'},
+ {id:'d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4',name:'Kael',loadout:{primary:'Longbow',backup:'Long sword',sidearm:'Dagger',armor:'Studded leather',shield:false,potions:2,ammoType:'Arrows',ammo:40,rations:5,rope:true,backpack:true,lantern:false,spellbook:false,components:false,holySymbol:false,thievesTools:false,other:6},race:'Half-Elf',className:'Ranger',alignment:'Neutral Good',level:6,
+  stats:[15,17,14,12,15,10],hp:41,ac:4,thac0:15,move:'12',
+  weapons:'Longbow (1d8), long sword (1d8), dagger (1d4); studded leather.',
+  equipment:'Quiver, trail rations, rope, tinderbox, hunting knife, cloak, herbs.',
+  spells:'Ranger skills: tracking, wilderness lore, stealth in natural terrain. No memorized priest spells at this level.',
+  personality:'Observant, quiet, fiercely loyal. BATTLE: ranged cover and flanking. BANTER: short, wry remarks. BEHAVIOUR: scouts, watches tracks and avoids unnecessary noise.'},
+ {id:'e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5',name:'Mira',loadout:{primary:'Short sword',backup:'Sling',sidearm:'Dagger',armor:'Leather',shield:false,potions:2,ammoType:'Sling stones',ammo:20,rations:5,rope:true,backpack:true,lantern:false,spellbook:false,components:false,holySymbol:false,thievesTools:true,other:3},race:'Halfling',className:'Thief',alignment:'Chaotic Good',level:5,
+  stats:[10,18,13,13,12,15],hp:28,ac:4,thac0:18,move:'6',
+  weapons:'Short sword (1d6), dagger (1d4), sling; leather armour.',
+  equipment:'Thieves tools, small mirror, chalk, rope, lock picks, spare cloak.',
+  spells:'Thief skills: Open Locks, Find/Remove Traps, Move Silently, Hide in Shadows, Climb Walls, Hear Noise, Backstab. Percentages to be confirmed on character sheet.',
+  personality:'Mischievous, quick-witted, loyal beneath the jokes. BATTLE: avoid direct clashes, exploit openings. BANTER: irreverent humour. BEHAVIOUR: checks doors, traps and valuables, but values the party.'}
+];
+const ARC_ANIMATED_FILES = {"Alaric": "alaric.jpg", "Malachar": "malachar.jpg", "Seraphina": "seraphina.jpg", "Kael": "kael.jpg", "Mira": "mira.jpg", "Brenna": "brenna.jpg", "Elowen": "elowen.jpg", "Thrain Ironbeard": "thrain_ironbeard.jpg", "Lirael Moonwhisper": "lirael_moonwhisper.jpg", "Cassian Ashborne": "cassian_ashborne.jpg", "Sylvara Greenleaf": "sylvara_greenleaf.jpg", "Brother Joram": "brother_joram.jpg", "Elandor Swiftblade": "elandor_swiftblade.jpg", "Arathor Moonshadow": "arathor_moonshadow.jpg", "Elara Nightwind": "elara_nightwind.jpg", "Virelya Red Veil": "virelya_red_veil.jpg", "Thorn Underleaf": "thorn_underleaf.jpg", "Maelis Vorn": "maelis_vorn.jpg", "Alaric Duskfall": "alaric_duskfall.jpg", "Fenwick Thistlegear": "fenwick_thistlegear.jpg"};
+function fallbackCharacters(){
+ const active=activeIds();
+ const candidates=active?.length ? active.map(id=>partyDefaults.find(c=>String(c.id)===String(id))).filter(Boolean) : partyDefaults.slice(0,3);
+ return candidates.map(c=>({id:c.id,name:c.name,sheet:[
+ 'Name: '+c.name,'Race: '+c.race,'Class: '+c.className,'Level: '+c.level,
+ 'HIT POINTS: '+c.hp,'ARMOR CLASS: '+c.ac,'THAC0: '+c.thac0,
+ 'Weapons & Attacks',c.weapons,'Spells',c.spells,
+ 'Special Abilities',c.personality
+ ].join('\n')}));
 }
 async function loadCharacters(){
  const session=sessionStorage.getItem('dndpov_ai_session');
@@ -5426,14 +6543,9 @@ async function loadCharacters(){
   try{
    const r=await fetch('/api/character/list',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session})});
    if(r.ok){const data=await r.json();if(Array.isArray(data.characters)&&data.characters.length)return data.characters;}
-  }catch(e){console.info('RPGPOV: using built-in browser ARC reference',e);}
+  }catch(e){console.info('Party reference: using built-in browser roster',e)}
  }
- // Read-only offline roster: the browser demo does not require a local API server.
- return RPGPOV_OFFLINE_ARCS.map(c=>({id:c.id,name:c.name,sheet:[
-  'Name: '+c.name,'Race: '+c.race,'Class: '+c.className,'Level: '+c.level,
-  'HIT POINTS: '+c.hp,'Weapons & Attacks',c.weapons,
-  'Spells',c.spells,'Special Abilities',c.abilities
- ].join('\n')}));
+ return fallbackCharacters();
 }
 function addDetail(card,label,value){
  if(!value||value==='None')return;
@@ -5451,7 +6563,7 @@ function render(rows){
   const top=document.createElement('div');top.className='arcQuickTop';
   const imageName=portraits[name]||portraits[stat(sheet,'Name')];
   if(imageName){
-   const img=document.createElement('img');img.src='arc_characters/animated/'+(RPGPOV_ANIMATED_FILES[name]||RPGPOV_ANIMATED_FILES[stat(sheet,'Name')]||'alaric.jpg');
+   const img=document.createElement('img');img.src='arc_characters/animated/'+imageName;
    img.alt=name+' portrait';img.loading='lazy';
    img.onerror=()=>{img.replaceWith(fallback())};top.append(img);
   }else top.append(fallback());
@@ -5469,7 +6581,7 @@ function render(rows){
  }
  if(!selected.length)host.textContent='No selected ARC sheets found for this session. Choose your party at the Last Chance Inn.';
  const hint=document.createElement('div');hint.className='arcQuickHint';
- hint.textContent='Read-only quick reference · character sheets from your current session';
+ hint.textContent='Read-only quick reference · session sheets when available; otherwise Old Svalich Road browser presets';
  host.append(hint);
 }
 toggle.onclick=async()=>{
@@ -5572,7 +6684,6 @@ panel.querySelector('#arcQuickClose').onclick=()=>{panel.classList.remove('open'
 })();
 </script>
 <style id="village-ai-chat-display-only">#aiDmPanel #aiDmPlace,#aiDmPanel #aiDmReadAgain,#aiDmPanel .aiDmScroll{display:none!important}</style>
-
 <!-- Browser demo: retain the complete character/sheet journal, but lock online-only controls. -->
 <style id="rpgpov-browser-feature-lock-style">
 #mpButton, #dndpovPrivateMpLaunch,
