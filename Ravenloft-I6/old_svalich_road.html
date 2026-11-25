@@ -850,7 +850,7 @@ function blocksGateWall(x,z){
 }
 const player={x:0,z:183,angle:0},keys={};let triggered=false,progress=0,night=false,noticeUntil=0,gateApproach=false,gateOpenProgress=0;
 window.addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();if(document.getElementById('gameModal')?.style.display!=='flex')keys[e.key.toLowerCase()]=true});window.addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
-function reset(){player.x=0;player.z=183;player.angle=0;triggered=false;progress=0;gateApproach=false;gateOpenProgress=0;gateL.rotation.y=0;gateR.rotation.y=0;document.querySelector('#notice').style.display='none';window.DNDPOV_RESET_SVALICH_CROSSINGS?.();window.DNDPOV_RESET_I6_JOURNEY?.()}document.querySelector('#reset').onclick=reset;
+function reset(){if(new URLSearchParams(location.search).get("classic")==="1")return;player.x=0;player.z=183;player.angle=0;triggered=false;progress=0;gateApproach=false;gateOpenProgress=0;gateL.rotation.y=0;gateR.rotation.y=0;document.querySelector('#notice').style.display='none';window.DNDPOV_RESET_SVALICH_CROSSINGS?.();window.DNDPOV_RESET_I6_JOURNEY?.()}document.querySelector('#reset').onclick=reset;
 // v1.22: Tser Pool's softer, layered distance mist and dusk/night palette.
 const atmospherePresets={
  day:{sky:0x899394,fog:0x899394,ambient:1.4,sun:1.6,exposure:1},
@@ -1929,7 +1929,7 @@ window.DNDPOV_SVALICH_EXIT_TAVERN=()=>leaveInn();
 // Door interaction cannot silently select a route.
 let i6DepartureSelected=false;
 function leaveInn(route=null){
- if(new URLSearchParams(location.search).get('classic')==='1'){if(!window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK&&!window.DNDPOV_ENCOUNTER_PENDING)location.href='village_of_barovia_classic_v1.7.html';return;}
+ if(new URLSearchParams(location.search).get('classic')==='1'){if(!window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK&&!window.DNDPOV_ENCOUNTER_PENDING)location.href='village_of_barovia_classic_v1.8.html';return;}
  if(!['full','overnight'].includes(route)){
   window.DNDPOV_KOBO_DEPARTURE?.();return;
  }
@@ -2045,7 +2045,7 @@ window.addEventListener('keydown',e=>{
 });
 const keyOverlay=document.createElement('canvas');keyOverlay.id='keyOverlay';keyOverlay.width=160;keyOverlay.height=240;GAME_MAP.style.position='absolute';GAME_MAP.append(keyOverlay);
 function drawKeys(){const c=keyOverlay.getContext('2d');c.clearRect(0,0,160,240);c.font='bold 9px Georgia';c.textAlign='center';for(const l of gameLocations){if(!l.r)continue;const x=MAP_X(l),y=MAP_Y(l);if(x<10||x>150||y<10||y>230)continue;c.fillStyle='#f4cf8a';c.fillRect(x-11,y-11,22,14);c.fillStyle='#3c2b1d';c.fillText(l.id,x,y-1)}}drawKeys();
-function gameNav(path){window.location.href=path}
+function gameNav(path){if(new URLSearchParams(location.search).get("classic")==="1")return;window.location.href=path}
 gameEl('castleBtn').onclick=async()=>{if(innInside&&!await window.DNDPOV_SVALICH_REQUIRE_PARTY?.())return;gameNav('ravenloft.html');};
 gameEl('encBtn').onclick=gameEncounter;
 gameRender();setInterval(()=>gameUpdateLocation(player.x,player.z),250);
@@ -4920,6 +4920,7 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
  const close=()=>{card.hidden=true;};
  window.DNDPOV_KOBO_CHOICE=()=>{close();};
  window.DNDPOV_KOBO_DEPARTURE=()=>{
+  if(new URLSearchParams(location.search).get("classic")==="1"){close();return;}
   if(window.DNDPOV_SVALICH_DEPARTED?.())return;
   show('When will you depart?',
    'Your party is assembled. Will you leave now for the full five-hour journey, or stay at the inn and depart at dawn?',[
@@ -5027,4 +5028,4 @@ body:has(#dungeonToolDock.open) #aiDmButton{right:79px!important;bottom:80px!imp
   lock();
 })();
 </script>
-<script>if(new URLSearchParams(location.search).get('classic')==='1'){document.addEventListener('DOMContentLoaded',()=>{const b=document.createElement('button');b.textContent='← Exit to Adventure Map';b.style.cssText='position:fixed;top:42px;left:50%;transform:translateX(-50%);z-index:2147483646;padding:12px 20px;background:#30251c;color:#f5dfb7;border:1px solid #d2aa70;border-radius:6px;font:bold 15px Georgia;cursor:pointer';b.onclick=()=>{if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()||window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK||window.DNDPOV_ENCOUNTER_PENDING)return;document.exitPointerLock?.();location.href='village_of_barovia_classic_v1.7.html';};document.body.append(b);});}</script></body></html>
+<script>if(new URLSearchParams(location.search).get('classic')==='1'){document.addEventListener('DOMContentLoaded',()=>{const b=document.createElement('button');b.textContent='← Exit to Adventure Map';b.style.cssText='position:fixed;top:42px;left:50%;transform:translateX(-50%);z-index:2147483646;padding:12px 20px;background:#30251c;color:#f5dfb7;border:1px solid #d2aa70;border-radius:6px;font:bold 15px Georgia;cursor:pointer';b.onclick=()=>{if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()||window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK||window.DNDPOV_ENCOUNTER_PENDING)return;document.exitPointerLock?.();location.href='village_of_barovia_classic_v1.8.html';};document.body.append(b);});}</script><script>if(new URLSearchParams(location.search).get('classic')==='1'&& (new URLSearchParams(location.search).get('site')||'INN')==='INN'){document.documentElement.classList.add('classic-inn');}</script><style>.classic-inn #svalichKoboChoices,.classic-inn #svalichJourneyOverlay,.classic-inn #svalichJourneyBadge,.classic-inn #svalichJourneyToast,.classic-inn #jumpSelect,.classic-inn #villageBtn,.classic-inn #castleBtn,.classic-inn #reset,.classic-inn #controlDeck .toolRow:has(#jumpSelect){display:none!important}</style></body></html>
