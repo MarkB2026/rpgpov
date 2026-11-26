@@ -4598,12 +4598,12 @@ window.DNDPOV_CLASSIC_MAP_CONTEXT=()=>({active:!classicFirstPerson,id:classicPos
 function classicSync(){const boardVisible=!activeInterior&&!classicFirstPerson;classicMarker();classicBoard.hidden=!boardVisible;classicReturn.hidden=!activeInterior;classicToggle.hidden=!!activeInterior;classicToggle.textContent=classicFirstPerson?'Return to adventure map':'Switch to first person';document.body.classList.toggle('classic-outside',boardVisible);if(boardVisible)classicCanvas.getContext('2d').drawImage(map,0,0);}
 function classicTravel(){const status=document.getElementById("classicStatus");if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()){status.textContent="Resolve the active encounter before continuing.";return false;}window.DNDPOV_AUTO_DM_TOOLS?.advanceTurn?.();if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()){status.textContent="Encounter on the way — resolve it, then select your destination again.";return false;}status.textContent="";return true;}
 function classicVisit(id){if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.()){document.getElementById('classicStatus').textContent='Resolve the active encounter before continuing.';return;}const site=adventureSites.find(a=>a.id===id);if(!site)return;closeLocation();if(!classicTravel())return;player.x=site.x;player.z=site.z;nearbyLocationId=id;const k=keyedPlaces.find(k=>k.id===id);if(k)classicSetPosition(34+45*k.p[0]/WIDTH,15+75*k.p[1]/HEIGHT,id);drawMap();if(id==='E7'){showLocation(id);}else{enterBuilding(id);}classicSync();}
-function classicLink(file,x,y,site){if(!classicTravel())return;classicSetPosition(x,y,site||'CASTLE');location.href=file+"?classic=1&build=1.19"+(site?"&site="+site:"");}
+function classicLink(file,x,y,site){if(!classicTravel())return;classicSetPosition(x,y,site||'CASTLE');location.href=file+"?classic=1&build=1.20"+(site?"&site="+site:"");}
 function classicPin(label,x,y,action){for(const parent of [classicMap,classicList]){const b=document.createElement('button');b.textContent=parent===classicMap?label.split(" ")[0]:label;b.title=label;b.setAttribute("aria-label",label);b.onclick=action;if(parent===classicMap){b.style.left=x+'%';b.style.top=y+'%';}parent.append(b);}}
 const classicIcons={E1:'🛒',E2:'🍺',E3:'🏠',E4:'🏰',E5:'🛏',E6:'⛪',E7:'🪦'};
 for(const k of keyedPlaces){classicPin(classicIcons[k.id]+' '+k.name,34+45*k.p[0]/WIDTH,15+75*k.p[1]/HEIGHT,()=>classicVisit(k.id));}
 classicPin('🏰 Castle Ravenloft',24,12,()=>classicLink('ravenloft.html',24,12));classicPin('🐎 Black carriage',12,43,()=>classicLink('road_to_tser.html',12,43,'I'));classicPin('⛺ Tser Pool / Madame Eva',12,83,()=>classicLink('road_to_tser.html',12,83,'G1'));classicPin('🚪 Gates of Barovia',88,48,()=>classicLink('old_svalich_road.html',88,48,'B'));classicPin('🌲 Old Svalich Road',92,22,()=>classicLink('old_svalich_road.html',92,22,'A'));classicPin('🛒 Burgomaster’s Messenger Cart',91,64,()=>classicLink('old_svalich_road.html',91,64,'CART'));classicPin('🌲 Woods of Svalich',82,34,()=>classicLink('old_svalich_road.html',82,34,'C'));classicPin('🍺 Last Chance Tavern',92,77,()=>classicLink('old_svalich_road.html',92,77,'INN'));
-classicReturn.onclick=()=>{if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.())return;document.exitPointerLock?.();closeLocation();classicFirstPerson=false;leaveBuilding();classicSync();};document.querySelector('#hud b').textContent='RPGPOV · BAROVIA CLASSIC v1.19';document.querySelector('#hud p:not(.build-notes p)').textContent='Choose a landmark on the adventure map.';classicSync();setInterval(classicSync,350);
+classicReturn.onclick=()=>{if(window.DNDPOV_AUTO_DM_MOVEMENT_LOCKED?.())return;document.exitPointerLock?.();closeLocation();classicFirstPerson=false;leaveBuilding();classicSync();};document.querySelector('#hud b').textContent='RPGPOV · BAROVIA CLASSIC v1.20';document.querySelector('#hud p:not(.build-notes p)').textContent='Choose a landmark on the adventure map.';classicSync();setInterval(classicSync,350);const classicTools=document.createElement('div');classicTools.style.cssText='display:flex;gap:8px;flex-wrap:wrap;margin:8px 0';for(const [label,id] of [['Oracle','localOracle'],['Encounters','localEncounters'],['Auto DM','localAutoDm']]){const b=document.createElement('button');b.textContent=label;b.onclick=()=>document.getElementById(id)?.click();classicTools.append(b);if(id==='localAutoDm')setInterval(()=>{b.textContent=document.getElementById(id)?.textContent||label},500);}classicBoard.prepend(classicTools);
 </script>
 <!-- DNDPOV local multiplayer: matching Castle Ravenloft Host/Join protocol -->
 <style id="dndpovMpStyle">
@@ -5709,7 +5709,7 @@ setInterval(checkLocation,350);checkLocation();
   wolvesHowling:false,howlingRounds:0,wolvesAttacked:false,turns:0,
   pendingEncounter:null,nightAttacked:false},readJSON(stateKey,{}));
  // Auto DM is opt-in. An old unresolved popup must not survive an OFF setting.
- state.enabled=state.enabled===true;
+ state.enabled=sessionStorage.getItem('classicAutoDM')!=='off';
  if(!state.enabled)state.pendingEncounter=null;
  let history=readJSON(logKey,[]);if(!Array.isArray(history))history=[];
  const persist=()=>{try{localStorage.setItem(stateKey,JSON.stringify(state));localStorage.setItem(logKey,JSON.stringify(history))}catch{}};
@@ -5815,7 +5815,7 @@ setInterval(checkLocation,350);checkLocation();
  const art=document.createElement('img');art.alt='Encounter creature';art.hidden=true;art.style.cssText='width:100%;height:clamp(90px,25vh,220px);object-fit:contain;background:#17151a;border-radius:6px';bannerCard.insertBefore(art,bannerHead);
  function classicCard(title,description){const active=classicCardMode();banner.classList.toggle('classic-monster-card',active);art.hidden=true;if(!active)return;bannerEyebrow.textContent='⚔ '+classicLocation()+' · '+($('timeofday')?.value||'dawn')+' · '+($('visibility')?.value||'mist');const t=(title+' '+description).toLowerCase();const asset=[[/worg/,'worg'],[/zomb/,'zombie'],[/ghoul/,'ghoul'],[/wraith/,'wraith'],[/wight/,'wight'],[/ghost/,'ghost'],[/vampire|strahd/,'vampire_maiden'],[/bat/,'bat'],[/vistani|villager/,'vistani_traveler']].find(([r])=>r.test(t))?.[1];if(asset){art.hidden=false;art.onerror=()=>{art.hidden=true};art.src='ravenloft/monsters/'+asset+'.svg';}}
  const cardStyle=document.createElement('style');cardStyle.textContent='#dndpovEncounterBanner.classic-monster-card{inset:0!important;transform:none!important;width:100%!important;align-items:center!important;justify-content:center!important;background:#08060bc9!important;padding:12px!important;box-sizing:border-box!important}#dndpovEncounterBanner.classic-monster-card .encounter-card{width:min(480px,94vw)!important;max-height:85dvh!important;overflow:auto!important;padding:16px!important}#dndpovEncounterBanner.classic-monster-card .encounter-eyebrow{display:block!important}#dndpovEncounterBanner.classic-monster-card .encounter-description{max-height:none!important}';document.head.append(cardStyle);
- let mapElapsed=0;setInterval(()=>{if(!classicCardMode()||!autoActive()||movementLocked()||document.hidden||banner.style.display==='flex'){mapElapsed=0;return;}if(++mapElapsed>=60){mapElapsed=0;advanceTurn();}},1000);
+ let mapElapsed=0;setInterval(()=>{if(!autoActive()||movementLocked()||document.hidden||banner.style.display==='flex'){mapElapsed=0;return;}if(!classicCardMode()&&!window.DNDPOV_CLASSIC_MAP_CONTEXT?.().active){mapElapsed=0;return;}if(++mapElapsed>=60){mapElapsed=0;advanceTurn();}},1000);
  function notice(title,description,lock=false){
   if(!state.enabled)return;
   bannerHead.textContent=title;bannerText.textContent=description;
@@ -6087,12 +6087,12 @@ setInterval(checkLocation,350);checkLocation();
   dmModeButton.textContent='⚿ DM: '+(localDm?'ON':'OFF');dmModeButton.classList.toggle('active',localDm);
   autoButton.textContent='⚙ Auto DM: '+(state.enabled?'ON':'OFF');autoButton.classList.toggle('auto-active',autoActive());
   autoButton.disabled=false;
-  $('localOracle').disabled=!localDm;$('localEncounters').disabled=!localDm;
+  $('localOracle').disabled=false;$('localEncounters').disabled=false;
   $('localModuleContents').disabled=!localDm;
   if(!localDm)$('dndpovModuleContents').classList.remove('open');
  }
  dmModeButton.onclick=()=>{if(actualDmId)$(actualDmId)?.click();else localDm=!localDm;sync()};
- autoButton.onclick=()=>{state.enabled=!state.enabled;if(!state.enabled){state.pendingEncounter=null;banner.style.display='none';travelDistance=0;lastCoords=null;}persist();record('Auto DM',titles[leg],state.enabled?'I6 checks enabled':'I6 checks paused');sync();renderEncounters()};
+ autoButton.onclick=()=>{state.enabled=!state.enabled;sessionStorage.setItem('classicAutoDM',state.enabled?'on':'off');if(!state.enabled){state.pendingEncounter=null;banner.style.display='none';travelDistance=0;lastCoords=null;}persist();record('Auto DM',titles[leg],state.enabled?'I6 checks enabled':'I6 checks paused');sync();renderEncounters()};
  $('localOracle').onclick=()=>{renderOracle();$('dndpovOracle').classList.add('open');$('dndpovEncounters').classList.remove('open');dock.classList.remove('open');document.exitPointerLock?.()};
  $('localEncounters').onclick=()=>{renderEncounters();$('dndpovEncounters').classList.add('open');$('dndpovOracle').classList.remove('open');dock.classList.remove('open');document.exitPointerLock?.()};
  $('localModuleContents').onclick=()=>{

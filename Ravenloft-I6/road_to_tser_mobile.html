@@ -3724,7 +3724,7 @@ document.addEventListener('keydown',event=>{
  // Auto DM is opt-in and independent of whether private DM notes are visible.
  const state=Object.assign({enabled:true,visited:[],lastLocation:'',woodsTurns:0,woodsLetter:false,
   wolvesHowling:false,howlingRounds:0,wolvesAttacked:false,turns:0},readJSON(stateKey,{}));
- state.enabled=true; // New adventure launches with Auto DM enabled; player may turn it off during play.
+ state.enabled=sessionStorage.getItem('classicAutoDM')!=='off'; // New adventure launches with Auto DM enabled; player may turn it off during play.
  let history=readJSON(logKey,[]);if(!Array.isArray(history))history=[];
  const persist=()=>{try{localStorage.setItem(stateKey,JSON.stringify(state));localStorage.setItem(logKey,JSON.stringify(history))}catch{}};
  const $=id=>document.getElementById(id);
@@ -3966,7 +3966,7 @@ document.addEventListener('keydown',event=>{
    onEnter(c);renderEncounters();}
   // The real module's wolf checks happen by exploration turns. Walking distance
   // is only a proxy; nonmovement actions can advance turns with the manual button.
-  if(leg==='tser'&&state.enabled){
+  if(new URLSearchParams(window.location.search).get('classic')!=='1'&&leg==='tser'&&state.enabled){
    const p=window.DNDPOV_ZONE_BRIDGE?.getPosition?.();
    if(p){
     if(lastCoords){const step=Math.hypot(p.x-lastCoords.x,p.y-lastCoords.y);
@@ -4059,12 +4059,12 @@ document.addEventListener('keydown',event=>{
   if(b)localDm=/\bON\b/.test(b.textContent)&&!/\bOFF\b/.test(b.textContent);
   dmModeButton.textContent='⚿ DM: '+(localDm?'ON':'OFF');dmModeButton.classList.toggle('active',localDm);
   autoButton.textContent='⚙ Auto DM: '+(state.enabled?'ON':'OFF');autoButton.classList.toggle('auto-active',state.enabled);
-  autoButton.disabled=false; $('localOracle').disabled=!localDm;$('localEncounters').disabled=!localDm;
+  autoButton.disabled=false; $('localOracle').disabled=false;$('localEncounters').disabled=false;
   $('localModuleContents').disabled=!localDm;
   if(!localDm)$('dndpovModuleContents').classList.remove('open');
  }
  dmModeButton.onclick=()=>{if(actualDmId)$(actualDmId)?.click();else localDm=!localDm;sync()};
- autoButton.onclick=()=>{state.enabled=!state.enabled;if(!state.enabled){window.DNDPOV_ENCOUNTER_PENDING=false;banner.style.display='none';travelDistance=0;lastCoords=null;}persist();record('Auto DM',titles[leg],state.enabled?'Checks enabled':'Checks paused');sync();renderEncounters()};
+ autoButton.onclick=()=>{state.enabled=!state.enabled;sessionStorage.setItem('classicAutoDM',state.enabled?'on':'off');if(!state.enabled){window.DNDPOV_ENCOUNTER_PENDING=false;banner.style.display='none';travelDistance=0;lastCoords=null;}persist();record('Auto DM',titles[leg],state.enabled?'Checks enabled':'Checks paused');sync();renderEncounters()};
  $('localOracle').onclick=()=>{if(!localDm)return;renderOracle();$('dndpovOracle').classList.add('open');$('dndpovEncounters').classList.remove('open');dock.classList.remove('open');document.exitPointerLock?.()};
  $('localEncounters').onclick=()=>{if(!localDm)return;renderEncounters();$('dndpovEncounters').classList.add('open');$('dndpovOracle').classList.remove('open');dock.classList.remove('open');document.exitPointerLock?.()};
  $('localModuleContents').onclick=()=>{
@@ -4083,6 +4083,7 @@ document.addEventListener('keydown',event=>{
  document.addEventListener('pointerdown',e=>{if(!dock.contains(e.target))dock.classList.remove('open')});
  document.addEventListener('keydown',e=>{if(e.key==='Escape'){dock.classList.remove('open');$('dndpovOracle').classList.remove('open');$('dndpovEncounters').classList.remove('open');$('dndpovModuleContents').classList.remove('open')}});
  window.DNDPOV_AUTO_DM_TOOLS={getState:()=>({...state}),advanceTurn,rollWolf:wolfCheck,rollDrawbridge:bridgeCheck};
+ let classicSeconds=0;setInterval(()=>{if(new URLSearchParams(window.location.search).get('classic')!=='1'||!state.enabled||document.hidden||window.DNDPOV_AUTO_DM_ENCOUNTER_LOCK||window.DNDPOV_ENCOUNTER_PENDING||banner.style.display==='flex')return;if(++classicSeconds>=60){classicSeconds=0;advanceTurn();}},1000);
  if(leg==='tser'){
   record('Oracle initialized','Tser Road private edition',
    'Auto DM will record travel turns, time and weather, eligibility, conditional decisions and actual rolls. No unverified nighttime encounter modifier applied.');
